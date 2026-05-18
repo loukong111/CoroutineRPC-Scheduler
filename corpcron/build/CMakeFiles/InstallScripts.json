@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/wcl/corpcron/build/cmake_install.cmake",
+		"/home/wcl/corpcron/build/client/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

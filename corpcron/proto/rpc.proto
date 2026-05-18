@@ -1,0 +1,32 @@
+syntax = "proto3";
+package corpcron.rpc;
+
+message EchoRequest {
+    string message = 1;
+}
+message EchoResponse {
+    string message = 1;
+}
+
+message SubmitTaskRequest {
+    string cron_expr = 1;
+    string params = 2;
+    string handler = 3;
+}
+message SubmitTaskResponse {
+    string task_id = 1;
+    bool success = 2;
+    string error = 3;
+}
+
+// 远程执行任务请求
+message ExecuteTaskRequest {
+    string task_id = 1;
+    string params = 2;
+    string handler = 3;
+}
+message ExecuteTaskResponse {
+    bool success = 1;
+    string result = 2;
+    string error = 3;
+}

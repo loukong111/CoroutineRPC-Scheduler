@@ -1,0 +1,6 @@
+set(__QT_DEPLOY_TARGET_corpcron_client_FILE /home/wcl/corpcron/build/client/corpcron_client)
+set(__QT_DEPLOY_TARGET_corpcron_client_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_corpcron_server_FILE /home/wcl/corpcron/build/corpcron_server)
+set(__QT_DEPLOY_TARGET_corpcron_server_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_test_submit_client_FILE /home/wcl/corpcron/build/test_submit_client)
+set(__QT_DEPLOY_TARGET_test_submit_client_TYPE EXECUTABLE)
