@@ -1,5 +1,4 @@
 #include "corpcron/common/config.hpp"
-#include "corpcron/common/memory_pool.hpp"
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/mysql/mysql_client.hpp"
@@ -50,8 +49,6 @@ bool daemonize() {
 }
 
 int main(int argc, char* argv[]) {
-    printf("=== main started ===\n");
-
     std::string config_path = "config/server.conf";
     if (argc >= 2 && std::string(argv[1]) == "--config" && argc >= 3) {
         config_path = argv[2];
@@ -80,14 +77,6 @@ int main(int argc, char* argv[]) {
     HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
         return "Echo: " + params;
     });
-
-    // 内存池测试
-    MemoryPool pool(64, 10);
-    void* p1 = pool.allocate();
-    void* p2 = pool.allocate();
-    printf("Memory pool test: allocated two objects\n");
-    pool.deallocate(p1);
-    pool.deallocate(p2);
 
     int port = Config::instance().getInt("server.listen_port", 8080);
     printf("Starting TCP server on port %d\n", port);

@@ -69,6 +69,7 @@ bool RedisClient::lock(const std::string& key, const std::string& value, int exp
     auto start = std::chrono::steady_clock::now();
     while (true) {
         std::cout << "Trying lock: key=" << lock_key << " value=" << value << std::endl;
+        //redisCommand 的返回类型是 void*，需要强转成 redisReply*
         redisReply* reply = (redisReply*)redisCommand(ctx_, "EVAL %s 1 %s %s %d", 
                             lua_script, lock_key.c_str(), value.c_str(), expire_sec);
         if (reply) {
@@ -91,7 +92,12 @@ bool RedisClient::lock(const std::string& key, const std::string& value, int exp
 void RedisClient::unlock(const std::string& key, const std::string& value) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::string lock_key = "lock:" + key;
-    std::string script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
+    std::string script = 
+        "if redis.call('get', KEYS[1]) == ARGV[1] then "
+        "   return redis.call('del', KEYS[1]) "
+        "else " 
+        "   return 0 "
+        "end";
     redisReply* reply = (redisReply*)redisCommand(ctx_, "EVAL %s 1 %s %s", script.c_str(), lock_key.c_str(), value.c_str());
     if (reply) freeReplyObject(reply);
 }

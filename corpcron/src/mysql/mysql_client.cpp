@@ -17,6 +17,7 @@ MySQLClient::~MySQLClient() {
 bool MySQLClient::connect() {
     try {
         driver_ = sql::mysql::get_mysql_driver_instance();
+        //driver_->connect() 返回的是裸指针 sql::Connection*，而 conn_ 是智能指针。reset() 让 unique_ptr 接管这个裸指针的生命周期
         conn_.reset(driver_->connect(host_ + ":" + std::to_string(port_), user_, password_));
         conn_->setSchema(database_);
         return true;
@@ -72,7 +73,8 @@ bool MySQLClient::updateTask(const TaskMeta& task) {
 bool MySQLClient::deleteTask(const std::string& id) {
     std::lock_guard<std::mutex> lock(mutex_);
     try {
-        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement("DELETE FROM tasks WHERE id=?"));
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
+            "DELETE FROM tasks WHERE id=?"));
         pstmt->setString(1, id);
         pstmt->execute();
         return true;

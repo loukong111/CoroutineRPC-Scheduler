@@ -1,5 +1,6 @@
 #pragma once
 #include <coroutine>
+#include <cstdint>
 #include <queue>
 #include <mutex>
 #include <unordered_map>
@@ -28,6 +29,19 @@ private:
     uint64_t next_timer_id_ = 0;
 
     void processTimers();
+};
+
+struct TimeoutAwaitable {
+    uint64_t ms_;
+    Scheduler* scheduler_;
+    std::coroutine_handle<> waiter_;
+
+    TimeoutAwaitable(uint64_t ms, Scheduler* scheduler)
+        : ms_(ms), scheduler_(scheduler), waiter_(nullptr) {}
+
+    bool await_ready() const { return false; }
+    void await_suspend(std::coroutine_handle<> h);
+    void await_resume() {}
 };
 
 } // namespace corpcron

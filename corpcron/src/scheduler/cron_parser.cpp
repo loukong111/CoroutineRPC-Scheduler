@@ -11,7 +11,7 @@ uint64_t CronParser::nextExecution(const std::string& cron_expr, uint64_t now_ms
         now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
     }
-    time_t now_sec = now_ms / 1000;
+    time_t now_sec = now_ms / 1000;//time_t 只认秒
     std::tm now_tm;
     localtime_r(&now_sec, &now_tm);
 

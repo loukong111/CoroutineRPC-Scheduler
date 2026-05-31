@@ -36,7 +36,9 @@ void EpollLoop::run() {
             }
             auto cit = coro_callbacks_.find(fd);
             if (cit != coro_callbacks_.end()) {
-                cit->second();
+                auto cb = std::move(cit->second);
+                delFd(fd);
+                cb();
             }
         }
     }

@@ -41,9 +41,8 @@ struct SocketAwaitable {
 
     bool await_ready() const { return false; }
     void await_suspend(std::coroutine_handle<> h) {
-        waiter_ = h;
-        loop_->addCoroutine(fd_, events_, [this]() {
-            if (waiter_) waiter_.resume();
+        loop_->addCoroutine(fd_, events_, [h]() mutable {
+            if (h && !h.done()) h.resume();
         });
     }
     void await_resume() {}

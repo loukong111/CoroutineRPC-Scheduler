@@ -49,7 +49,7 @@ Task clientHandler(int fd, EpollLoop* loop,
             if (!rpc::decode(read_buffer.data(), read_buffer.size(), serial_id, payload))
                 break;
             uint32_t total_len = 4 + 4 + payload.size();
-            read_buffer.erase(0, 4 + total_len);
+            read_buffer.erase(0, total_len);
 
             std::string response_data;
             uint32_t response_id = 0;
@@ -120,6 +120,7 @@ Task clientHandler(int fd, EpollLoop* loop,
             write(fd, response.c_str(), response.size());
         }
     }
+    loop->delFd(fd);
     close(fd);
     co_return;
 }
@@ -144,10 +145,14 @@ bool TcpServer::start() {
     addr.sin_port = htons(port_);
     inet_pton(AF_INET, addr_.c_str(), &addr.sin_addr);
     if (bind(listen_fd_, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        perror("bind"); close(listen_fd_); return false;
+        perror("bind"); 
+        close(listen_fd_);
+        return false;
     }
     if (listen(listen_fd_, 128) == -1) {
-        perror("listen"); close(listen_fd_); return false;
+        perror("listen"); 
+        close(listen_fd_); 
+        return false;
     }
     loop_->addFd(listen_fd_, EPOLLIN, [this](int, uint32_t) { handleAccept(); });
     std::cout << "TcpServer listening on " << addr_ << ":" << port_ << std::endl;
@@ -173,7 +178,7 @@ void TcpServer::handleAccept() {
         inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
         std::cout << "New connection from " << ip << ":" << ntohs(client_addr.sin_port) << std::endl;
         auto* task = new Task(clientHandler(client_fd, loop_.get(), db_, redis_));
-        (void)task; // 实际项目应管理生命周期，此处简化
+        (void)task; //防止报错未使用变量
     }
 }
 

@@ -5,7 +5,6 @@
 
 namespace corpcron {
 
-// 前向声明
 class MySQLClient;
 class RedisClient;
 
@@ -21,8 +20,6 @@ public:
 
 private:
     void handleAccept();
-    // 不再使用 handleClient，改为协程处理，但保留声明用于兼容（实际不使用）
-    // void handleClient(int client_fd, uint32_t events);
 
     std::string addr_;
     int port_;

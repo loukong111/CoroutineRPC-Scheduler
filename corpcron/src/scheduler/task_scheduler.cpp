@@ -13,6 +13,7 @@ namespace corpcron {
 static std::string to_datetime_string(const std::chrono::system_clock::time_point& tp) {
     auto time_t = std::chrono::system_clock::to_time_t(tp);
     std::tm tm_buf;
+    //localtime_r 要求调用者提供 tm_buf，各线程用自己的缓冲区，线程安全
     localtime_r(&time_t, &tm_buf);
     char buf[20];
     strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_buf);
@@ -74,7 +75,7 @@ void TaskScheduler::scanAndDispatch() {
                 }
             }
             if (!should_run) continue;
-            std::string lock_key = "task:" + task.id;   // 注意前缀，保持与 lock 函数内部一致（lock 函数会再加 "lock:"）
+            std::string lock_key = "task:" + task.id;   // 保持与lock函数内部一致（lock 函数会再加 "lock:"）
             std::string lock_value = node_id_;
             if (redis_->lock(lock_key, lock_value, 10, 100)) {
                 thread_pool_->enqueue([this, task, lock_key, lock_value]() {
@@ -90,7 +91,7 @@ void TaskScheduler::scanAndDispatch() {
 }
 
 void TaskScheduler::executeTask(const TaskMeta& task) {
-    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::this_thread::sleep_for(std::chrono::seconds(10));//模拟执行任务
     // 获取服务列表
     auto endpoints = redis_->discoverServices("rpc");
     if (endpoints.empty()) {
