@@ -1,295 +1,143 @@
-# Corpcron：基于 C++20 协程的 RPC 与分布式定时任务调度系统
+# Corpcron
 
-## 项目简介
+Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，包含自定义 RPC 协议、Redis 服务发现/分布式锁、MySQL 任务持久化、动态线程池和 Qt 客户端示例。
 
-Corpcron 是一个基于 C++20 实现的协程化 RPC 与分布式定时任务调度系统，主要用于学习和实践 C++ 后端开发中的网络编程、RPC 编解码、任务调度、服务注册发现、分布式锁和后台线程池等技术点。
+## 功能
 
-项目包含 RPC 服务端、任务提交客户端、可选 Qt 客户端、Cron 任务调度器、Redis 服务注册发现、MySQL 任务持久化和动态线程池。多个节点启动后，可通过 Redis 分布式锁保证同一任务在同一时间窗口内只由一个节点执行。
+- 自定义 TCP RPC 协议，使用 Protobuf 编解码业务消息。
+- RPC 包长校验，支持半包处理，并限制最大帧大小。
+- Redis 服务注册、心跳续约、服务发现和分布式锁。
+- MySQL 持久化任务、执行历史和下一次调度时间。
+- 调度器按 `next_run_at` 查询到期任务，抢锁后执行并写入历史。
+- 任务失败后按指数退避重试，超过 `max_retries` 后自动禁用。
+- 执行期间会续约 Redis 锁，降低长任务重复执行风险。
+- RPC 支持统一错误响应 `RpcError`，便于客户端识别协议级错误。
+- 支持基础 RPC token 鉴权、连接数上限和取消任务接口。
+- 支持环境变量覆盖配置，避免在配置文件中提交真实密码。
+- Docker Compose 提供 Redis/MySQL 开发环境。
+- 提供 Dockerfile、systemd unit 和基础部署文档。
+- CTest 接入基础协议单测和可选 Redis/MySQL 集成测试。
 
-## 核心功能
+## 依赖
 
-- **协程化网络处理**：基于 `epoll` 与 C++20 协程封装 Socket 读写事件。
-- **自定义 RPC 协议**：协议格式为 `总长度 + 消息类型/序列号 + Protobuf Payload`，用于解决 TCP 粘包/拆包问题。
-- **Protobuf 编解码**：定义 Echo、提交任务、执行任务等请求与响应结构。
-- **任务持久化**：使用 MySQL 存储定时任务元信息和任务执行历史表结构。
-- **Cron 调度**：支持 Cron 表达式解析，调度线程周期性扫描可执行任务。
-- **服务注册发现**：服务节点启动后注册到 Redis，并通过心跳刷新 TTL。
-- **分布式锁**：执行任务前通过 Redis 锁竞争，避免多个节点重复执行同一任务。
-- **动态线程池**：调度任务交由线程池处理，根据任务积压情况扩缩容。
-- **可选 Qt 客户端**：提供简单图形客户端入口，便于演示任务提交。
+Ubuntu 22.04/24.04 可安装：
 
-## 技术栈
+```bash
+sudo apt update
+sudo apt install -y g++ cmake libprotobuf-dev protobuf-compiler \
+  libhiredis-dev libmysqlcppconn-dev qt6-base-dev qt6-tools-dev
+```
 
-| 模块 | 实现 |
-| --- | --- |
-| 开发语言 | C++20 |
-| 构建工具 | CMake |
-| 网络模型 | Socket + epoll + C++20 coroutine |
-| RPC 协议 | 自定义二进制协议 + Protobuf |
-| 任务调度 | Cron 表达式 + 后台扫描线程 |
-| 服务发现 | Redis SETEX + 心跳续期 |
-| 分布式锁 | Redis Lua 脚本封装 SETNX + EXPIRE |
-| 数据存储 | MySQL Connector/C++ |
-| 客户端 | 命令行测试客户端 + 可选 Qt6 客户端 |
+如果只运行服务端和测试客户端，Qt 不是必需的；未安装 Qt 时 CMake 会跳过客户端。
+
+## 快速启动
+
+启动依赖：
+
+```bash
+docker compose up -d
+```
+
+编译：
+
+```bash
+cmake -S . -B build
+cmake --build build -j
+```
+
+运行服务端：
+
+```bash
+./build/corpcron_server --config config/server.conf
+```
+
+提交测试任务：
+
+```bash
+./build/test_submit_client 127.0.0.1 8081
+```
+
+运行测试：
+
+```bash
+ctest --test-dir build --output-on-failure
+```
+
+运行 Redis/MySQL 集成测试：
+
+```bash
+CORPCRON_RUN_INTEGRATION_TESTS=1 ctest --test-dir build --output-on-failure
+```
+
+如果使用本机已有数据库，可以通过环境变量覆盖密码：
+
+```bash
+CORPCRON_RUN_INTEGRATION_TESTS=1 \
+CORPCRON_MYSQL_PASSWORD=your_password \
+ctest --test-dir build --output-on-failure
+```
+
+运行端到端调度测试也使用同一个开关。该测试会启动本地 TCP 服务，插入一个到期任务，并等待执行历史落库。
+
+简单压测：
+
+```bash
+./build/bench_client 127.0.0.1 8081 16 1000
+```
+
+## 配置
+
+参考 [config/server.example.conf](config/server.example.conf)。
+
+常用环境变量覆盖：
+
+```bash
+CORPCRON_SERVER_LISTEN_PORT=8082
+CORPCRON_SERVER_ADVERTISE_HOST=192.168.1.10
+CORPCRON_MYSQL_PASSWORD=your_password
+CORPCRON_RPC_AUTH_TOKEN=your_token
+```
+
+多节点部署时，每个节点应配置不同端口或不同机器地址，并设置可被其他节点访问的 `server.advertise_host`。
+
+## 数据库
+
+初始化 SQL 位于 [sql/init.sql](sql/init.sql)。服务启动时也会对缺失的基础表和新增列做一次轻量补齐，方便从旧版本本地库平滑启动。
+
+核心表：
+
+- `tasks`：任务定义、状态、`next_run_at`、`last_run_at`、重试计数。
+- `task_history`：每次执行的节点、结果、错误、开始/结束时间。
 
 ## 项目结构
 
 ```text
-corpcron/
-├── CMakeLists.txt
-├── client/                         # Qt 客户端，可选编译
-├── config/
-│   ├── server.conf                 # 节点 1 配置
-│   └── server2.conf                # 节点 2 配置示例
-├── include/corpcron/
-│   ├── common/                     # 配置、日志、线程池、内存池
-│   ├── coroutine/                  # Task 与协程调度相关封装
-│   ├── mysql/                      # MySQL 客户端封装
-│   ├── net/                        # epoll 事件循环与 TCP Server
-│   ├── redis/                      # Redis 客户端、服务发现、分布式锁
-│   ├── rpc/                        # RPC 协议、客户端、处理器注册
-│   └── scheduler/                  # Cron 解析与任务调度器
-├── proto/
-│   └── rpc.proto                   # Protobuf 协议定义
-├── scripts/
-│   └── start.sh
-├── src/
-│   ├── common/
-│   ├── coroutine/
-│   ├── mysql/
-│   ├── net/
-│   ├── redis/
-│   ├── rpc/
-│   ├── scheduler/
-│   ├── main.cpp                    # 服务端入口
-│   └── test_submit_client.cpp      # 命令行任务提交客户端
-└── README.md
+client/          Qt 客户端示例
+config/          配置文件和样例
+include/         公共头文件
+proto/           Protobuf 定义
+sql/             数据库初始化脚本
+src/             服务端源码
+tests/           自动化测试
 ```
-
-## 环境依赖
-
-建议环境：
-
-- Ubuntu 22.04 / 24.04 或 WSL2
-- g++ 11+，建议 g++ 13+
-- CMake 3.20+
-- Protobuf
-- Redis
-- MySQL
-- hiredis
-- MySQL Connector/C++
-- Qt6，可选，仅用于图形客户端
-
-安装示例：
-
-```bash
-sudo apt update
-sudo apt install -y g++ cmake \
-    libprotobuf-dev protobuf-compiler \
-    libhiredis-dev redis-server \
-    mysql-server libmysqlcppconn-dev \
-    qt6-base-dev qt6-tools-dev
-```
-
-如果不需要 Qt 客户端，也可以不安装 Qt6；CMake 会在未找到 Qt6 时跳过客户端编译。
-
-## 初始化 Redis 和 MySQL
-
-启动服务：
-
-```bash
-sudo systemctl start redis-server || sudo systemctl start redis
-sudo systemctl start mysql
-```
-
-创建数据库和表：
-
-```sql
-CREATE DATABASE IF NOT EXISTS corpcron DEFAULT CHARSET utf8mb4;
-USE corpcron;
-
-CREATE TABLE IF NOT EXISTS tasks (
-    id VARCHAR(64) PRIMARY KEY,
-    cron_expr VARCHAR(100) NOT NULL,
-    params TEXT,
-    handler VARCHAR(100) NOT NULL,
-    status TINYINT DEFAULT 1,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS task_history (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    task_id VARCHAR(64) NOT NULL,
-    exec_node VARCHAR(50),
-    result TEXT,
-    error TEXT,
-    start_time TIMESTAMP NULL,
-    end_time TIMESTAMP NULL,
-    INDEX(task_id)
-);
-```
-
-## 配置文件
-
-示例配置位于 `config/server.conf`：
-
-```ini
-[server]
-listen_port = 8081
-daemon = false
-
-[redis]
-host = 127.0.0.1
-port = 6379
-
-[mysql]
-host = 127.0.0.1
-port = 3306
-user = root
-password = your_password
-database = corpcron
-```
-
-多节点测试时，可复制一份配置文件并修改端口，例如 `config/server2.conf`：
-
-```ini
-[server]
-listen_port = 8082
-daemon = false
-```
-
-## 编译
-
-```bash
-git clone https://github.com/loukong111/CoroutineRPC-Scheduler.git
-cd CoroutineRPC-Scheduler
-mkdir -p build
-cd build
-cmake ..
-make -j$(nproc)
-```
-
-编译完成后主要生成：
-
-```text
-corpcron_server       # RPC 与调度服务端
-test_submit_client    # 命令行测试客户端
-client/corpcron_client # Qt 客户端，可选
-```
-
-## 运行
-
-### 1. 启动单个服务节点
-
-```bash
-./corpcron_server --config ../config/server.conf
-```
-
-服务启动后会完成：
-
-1. 加载配置文件。
-2. 连接 Redis。
-3. 向 Redis 注册 RPC 服务地址。
-4. 启动心跳线程，定期刷新服务 TTL。
-5. 连接 MySQL。
-6. 启动任务调度器。
-7. 启动 TCP RPC 服务端。
-
-### 2. 提交测试任务
-
-在另一个终端执行：
-
-```bash
-./test_submit_client
-```
-
-输出示例：
-
-```text
-Success=1, TaskID=xxxx-xxxx-xxxx
-```
-
-任务会写入 MySQL 的 `tasks` 表，调度器扫描到可执行任务后，会尝试获取 Redis 分布式锁，并通过 RPC 调用节点执行任务。
-
-### 3. 多节点演示
-
-打开两个终端，分别运行：
-
-```bash
-./corpcron_server --config ../config/server.conf
-```
-
-```bash
-./corpcron_server --config ../config/server2.conf
-```
-
-再提交一个定时任务。两个节点都会扫描任务，但同一时间窗口内只有抢到 Redis 锁的节点会执行任务；另一个节点会因获取锁失败而跳过。
-
-## RPC 协议说明
-
-项目使用自定义二进制协议解决 TCP 流式传输中的粘包/拆包问题。
-
-协议格式：
-
-```text
-| total_len: 4 bytes | serial_id: 4 bytes | protobuf_payload: N bytes |
-```
-
-其中：
-
-- `total_len` 表示 `serial_id + payload` 的长度。
-- `serial_id` 表示消息类型。
-- `protobuf_payload` 是序列化后的 Protobuf 数据。
-
-当前主要消息类型：
-
-| serial_id | 含义 |
-| --- | --- |
-| 1 | EchoRequest |
-| 2 | EchoResponse |
-| 3 | SubmitTaskRequest |
-| 4 | SubmitTaskResponse |
-| 5 | ExecuteTaskRequest |
-| 6 | ExecuteTaskResponse |
-
-## 实现要点
-
-### 1. 协程网络模型
-
-TCP 服务端基于 `epoll` 监听连接和读事件，客户端连接由协程处理。协程在等待 I/O 时挂起，事件就绪后由事件循环恢复。
-
-### 2. 服务注册发现
-
-节点启动时将自身地址写入 Redis，并使用心跳线程定期刷新 TTL。调度器执行任务时从 Redis 获取可用 RPC 服务节点。
-
-### 3. 分布式锁
-
-任务执行前，节点通过 Redis Lua 脚本封装 `SETNX + EXPIRE`，在限定时间内竞争任务锁。任务执行完成后使用 value 校验释放锁，避免误删其他节点的锁。
-
-### 4. 定时任务调度
-
-调度器周期性扫描 MySQL 中启用的任务，根据 Cron 表达式计算下一次执行时间。满足执行条件时提交到动态线程池，并通过 RPC 调用实际任务处理器。
-
-### 5. 动态线程池
-
-线程池根据任务队列积压情况增加工作线程，空闲线程在超时后回收，用于处理调度执行等后台任务。
 
 ## 当前限制
 
-- Redis 服务发现当前以单个 key 存储服务地址，适合演示流程；若要支持完整多节点列表，可改为 Set / ZSet 结构。
-- 当前任务执行逻辑主要用于演示，默认注册了 `Echo` 处理器，实际业务处理器需要继续扩展。
-- 分布式锁未实现自动续约，长任务可能需要 WatchDog 机制。
-- 故障转移依赖锁过期和后续扫描，不是实时主动故障转移。
-- `task_history` 表结构已提供，执行历史记录逻辑可继续完善。
-- 当前未提供完整压测报告，后续可补充并发连接数、RPC QPS、平均延迟和 P99 延迟。
+- RPC 还没有鉴权、TLS 和限流，不建议直接暴露到公网。
+- Redis 锁已支持续约，但任务执行仍应尽量设计为幂等。
+- 调度策略已使用 `next_run_at`，但 misfire 和任务取消还需要继续完善。
+- 自动化测试已覆盖协议和基础 Redis/MySQL 链路，后续还需要端到端调度测试和压测。
 
-## 后续优化方向
+## 文档
 
-- 使用 Redis Set / ZSet 维护多服务实例，完善服务发现能力。
-- 增加 RPC 调用超时协程封装，例如 `TimeoutAwaitable`。
-- 增加 MySQL 连接池。
-- 增加任务执行历史写入与失败重试机制。
-- 为分布式锁增加续约机制。
-- 补充单元测试、集成测试和压测报告。
-- 提供 Docker Compose，一键启动 Redis、MySQL 和多节点服务。
+- [部署说明](docs/deploy.md)
+- [架构设计](docs/design.md)
+- [RPC 协议](docs/protocol.md)
+- [压测说明](docs/benchmark.md)
+
+## 后续路线
+
+1. 增加任务查询/编辑 API 和基础管理页面。
+2. 增加失败告警、指标导出和结构化日志。
+3. 增加持久连接压测和多节点压测报告。
+4. 加强鉴权模型，支持 TLS 或反向代理部署示例。
