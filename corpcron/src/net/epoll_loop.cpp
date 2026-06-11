@@ -1,4 +1,5 @@
 #include "corpcron/net/epoll_loop.hpp"
+#include <sys/eventfd.h>
 #include <unistd.h>
 #include <cstring>
 #include <iostream>
@@ -7,6 +8,7 @@ namespace corpcron {
 
 EpollLoop::EpollLoop() = default;
 EpollLoop::~EpollLoop() {
+    if (wake_fd_ != -1) close(wake_fd_);
     if (epoll_fd_ != -1) close(epoll_fd_);
 }
 
@@ -16,6 +18,15 @@ bool EpollLoop::init() {
         perror("epoll_create1");
         return false;
     }
+    wake_fd_ = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+    if (wake_fd_ == -1) {
+        perror("eventfd");
+        return false;
+    }
+    addFd(wake_fd_, EPOLLIN, [this](int fd, uint32_t) {
+        uint64_t value;
+        while (read(fd, &value, sizeof(value)) == sizeof(value)) {}
+    });
     return true;
 }
 
@@ -46,6 +57,11 @@ void EpollLoop::run() {
 
 void EpollLoop::stop() {
     running_ = false;
+    if (wake_fd_ != -1) {
+        uint64_t value = 1;
+        ssize_t n = write(wake_fd_, &value, sizeof(value));
+        (void)n;
+    }
 }
 
 void EpollLoop::addFd(int fd, uint32_t events, EventCallback cb) {

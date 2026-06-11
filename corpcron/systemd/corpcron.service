@@ -1,0 +1,23 @@
+[Unit]
+Description=Corpcron distributed task scheduler
+After=network-online.target mysql.service redis-server.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=corpcron
+Group=corpcron
+WorkingDirectory=/opt/corpcron
+EnvironmentFile=-/etc/corpcron/corpcron.env
+ExecStart=/opt/corpcron/bin/corpcron_server --config /etc/corpcron/server.conf
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=65535
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

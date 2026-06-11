@@ -38,13 +38,13 @@ bool daemonize() {
     pid = fork();
     if (pid < 0) return false;
     if (pid > 0) exit(0);
-    chdir("/");
-    close(STDIN_FILENO);
-    close(STDOUT_FILENO);
-    close(STDERR_FILENO);
-    open("/dev/null", O_RDWR);
-    dup(0);
-    dup(0);
+    if (chdir("/") < 0) return false;
+    int fd = open("/dev/null", O_RDWR);
+    if (fd < 0) return false;
+    if (dup2(fd, STDIN_FILENO) < 0) return false;
+    if (dup2(fd, STDOUT_FILENO) < 0) return false;
+    if (dup2(fd, STDERR_FILENO) < 0) return false;
+    if (fd > STDERR_FILENO) close(fd);
     return true;
 }
 
@@ -72,6 +72,7 @@ int main(int argc, char* argv[]) {
 
     signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
+    signal(SIGPIPE, SIG_IGN);
 
     // 注册处理器
     HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
@@ -79,7 +80,15 @@ int main(int argc, char* argv[]) {
     });
 
     int port = Config::instance().getInt("server.listen_port", 8080);
-    printf("Starting TCP server on port %d\n", port);
+    std::string bind_host = Config::instance().get("server.bind_host", "0.0.0.0");
+    std::string advertise_host = Config::instance().get("server.advertise_host", "127.0.0.1");
+    size_t max_connections = static_cast<size_t>(Config::instance().getInt("server.max_connections", 1024));
+    std::string auth_token = Config::instance().get("rpc.auth_token", "");
+    std::string endpoint = advertise_host + ":" + std::to_string(port);
+    std::string node_id = Config::instance().get("server.node_id", "");
+    if (node_id.empty()) node_id = endpoint;
+    printf("Starting TCP server on %s:%d, advertise endpoint %s\n",
+           bind_host.c_str(), port, endpoint.c_str());
 
     // Redis 连接
     std::string redis_host = Config::instance().get("redis.host", "127.0.0.1");
@@ -90,15 +99,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     printf("Connected to Redis\n");
-
-    std::string endpoint = "127.0.0.1:" + std::to_string(port);
-    redis->registerService("rpc", endpoint, 30);
-    std::thread heartbeat_thread([&]() {
-        while (running) {
-            std::this_thread::sleep_for(std::chrono::seconds(5));
-            redis->heartbeat("rpc", endpoint, 30);
-        }
-    });
 
     // MySQL 连接
     std::string mysql_host = Config::instance().get("mysql.host", "127.0.0.1");
@@ -114,17 +114,29 @@ int main(int argc, char* argv[]) {
     printf("Connected to MySQL\n");
 
     // 启动调度器
-    g_scheduler = std::make_unique<TaskScheduler>(db, redis, endpoint);
+    g_scheduler = std::make_unique<TaskScheduler>(db, redis, node_id);
     g_scheduler->start();
     printf("Task scheduler started\n");
 
+    redis->registerService("rpc", endpoint, 30);
+    std::thread heartbeat_thread([&]() {
+        while (running) {
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+            if (running) redis->heartbeat("rpc", endpoint, 30);
+        }
+    });
+
     // 创建 TCP 服务器（传入 db 和 redis）
-    TcpServer server("0.0.0.0", port, db, redis);
+    TcpServer server(bind_host, port, db, redis, max_connections, auth_token);
     g_server = &server;
 
-    server.start();
+    if (!server.start()) {
+        running = false;
+        g_scheduler->stop();
+    }
 
     printf("Server stopped\n");
+    redis->unregisterService("rpc", endpoint);
     heartbeat_thread.join();
     return 0;
 }

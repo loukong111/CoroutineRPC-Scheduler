@@ -1,7 +1,9 @@
 #include "corpcron/common/config.hpp"
+#include <cstdlib>
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <cctype>
 
 namespace corpcron {
 
@@ -49,6 +51,10 @@ void Config::parseLine(const std::string& line, std::string& current_section) {
 }
 
 std::string Config::get(const std::string& section_key, const std::string& default_value) const {
+    std::string env_name = envNameForKey(section_key);
+    if (const char* value = std::getenv(env_name.c_str())) {
+        return value;
+    }
     auto it = kv_map_.find(section_key);
     if (it != kv_map_.end()) return it->second;
     return default_value;
@@ -62,6 +68,19 @@ int Config::getInt(const std::string& section_key, int default_value) const {
     } catch (...) {
         return default_value;
     }
+}
+
+std::string Config::envNameForKey(const std::string& section_key) {
+    std::string env_name = "CORPCRON_";
+    env_name.reserve(env_name.size() + section_key.size());
+    for (char ch : section_key) {
+        if (std::isalnum(static_cast<unsigned char>(ch))) {
+            env_name.push_back(static_cast<char>(std::toupper(static_cast<unsigned char>(ch))));
+        } else {
+            env_name.push_back('_');
+        }
+    }
+    return env_name;
 }
 
 }

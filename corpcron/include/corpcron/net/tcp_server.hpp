@@ -1,5 +1,6 @@
 #pragma once
 #include "epoll_loop.hpp"
+#include <atomic>
 #include <memory>
 #include <string>
 
@@ -12,7 +13,9 @@ class TcpServer {
 public:
     TcpServer(const std::string& addr, int port,
               std::shared_ptr<MySQLClient> db,
-              std::shared_ptr<RedisClient> redis);
+              std::shared_ptr<RedisClient> redis,
+              size_t max_connections = 1024,
+              const std::string& auth_token = "");
     ~TcpServer();
 
     bool start();
@@ -27,6 +30,9 @@ private:
     std::unique_ptr<EpollLoop> loop_;
     std::shared_ptr<MySQLClient> db_;
     std::shared_ptr<RedisClient> redis_;
+    size_t max_connections_;
+    std::string auth_token_;
+    std::atomic<size_t> active_connections_{0};
 };
 
 } // namespace corpcron

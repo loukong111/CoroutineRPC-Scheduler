@@ -13,6 +13,7 @@ public:
 private:
     std::unordered_map<std::string, std::string> kv_map_;
     void parseLine(const std::string& line, std::string& current_section);
+    static std::string envNameForKey(const std::string& section_key);
 };
 
 }

@@ -28,6 +28,7 @@ public:
 
 private:
     int epoll_fd_ = -1;
+    int wake_fd_ = -1;
     std::atomic<bool> running_{false};
     std::unordered_map<int, EventCallback> callbacks_;
     std::unordered_map<int, CoroutineCallback> coro_callbacks_;

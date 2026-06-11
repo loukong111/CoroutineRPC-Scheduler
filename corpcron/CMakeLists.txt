@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(corpcron)
+enable_testing()
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -54,5 +55,47 @@ install(TARGETS corpcron_server DESTINATION bin)
 add_executable(test_submit_client
     src/test_submit_client.cpp
     src/rpc.pb.cc
+    src/rpc/rpc_client.cpp
 )
 target_link_libraries(test_submit_client ${Protobuf_LIBRARIES} pthread)
+
+add_executable(bench_client
+    src/bench_client.cpp
+    src/rpc.pb.cc
+    src/rpc/rpc_client.cpp
+)
+target_link_libraries(bench_client ${Protobuf_LIBRARIES} pthread)
+
+add_executable(corpcron_protocol_test
+    tests/protocol_test.cpp
+)
+target_include_directories(corpcron_protocol_test PRIVATE include)
+add_test(NAME protocol_test COMMAND corpcron_protocol_test)
+
+add_executable(corpcron_integration_test
+    tests/integration_test.cpp
+    src/common/config.cpp
+    src/mysql/mysql_client.cpp
+    src/redis/redis_client.cpp
+)
+target_link_libraries(corpcron_integration_test pthread hiredis mysqlcppconn)
+add_test(NAME integration_test COMMAND corpcron_integration_test)
+set_tests_properties(integration_test PROPERTIES SKIP_RETURN_CODE 77)
+
+add_executable(corpcron_e2e_scheduler_test
+    tests/e2e_scheduler_test.cpp
+    src/common/config.cpp
+    src/common/thread_pool.cpp
+    src/mysql/mysql_client.cpp
+    src/net/epoll_loop.cpp
+    src/net/tcp_server.cpp
+    src/redis/redis_client.cpp
+    src/rpc.pb.cc
+    src/rpc/handler_registry.cpp
+    src/rpc/rpc_client.cpp
+    src/scheduler/cron_parser.cpp
+    src/scheduler/task_scheduler.cpp
+)
+target_link_libraries(corpcron_e2e_scheduler_test ${Protobuf_LIBRARIES} pthread hiredis mysqlcppconn)
+add_test(NAME e2e_scheduler_test COMMAND corpcron_e2e_scheduler_test)
+set_tests_properties(e2e_scheduler_test PROPERTIES SKIP_RETURN_CODE 77)

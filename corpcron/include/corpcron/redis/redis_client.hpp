@@ -16,11 +16,13 @@ public:
 
     // 服务注册与心跳
     bool registerService(const std::string& service_name, const std::string& endpoint, int ttl_sec = 30);
+    void unregisterService(const std::string& service_name, const std::string& endpoint);
     bool heartbeat(const std::string& service_name, const std::string& endpoint, int ttl_sec = 30);
     std::vector<std::string> discoverServices(const std::string& service_name);
 
     // 分布式锁
     bool lock(const std::string& key, const std::string& value, int expire_sec = 10, int timeout_ms = 1000);
+    bool renewLock(const std::string& key, const std::string& value, int expire_sec = 10);
     void unlock(const std::string& key, const std::string& value);
 
 private:

@@ -1,12 +1,17 @@
 #include "corpcron/scheduler/task_scheduler.hpp"
+#include "corpcron/common/config.hpp"
 #include "corpcron/scheduler/cron_parser.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
+#include "corpcron/rpc/protocol.hpp"
 #include "corpcron/rpc/rpc_client.hpp"   // for RpcClient
 #include "rpc.pb.h"
 #include <random> 
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <algorithm>
+#include <iomanip>
+#include <sstream>
 
 namespace corpcron {
 
@@ -18,6 +23,30 @@ static std::string to_datetime_string(const std::chrono::system_clock::time_poin
     char buf[20];
     strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_buf);
     return buf;
+}
+
+static std::string to_datetime_string(uint64_t timestamp_ms) {
+    time_t time_sec = timestamp_ms / 1000;
+    std::tm tm_buf;
+    localtime_r(&time_sec, &tm_buf);
+    char buf[20];
+    strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_buf);
+    return buf;
+}
+
+static int retry_delay_seconds(int retry_count) {
+    int exponent = std::min(std::max(retry_count - 1, 0), 6);
+    return std::min(300, 5 * (1 << exponent));
+}
+
+static bool parse_datetime(const std::string& value, std::chrono::system_clock::time_point& out) {
+    if (value.empty()) return false;
+    std::tm tm_buf{};
+    std::istringstream ss(value);
+    ss >> std::get_time(&tm_buf, "%Y-%m-%d %H:%M:%S");
+    if (ss.fail()) return false;
+    out = std::chrono::system_clock::from_time_t(std::mktime(&tm_buf));
+    return true;
 }
 
 TaskScheduler::TaskScheduler(std::shared_ptr<MySQLClient> db,
@@ -56,53 +85,124 @@ void TaskScheduler::schedulerLoop() {
 }
 
 void TaskScheduler::scanAndDispatch() {
-    auto tasks = db_->getEnabledTasks();
-    uint64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
+    auto tasks = db_->getDueTasks(100);
+    std::string misfire_policy = Config::instance().get("scheduler.misfire_policy", "once");
+    int misfire_grace_seconds = Config::instance().getInt("scheduler.misfire_grace_seconds", 300);
 
     for (auto& task : tasks) {
-        uint64_t next_time = CronParser::nextExecution(task.cron_expr, now_ms);
-        if (next_time == 0) continue;
-
-        if (next_time <= now_ms + 5000) {
-            bool should_run = false;
-            {
-                std::lock_guard<std::mutex> lock(last_fire_mutex_);
-                auto it = last_fire_ms_.find(task.id);
-                if (it == last_fire_ms_.end() || (now_ms - it->second) >= 60000) {
-                    last_fire_ms_[task.id] = now_ms;
-                    should_run = true;
+        if (misfire_policy == "skip") {
+            std::chrono::system_clock::time_point due_at;
+            if (parse_datetime(task.next_run_at, due_at)) {
+                auto now = std::chrono::system_clock::now();
+                auto overdue = std::chrono::duration_cast<std::chrono::seconds>(now - due_at).count();
+                if (overdue > misfire_grace_seconds) {
+                    uint64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        now.time_since_epoch()).count();
+                    uint64_t next_ms = CronParser::nextExecution(task.cron_expr, now_ms);
+                    if (next_ms != 0) {
+                        db_->updateTaskRuntime(task.id, 1, to_datetime_string(next_ms), task.last_run_at, task.retry_count);
+                    } else {
+                        db_->updateTaskRuntime(task.id, 0, task.next_run_at, task.last_run_at, task.retry_count);
+                    }
+                    std::cout << "Skipped misfired task " << task.id << " overdue by "
+                              << overdue << " seconds" << std::endl;
+                    continue;
                 }
             }
-            if (!should_run) continue;
-            std::string lock_key = "task:" + task.id;   // 保持与lock函数内部一致（lock 函数会再加 "lock:"）
-            std::string lock_value = node_id_;
-            if (redis_->lock(lock_key, lock_value, 10, 100)) {
-                thread_pool_->enqueue([this, task, lock_key, lock_value]() {
-                    executeTask(task);
-                    redis_->unlock(lock_key, lock_value);
+        }
+
+        std::string lock_key = "task:" + task.id;
+        std::string lock_value = node_id_;
+        constexpr int lock_ttl_sec = 60;
+        if (redis_->lock(lock_key, lock_value, lock_ttl_sec, 100)) {
+            thread_pool_->enqueue([this, task, lock_key, lock_value]() {
+                std::atomic<bool> renew_running{true};
+                std::thread renew_thread([this, &renew_running, lock_key, lock_value]() {
+                    int elapsed = 0;
+                    while (renew_running) {
+                        std::this_thread::sleep_for(std::chrono::seconds(1));
+                        if (!renew_running) break;
+                        if (++elapsed < 20) continue;
+                        elapsed = 0;
+                        if (!redis_->renewLock(lock_key, lock_value, 60)) {
+                            std::cerr << "Failed to renew lock for " << lock_key << std::endl;
+                        }
+                    }
                 });
-            } else{
-                // 可选：打印日志
-                std::cout << "Node " << node_id_ << " failed to get lock for task " << task.id << std::endl;
-            }
+
+                auto start = std::chrono::system_clock::now();
+                ExecutionOutcome outcome;
+                try {
+                    outcome = executeTask(task);
+                } catch (const std::exception& e) {
+                    outcome.success = false;
+                    outcome.error = e.what();
+                }
+                auto end = std::chrono::system_clock::now();
+
+                TaskHistory history;
+                history.task_id = task.id;
+                history.exec_node = node_id_;
+                history.success = outcome.success;
+                history.result = outcome.result;
+                history.error = outcome.error;
+                history.start_time = to_datetime_string(start);
+                history.end_time = to_datetime_string(end);
+                db_->addHistory(history);
+
+                uint64_t end_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    end.time_since_epoch()).count();
+                int next_status = 1;
+                int next_retry_count = 0;
+                std::string next_run_at = history.end_time;
+
+                if (outcome.success) {
+                    uint64_t next_ms = CronParser::nextExecution(task.cron_expr, end_ms);
+                    if (next_ms != 0) {
+                        next_run_at = to_datetime_string(next_ms);
+                    } else {
+                        next_status = 0;
+                    }
+                } else {
+                    next_retry_count = task.retry_count + 1;
+                    if (next_retry_count >= task.max_retries) {
+                        next_status = 0;
+                        std::cerr << "Task " << task.id << " disabled after "
+                                  << next_retry_count << " failed attempts" << std::endl;
+                    } else {
+                        auto retry_at = end + std::chrono::seconds(retry_delay_seconds(next_retry_count));
+                        next_run_at = to_datetime_string(retry_at);
+                    }
+                }
+
+                db_->updateTaskRuntime(task.id, next_status, next_run_at, history.end_time, next_retry_count);
+                renew_running = false;
+                if (renew_thread.joinable()) renew_thread.join();
+                redis_->unlock(lock_key, lock_value);
+            });
+        } else {
+            std::cout << "Node " << node_id_ << " failed to get lock for task " << task.id << std::endl;
         }
     }
 }
 
-void TaskScheduler::executeTask(const TaskMeta& task) {
-    std::this_thread::sleep_for(std::chrono::seconds(10));//模拟执行任务
-    // 获取服务列表
+TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task) {
+    ExecutionOutcome outcome;
     auto endpoints = redis_->discoverServices("rpc");
     if (endpoints.empty()) {
-        std::cerr << "No RPC service available for task " << task.id << std::endl;
-        return;
+        outcome.error = "No RPC service available";
+        std::cerr << outcome.error << " for task " << task.id << std::endl;
+        return outcome;
     }
-    // 随机选择一个节点
-    static std::mt19937 rng(std::random_device{}());
+
+    thread_local std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<> dist(0, endpoints.size() - 1);
     std::string endpoint = endpoints[dist(rng)];
     size_t colon = endpoint.find(':');
+    if (colon == std::string::npos || colon + 1 >= endpoint.size()) {
+        outcome.error = "Invalid RPC endpoint: " + endpoint;
+        return outcome;
+    }
     std::string host = endpoint.substr(0, colon);
     int port = std::stoi(endpoint.substr(colon + 1));
 
@@ -111,22 +211,39 @@ void TaskScheduler::executeTask(const TaskMeta& task) {
     req.set_task_id(task.id);
     req.set_params(task.params);
     req.set_handler(task.handler);
+    req.set_auth_token(Config::instance().get("rpc.auth_token", ""));
     std::string req_data;
     req.SerializeToString(&req_data);
 
     RpcClient client(host, port);
+    uint32_t response_serial_id = 0;
     std::string resp_data;
-    if (client.call(5, req_data, resp_data, 5000)) {
+    if (client.call(5, req_data, response_serial_id, resp_data, 5000)) {
+        if (response_serial_id == corpcron::rpc::kRpcErrorSerialId) {
+            corpcron::rpc::RpcError error;
+            if (error.ParseFromString(resp_data)) {
+                outcome.error = "RPC error " + std::to_string(error.code()) + ": " + error.message();
+            } else {
+                outcome.error = "RPC error response parse failed";
+            }
+            std::cerr << outcome.error << std::endl;
+            return outcome;
+        }
         corpcron::rpc::ExecuteTaskResponse resp;
         if (resp.ParseFromString(resp_data)) {
             std::cout << "Remote execution result: " << resp.result() << std::endl;
-            // 可选：由执行节点记录历史，或由调用节点记录
+            outcome.success = resp.success();
+            outcome.result = resp.result();
+            outcome.error = resp.error();
         } else {
-            std::cerr << "Failed to parse ExecuteTaskResponse" << std::endl;
+            outcome.error = "Failed to parse ExecuteTaskResponse";
+            std::cerr << outcome.error << std::endl;
         }
     } else {
-        std::cerr << "RPC call to " << endpoint << " failed" << std::endl;
+        outcome.error = "RPC call to " + endpoint + " failed";
+        std::cerr << outcome.error << std::endl;
     }
+    return outcome;
 }
 
 } // namespace corpcron

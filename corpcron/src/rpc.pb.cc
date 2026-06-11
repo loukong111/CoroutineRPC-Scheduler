@@ -22,9 +22,24 @@ namespace _pbi = _pb::internal;
 
 namespace corpcron {
 namespace rpc {
+PROTOBUF_CONSTEXPR RpcError::RpcError(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.code_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RpcErrorDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RpcErrorDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RpcErrorDefaultTypeInternal() {}
+  union {
+    RpcError _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RpcErrorDefaultTypeInternal _RpcError_default_instance_;
 PROTOBUF_CONSTEXPR EchoRequest::EchoRequest(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.message_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct EchoRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR EchoRequestDefaultTypeInternal()
@@ -53,6 +68,7 @@ PROTOBUF_CONSTEXPR SubmitTaskRequest::SubmitTaskRequest(
     /*decltype(_impl_.cron_expr_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.params_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.handler_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct SubmitTaskRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR SubmitTaskRequestDefaultTypeInternal()
@@ -83,6 +99,7 @@ PROTOBUF_CONSTEXPR ExecuteTaskRequest::ExecuteTaskRequest(
     /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.params_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.handler_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ExecuteTaskRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExecuteTaskRequestDefaultTypeInternal()
@@ -108,13 +125,49 @@ struct ExecuteTaskResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ExecuteTaskResponseDefaultTypeInternal _ExecuteTaskResponse_default_instance_;
+PROTOBUF_CONSTEXPR CancelTaskRequest::CancelTaskRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CancelTaskRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CancelTaskRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CancelTaskRequestDefaultTypeInternal() {}
+  union {
+    CancelTaskRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CancelTaskRequestDefaultTypeInternal _CancelTaskRequest_default_instance_;
+PROTOBUF_CONSTEXPR CancelTaskResponse::CancelTaskResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct CancelTaskResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR CancelTaskResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~CancelTaskResponseDefaultTypeInternal() {}
+  union {
+    CancelTaskResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CancelTaskResponseDefaultTypeInternal _CancelTaskResponse_default_instance_;
 }  // namespace rpc
 }  // namespace corpcron
-static ::_pb::Metadata file_level_metadata_rpc_2eproto[6];
-static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_rpc_2eproto = nullptr;
+static ::_pb::Metadata file_level_metadata_rpc_2eproto[9];
+static const ::_pb::EnumDescriptor* file_level_enum_descriptors_rpc_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_rpc_2eproto = nullptr;
 
 const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RpcError, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RpcError, _impl_.code_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RpcError, _impl_.message_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EchoRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -122,6 +175,7 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EchoRequest, _impl_.message_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EchoRequest, _impl_.auth_token_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EchoResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -138,6 +192,7 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::SubmitTaskRequest, _impl_.cron_expr_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::SubmitTaskRequest, _impl_.params_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::SubmitTaskRequest, _impl_.handler_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::SubmitTaskRequest, _impl_.auth_token_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::SubmitTaskResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -156,6 +211,7 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.task_id_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.params_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.handler_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.auth_token_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -165,42 +221,74 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskResponse, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskResponse, _impl_.result_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskResponse, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskRequest, _impl_.task_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskRequest, _impl_.auth_token_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskResponse, _impl_.error_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::corpcron::rpc::EchoRequest)},
-  { 7, -1, -1, sizeof(::corpcron::rpc::EchoResponse)},
-  { 14, -1, -1, sizeof(::corpcron::rpc::SubmitTaskRequest)},
-  { 23, -1, -1, sizeof(::corpcron::rpc::SubmitTaskResponse)},
-  { 32, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskRequest)},
-  { 41, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskResponse)},
+  { 0, -1, -1, sizeof(::corpcron::rpc::RpcError)},
+  { 8, -1, -1, sizeof(::corpcron::rpc::EchoRequest)},
+  { 16, -1, -1, sizeof(::corpcron::rpc::EchoResponse)},
+  { 23, -1, -1, sizeof(::corpcron::rpc::SubmitTaskRequest)},
+  { 33, -1, -1, sizeof(::corpcron::rpc::SubmitTaskResponse)},
+  { 42, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskRequest)},
+  { 52, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskResponse)},
+  { 61, -1, -1, sizeof(::corpcron::rpc::CancelTaskRequest)},
+  { 69, -1, -1, sizeof(::corpcron::rpc::CancelTaskResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
+  &::corpcron::rpc::_RpcError_default_instance_._instance,
   &::corpcron::rpc::_EchoRequest_default_instance_._instance,
   &::corpcron::rpc::_EchoResponse_default_instance_._instance,
   &::corpcron::rpc::_SubmitTaskRequest_default_instance_._instance,
   &::corpcron::rpc::_SubmitTaskResponse_default_instance_._instance,
   &::corpcron::rpc::_ExecuteTaskRequest_default_instance_._instance,
   &::corpcron::rpc::_ExecuteTaskResponse_default_instance_._instance,
+  &::corpcron::rpc::_CancelTaskRequest_default_instance_._instance,
+  &::corpcron::rpc::_CancelTaskResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_rpc_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
-  "\n\trpc.proto\022\014corpcron.rpc\"\036\n\013EchoRequest"
-  "\022\017\n\007message\030\001 \001(\t\"\037\n\014EchoResponse\022\017\n\007mes"
-  "sage\030\001 \001(\t\"G\n\021SubmitTaskRequest\022\021\n\tcron_"
-  "expr\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017\n\007handler\030\003 "
-  "\001(\t\"E\n\022SubmitTaskResponse\022\017\n\007task_id\030\001 \001"
-  "(\t\022\017\n\007success\030\002 \001(\010\022\r\n\005error\030\003 \001(\t\"F\n\022Ex"
-  "ecuteTaskRequest\022\017\n\007task_id\030\001 \001(\t\022\016\n\006par"
-  "ams\030\002 \001(\t\022\017\n\007handler\030\003 \001(\t\"E\n\023ExecuteTas"
-  "kResponse\022\017\n\007success\030\001 \001(\010\022\016\n\006result\030\002 \001"
-  "(\t\022\r\n\005error\030\003 \001(\tb\006proto3"
+  "\n\trpc.proto\022\014corpcron.rpc\"B\n\010RpcError\022%\n"
+  "\004code\030\001 \001(\0162\027.corpcron.rpc.ErrorCode\022\017\n\007"
+  "message\030\002 \001(\t\"2\n\013EchoRequest\022\017\n\007message\030"
+  "\001 \001(\t\022\022\n\nauth_token\030\002 \001(\t\"\037\n\014EchoRespons"
+  "e\022\017\n\007message\030\001 \001(\t\"[\n\021SubmitTaskRequest\022"
+  "\021\n\tcron_expr\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017\n\007ha"
+  "ndler\030\003 \001(\t\022\022\n\nauth_token\030\004 \001(\t\"E\n\022Submi"
+  "tTaskResponse\022\017\n\007task_id\030\001 \001(\t\022\017\n\007succes"
+  "s\030\002 \001(\010\022\r\n\005error\030\003 \001(\t\"Z\n\022ExecuteTaskReq"
+  "uest\022\017\n\007task_id\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017\n"
+  "\007handler\030\003 \001(\t\022\022\n\nauth_token\030\004 \001(\t\"E\n\023Ex"
+  "ecuteTaskResponse\022\017\n\007success\030\001 \001(\010\022\016\n\006re"
+  "sult\030\002 \001(\t\022\r\n\005error\030\003 \001(\t\"8\n\021CancelTaskR"
+  "equest\022\017\n\007task_id\030\001 \001(\t\022\022\n\nauth_token\030\002 "
+  "\001(\t\"4\n\022CancelTaskResponse\022\017\n\007success\030\001 \001"
+  "(\010\022\r\n\005error\030\002 \001(\t*\232\001\n\tErrorCode\022\006\n\002OK\020\000\022"
+  "\017\n\013BAD_REQUEST\020\001\022\022\n\016UNKNOWN_METHOD\020\002\022\025\n\021"
+  "PAYLOAD_TOO_LARGE\020\003\022\022\n\016INTERNAL_ERROR\020\004\022"
+  "\014\n\010DB_ERROR\020\005\022\025\n\021HANDLER_NOT_FOUND\020\006\022\020\n\014"
+  "UNAUTHORIZED\020\007b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_rpc_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_rpc_2eproto = {
-    false, false, 385, descriptor_table_protodef_rpc_2eproto,
+    false, false, 782, descriptor_table_protodef_rpc_2eproto,
     "rpc.proto",
-    &descriptor_table_rpc_2eproto_once, nullptr, 0, 6,
+    &descriptor_table_rpc_2eproto_once, nullptr, 0, 9,
     schemas, file_default_instances, TableStruct_rpc_2eproto::offsets,
     file_level_metadata_rpc_2eproto, file_level_enum_descriptors_rpc_2eproto,
     file_level_service_descriptors_rpc_2eproto,
@@ -213,6 +301,259 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_rpc_2epr
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_rpc_2eproto(&descriptor_table_rpc_2eproto);
 namespace corpcron {
 namespace rpc {
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ErrorCode_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_rpc_2eproto);
+  return file_level_enum_descriptors_rpc_2eproto[0];
+}
+bool ErrorCode_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return true;
+    default:
+      return false;
+  }
+}
+
+
+// ===================================================================
+
+class RpcError::_Internal {
+ public:
+};
+
+RpcError::RpcError(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.RpcError)
+}
+RpcError::RpcError(const RpcError& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RpcError* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.code_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_message().empty()) {
+    _this->_impl_.message_.Set(from._internal_message(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.code_ = from._impl_.code_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.RpcError)
+}
+
+inline void RpcError::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.message_){}
+    , decltype(_impl_.code_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.message_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RpcError::~RpcError() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.RpcError)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RpcError::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.message_.Destroy();
+}
+
+void RpcError::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RpcError::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.RpcError)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.message_.ClearToEmpty();
+  _impl_.code_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RpcError::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // .corpcron.rpc.ErrorCode code = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          uint64_t val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_code(static_cast<::corpcron::rpc::ErrorCode>(val));
+        } else
+          goto handle_unusual;
+        continue;
+      // string message = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_message();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.RpcError.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RpcError::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.RpcError)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .corpcron.rpc.ErrorCode code = 1;
+  if (this->_internal_code() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_code(), target);
+  }
+
+  // string message = 2;
+  if (!this->_internal_message().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_message().data(), static_cast<int>(this->_internal_message().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.RpcError.message");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_message(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.RpcError)
+  return target;
+}
+
+size_t RpcError::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.RpcError)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string message = 2;
+  if (!this->_internal_message().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_message());
+  }
+
+  // .corpcron.rpc.ErrorCode code = 1;
+  if (this->_internal_code() != 0) {
+    total_size += 1 +
+      ::_pbi::WireFormatLite::EnumSize(this->_internal_code());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RpcError::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RpcError::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RpcError::GetClassData() const { return &_class_data_; }
+
+
+void RpcError::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RpcError*>(&to_msg);
+  auto& from = static_cast<const RpcError&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.RpcError)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_message().empty()) {
+    _this->_internal_set_message(from._internal_message());
+  }
+  if (from._internal_code() != 0) {
+    _this->_internal_set_code(from._internal_code());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RpcError::CopyFrom(const RpcError& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.RpcError)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RpcError::IsInitialized() const {
+  return true;
+}
+
+void RpcError::InternalSwap(RpcError* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.message_, lhs_arena,
+      &other->_impl_.message_, rhs_arena
+  );
+  swap(_impl_.code_, other->_impl_.code_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RpcError::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[0]);
+}
 
 // ===================================================================
 
@@ -231,6 +572,7 @@ EchoRequest::EchoRequest(const EchoRequest& from)
   EchoRequest* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.message_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -242,6 +584,14 @@ EchoRequest::EchoRequest(const EchoRequest& from)
     _this->_impl_.message_.Set(from._internal_message(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.EchoRequest)
 }
 
@@ -251,11 +601,16 @@ inline void EchoRequest::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.message_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.message_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.message_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -271,6 +626,7 @@ EchoRequest::~EchoRequest() {
 inline void EchoRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.message_.Destroy();
+  _impl_.auth_token_.Destroy();
 }
 
 void EchoRequest::SetCachedSize(int size) const {
@@ -284,6 +640,7 @@ void EchoRequest::Clear() {
   (void) cached_has_bits;
 
   _impl_.message_.ClearToEmpty();
+  _impl_.auth_token_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -300,6 +657,16 @@ const char* EchoRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* c
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.EchoRequest.message"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string auth_token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.EchoRequest.auth_token"));
         } else
           goto handle_unusual;
         continue;
@@ -342,6 +709,16 @@ uint8_t* EchoRequest::_InternalSerialize(
         1, this->_internal_message(), target);
   }
 
+  // string auth_token = 2;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.EchoRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_auth_token(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -365,6 +742,13 @@ size_t EchoRequest::ByteSizeLong() const {
         this->_internal_message());
   }
 
+  // string auth_token = 2;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -385,6 +769,9 @@ void EchoRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PR
 
   if (!from._internal_message().empty()) {
     _this->_internal_set_message(from._internal_message());
+  }
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -409,12 +796,16 @@ void EchoRequest::InternalSwap(EchoRequest* other) {
       &_impl_.message_, lhs_arena,
       &other->_impl_.message_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata EchoRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[0]);
+      file_level_metadata_rpc_2eproto[1]);
 }
 
 // ===================================================================
@@ -617,7 +1008,7 @@ void EchoResponse::InternalSwap(EchoResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata EchoResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[1]);
+      file_level_metadata_rpc_2eproto[2]);
 }
 
 // ===================================================================
@@ -639,6 +1030,7 @@ SubmitTaskRequest::SubmitTaskRequest(const SubmitTaskRequest& from)
       decltype(_impl_.cron_expr_){}
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -666,6 +1058,14 @@ SubmitTaskRequest::SubmitTaskRequest(const SubmitTaskRequest& from)
     _this->_impl_.handler_.Set(from._internal_handler(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.SubmitTaskRequest)
 }
 
@@ -677,6 +1077,7 @@ inline void SubmitTaskRequest::SharedCtor(
       decltype(_impl_.cron_expr_){}
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.cron_expr_.InitDefault();
@@ -690,6 +1091,10 @@ inline void SubmitTaskRequest::SharedCtor(
   _impl_.handler_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.handler_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -707,6 +1112,7 @@ inline void SubmitTaskRequest::SharedDtor() {
   _impl_.cron_expr_.Destroy();
   _impl_.params_.Destroy();
   _impl_.handler_.Destroy();
+  _impl_.auth_token_.Destroy();
 }
 
 void SubmitTaskRequest::SetCachedSize(int size) const {
@@ -722,6 +1128,7 @@ void SubmitTaskRequest::Clear() {
   _impl_.cron_expr_.ClearToEmpty();
   _impl_.params_.ClearToEmpty();
   _impl_.handler_.ClearToEmpty();
+  _impl_.auth_token_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -758,6 +1165,16 @@ const char* SubmitTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseCont
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.SubmitTaskRequest.handler"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string auth_token = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.SubmitTaskRequest.auth_token"));
         } else
           goto handle_unusual;
         continue;
@@ -820,6 +1237,16 @@ uint8_t* SubmitTaskRequest::_InternalSerialize(
         3, this->_internal_handler(), target);
   }
 
+  // string auth_token = 4;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.SubmitTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_auth_token(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -857,6 +1284,13 @@ size_t SubmitTaskRequest::ByteSizeLong() const {
         this->_internal_handler());
   }
 
+  // string auth_token = 4;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -883,6 +1317,9 @@ void SubmitTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   }
   if (!from._internal_handler().empty()) {
     _this->_internal_set_handler(from._internal_handler());
+  }
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -915,12 +1352,16 @@ void SubmitTaskRequest::InternalSwap(SubmitTaskRequest* other) {
       &_impl_.handler_, lhs_arena,
       &other->_impl_.handler_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata SubmitTaskRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[2]);
+      file_level_metadata_rpc_2eproto[3]);
 }
 
 // ===================================================================
@@ -1200,7 +1641,7 @@ void SubmitTaskResponse::InternalSwap(SubmitTaskResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata SubmitTaskResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[3]);
+      file_level_metadata_rpc_2eproto[4]);
 }
 
 // ===================================================================
@@ -1222,6 +1663,7 @@ ExecuteTaskRequest::ExecuteTaskRequest(const ExecuteTaskRequest& from)
       decltype(_impl_.task_id_){}
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -1249,6 +1691,14 @@ ExecuteTaskRequest::ExecuteTaskRequest(const ExecuteTaskRequest& from)
     _this->_impl_.handler_.Set(from._internal_handler(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ExecuteTaskRequest)
 }
 
@@ -1260,6 +1710,7 @@ inline void ExecuteTaskRequest::SharedCtor(
       decltype(_impl_.task_id_){}
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
+    , decltype(_impl_.auth_token_){}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.task_id_.InitDefault();
@@ -1273,6 +1724,10 @@ inline void ExecuteTaskRequest::SharedCtor(
   _impl_.handler_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.handler_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -1290,6 +1745,7 @@ inline void ExecuteTaskRequest::SharedDtor() {
   _impl_.task_id_.Destroy();
   _impl_.params_.Destroy();
   _impl_.handler_.Destroy();
+  _impl_.auth_token_.Destroy();
 }
 
 void ExecuteTaskRequest::SetCachedSize(int size) const {
@@ -1305,6 +1761,7 @@ void ExecuteTaskRequest::Clear() {
   _impl_.task_id_.ClearToEmpty();
   _impl_.params_.ClearToEmpty();
   _impl_.handler_.ClearToEmpty();
+  _impl_.auth_token_.ClearToEmpty();
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -1341,6 +1798,16 @@ const char* ExecuteTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseCon
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ExecuteTaskRequest.handler"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string auth_token = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ExecuteTaskRequest.auth_token"));
         } else
           goto handle_unusual;
         continue;
@@ -1403,6 +1870,16 @@ uint8_t* ExecuteTaskRequest::_InternalSerialize(
         3, this->_internal_handler(), target);
   }
 
+  // string auth_token = 4;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ExecuteTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_auth_token(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -1440,6 +1917,13 @@ size_t ExecuteTaskRequest::ByteSizeLong() const {
         this->_internal_handler());
   }
 
+  // string auth_token = 4;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -1466,6 +1950,9 @@ void ExecuteTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   }
   if (!from._internal_handler().empty()) {
     _this->_internal_set_handler(from._internal_handler());
+  }
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -1498,12 +1985,16 @@ void ExecuteTaskRequest::InternalSwap(ExecuteTaskRequest* other) {
       &_impl_.handler_, lhs_arena,
       &other->_impl_.handler_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ExecuteTaskRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[4]);
+      file_level_metadata_rpc_2eproto[5]);
 }
 
 // ===================================================================
@@ -1783,13 +2274,500 @@ void ExecuteTaskResponse::InternalSwap(ExecuteTaskResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ExecuteTaskResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
-      file_level_metadata_rpc_2eproto[5]);
+      file_level_metadata_rpc_2eproto[6]);
+}
+
+// ===================================================================
+
+class CancelTaskRequest::_Internal {
+ public:
+};
+
+CancelTaskRequest::CancelTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.CancelTaskRequest)
+}
+CancelTaskRequest::CancelTaskRequest(const CancelTaskRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CancelTaskRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_id_){}
+    , decltype(_impl_.auth_token_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.CancelTaskRequest)
+}
+
+inline void CancelTaskRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_id_){}
+    , decltype(_impl_.auth_token_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+CancelTaskRequest::~CancelTaskRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.CancelTaskRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CancelTaskRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.task_id_.Destroy();
+  _impl_.auth_token_.Destroy();
+}
+
+void CancelTaskRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CancelTaskRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.CancelTaskRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.task_id_.ClearToEmpty();
+  _impl_.auth_token_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CancelTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string task_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.CancelTaskRequest.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string auth_token = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.CancelTaskRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CancelTaskRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.CancelTaskRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.CancelTaskRequest.task_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_task_id(), target);
+  }
+
+  // string auth_token = 2;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.CancelTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_auth_token(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.CancelTaskRequest)
+  return target;
+}
+
+size_t CancelTaskRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.CancelTaskRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  // string auth_token = 2;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CancelTaskRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CancelTaskRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CancelTaskRequest::GetClassData() const { return &_class_data_; }
+
+
+void CancelTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CancelTaskRequest*>(&to_msg);
+  auto& from = static_cast<const CancelTaskRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.CancelTaskRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CancelTaskRequest::CopyFrom(const CancelTaskRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.CancelTaskRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CancelTaskRequest::IsInitialized() const {
+  return true;
+}
+
+void CancelTaskRequest::InternalSwap(CancelTaskRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CancelTaskRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[7]);
+}
+
+// ===================================================================
+
+class CancelTaskResponse::_Internal {
+ public:
+};
+
+CancelTaskResponse::CancelTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.CancelTaskResponse)
+}
+CancelTaskResponse::CancelTaskResponse(const CancelTaskResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  CancelTaskResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.CancelTaskResponse)
+}
+
+inline void CancelTaskResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+CancelTaskResponse::~CancelTaskResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.CancelTaskResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void CancelTaskResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.error_.Destroy();
+}
+
+void CancelTaskResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void CancelTaskResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.CancelTaskResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* CancelTaskResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.CancelTaskResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* CancelTaskResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.CancelTaskResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.CancelTaskResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.CancelTaskResponse)
+  return target;
+}
+
+size_t CancelTaskResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.CancelTaskResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData CancelTaskResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    CancelTaskResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*CancelTaskResponse::GetClassData() const { return &_class_data_; }
+
+
+void CancelTaskResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<CancelTaskResponse*>(&to_msg);
+  auto& from = static_cast<const CancelTaskResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.CancelTaskResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void CancelTaskResponse::CopyFrom(const CancelTaskResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.CancelTaskResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool CancelTaskResponse::IsInitialized() const {
+  return true;
+}
+
+void CancelTaskResponse::InternalSwap(CancelTaskResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata CancelTaskResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[8]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace rpc
 }  // namespace corpcron
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::RpcError*
+Arena::CreateMaybeMessage< ::corpcron::rpc::RpcError >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::RpcError >(arena);
+}
 template<> PROTOBUF_NOINLINE ::corpcron::rpc::EchoRequest*
 Arena::CreateMaybeMessage< ::corpcron::rpc::EchoRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::corpcron::rpc::EchoRequest >(arena);
@@ -1813,6 +2791,14 @@ Arena::CreateMaybeMessage< ::corpcron::rpc::ExecuteTaskRequest >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::corpcron::rpc::ExecuteTaskResponse*
 Arena::CreateMaybeMessage< ::corpcron::rpc::ExecuteTaskResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::corpcron::rpc::ExecuteTaskResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::CancelTaskRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::CancelTaskRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::CancelTaskRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::CancelTaskResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::CancelTaskResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::CancelTaskResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

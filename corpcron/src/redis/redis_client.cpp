@@ -30,26 +30,55 @@ void RedisClient::disconnect() {
 }
 
 bool RedisClient::registerService(const std::string& service_name, const std::string& endpoint, int ttl_sec) {
-    std::string key = "services:" + service_name;
-    redisReply* reply = (redisReply*)redisCommand(ctx_, "SETEX %s %d %s", key.c_str(), ttl_sec, endpoint.c_str());
+    std::lock_guard<std::mutex> lock(mutex_);
+    std::string set_key = "services:" + service_name;
+    std::string node_key = set_key + ":" + endpoint;
+
+    redisReply* reply = (redisReply*)redisCommand(ctx_, "SADD %s %s", set_key.c_str(), endpoint.c_str());
     if (reply == nullptr) return false;
-    bool success = (reply->type == REDIS_REPLY_STATUS && std::string(reply->str) == "OK");
+    freeReplyObject(reply);
+
+    reply = (redisReply*)redisCommand(ctx_, "SETEX %s %d %s", node_key.c_str(), ttl_sec, endpoint.c_str());
+    if (reply == nullptr) return false;
+    bool success = (reply->type == REDIS_REPLY_STATUS && reply->str && std::string(reply->str) == "OK");
     freeReplyObject(reply);
     return success;
 }
 
-bool RedisClient::heartbeat(const std::string& service_name, const std::string& endpoint, int ttl_sec) {
+void RedisClient::unregisterService(const std::string& service_name, const std::string& endpoint) {
     std::lock_guard<std::mutex> lock(mutex_);
+    std::string set_key = "services:" + service_name;
+    std::string node_key = set_key + ":" + endpoint;
+    redisReply* reply = (redisReply*)redisCommand(ctx_, "SREM %s %s", set_key.c_str(), endpoint.c_str());
+    if (reply) freeReplyObject(reply);
+    reply = (redisReply*)redisCommand(ctx_, "DEL %s", node_key.c_str());
+    if (reply) freeReplyObject(reply);
+}
+
+bool RedisClient::heartbeat(const std::string& service_name, const std::string& endpoint, int ttl_sec) {
     return registerService(service_name, endpoint, ttl_sec);
 }
 
 std::vector<std::string> RedisClient::discoverServices(const std::string& service_name) {
     std::lock_guard<std::mutex> lock(mutex_);
-    std::string key = "services:" + service_name;
-    redisReply* reply = (redisReply*)redisCommand(ctx_, "GET %s", key.c_str());
+    std::string set_key = "services:" + service_name;
+    redisReply* reply = (redisReply*)redisCommand(ctx_, "SMEMBERS %s", set_key.c_str());
     std::vector<std::string> endpoints;
-    if (reply && reply->type == REDIS_REPLY_STRING) {
-        endpoints.push_back(std::string(reply->str, reply->len));
+    if (reply && reply->type == REDIS_REPLY_ARRAY) {
+        for (size_t i = 0; i < reply->elements; ++i) {
+            redisReply* item = reply->element[i];
+            if (!item || item->type != REDIS_REPLY_STRING) continue;
+            std::string endpoint(item->str, item->len);
+            std::string node_key = set_key + ":" + endpoint;
+            redisReply* alive = (redisReply*)redisCommand(ctx_, "GET %s", node_key.c_str());
+            if (alive && alive->type == REDIS_REPLY_STRING) {
+                endpoints.emplace_back(alive->str, alive->len);
+            } else {
+                redisReply* cleanup = (redisReply*)redisCommand(ctx_, "SREM %s %s", set_key.c_str(), endpoint.c_str());
+                if (cleanup) freeReplyObject(cleanup);
+            }
+            if (alive) freeReplyObject(alive);
+        }
     }
     if (reply) freeReplyObject(reply);
     return endpoints;
@@ -68,12 +97,10 @@ bool RedisClient::lock(const std::string& key, const std::string& value, int exp
         "end";
     auto start = std::chrono::steady_clock::now();
     while (true) {
-        std::cout << "Trying lock: key=" << lock_key << " value=" << value << std::endl;
         //redisCommand 的返回类型是 void*，需要强转成 redisReply*
         redisReply* reply = (redisReply*)redisCommand(ctx_, "EVAL %s 1 %s %s %d", 
                             lua_script, lock_key.c_str(), value.c_str(), expire_sec);
         if (reply) {
-            std::cout << "EVAL reply type=" << reply->type << " str=" << (reply->str ? reply->str : "null") << std::endl;
             if (reply->type == REDIS_REPLY_STRING && std::string(reply->str) == "OK") {
                 freeReplyObject(reply);
                 return true;
@@ -87,6 +114,22 @@ bool RedisClient::lock(const std::string& key, const std::string& value, int exp
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
     return false;
+}
+
+bool RedisClient::renewLock(const std::string& key, const std::string& value, int expire_sec) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    std::string lock_key = "lock:" + key;
+    const char* script =
+        "if redis.call('get', KEYS[1]) == ARGV[1] then "
+        "   return redis.call('expire', KEYS[1], ARGV[2]) "
+        "else "
+        "   return 0 "
+        "end";
+    redisReply* reply = (redisReply*)redisCommand(ctx_, "EVAL %s 1 %s %s %d",
+                                                  script, lock_key.c_str(), value.c_str(), expire_sec);
+    bool success = reply && reply->type == REDIS_REPLY_INTEGER && reply->integer == 1;
+    if (reply) freeReplyObject(reply);
+    return success;
 }
 
 void RedisClient::unlock(const std::string& key, const std::string& value) {

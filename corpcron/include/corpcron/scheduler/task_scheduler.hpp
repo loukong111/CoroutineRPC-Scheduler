@@ -21,9 +21,15 @@ public:
     void stop();
 
 private:
+    struct ExecutionOutcome {
+        bool success = false;
+        std::string result;
+        std::string error;
+    };
+
     void schedulerLoop();
     void scanAndDispatch();
-    void executeTask(const TaskMeta& task);
+    ExecutionOutcome executeTask(const TaskMeta& task);
 
     std::shared_ptr<MySQLClient> db_;
     std::shared_ptr<RedisClient> redis_;
