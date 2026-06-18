@@ -3,11 +3,12 @@
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/common/thread_pool.hpp"
 #include <atomic>
+#include <condition_variable>
 #include <thread>
 #include <memory>
 #include <unordered_map>
 #include <mutex>
-#include <random> 
+#include <chrono>
 
 namespace corpcron {
 
@@ -27,6 +28,35 @@ private:
         std::string error;
     };
 
+    class LockRenewer {
+    public:
+        explicit LockRenewer(std::shared_ptr<RedisClient> redis);
+        ~LockRenewer();
+
+        void start();
+        void stop();
+        void add(const std::string& key, const std::string& value, int ttl_sec);
+        void remove(const std::string& key);
+
+    private:
+        struct Lease {
+            std::string key;
+            std::string value;
+            int ttl_sec;
+            std::chrono::steady_clock::time_point next_renew_at;
+        };
+
+        void loop();
+        std::chrono::steady_clock::time_point nextRenewTime(int ttl_sec) const;
+
+        std::shared_ptr<RedisClient> redis_;
+        std::mutex mutex_;
+        std::condition_variable cv_;
+        std::unordered_map<std::string, Lease> leases_;
+        std::thread thread_;
+        bool running_ = false;
+    };
+
     void schedulerLoop();
     void scanAndDispatch();
     ExecutionOutcome executeTask(const TaskMeta& task);
@@ -37,10 +67,7 @@ private:
     std::atomic<bool> running_;
     std::unique_ptr<std::thread> thread_;
     std::unique_ptr<DynamicThreadPool> thread_pool_;
-    std::unordered_map<std::string, uint64_t> last_fire_ms_;
-    std::mutex last_fire_mutex_;
-    std::vector<std::string> nodes_;
-    std::mt19937 rng_;
+    std::unique_ptr<LockRenewer> lock_renewer_;
 };
 
 } // namespace corpcron

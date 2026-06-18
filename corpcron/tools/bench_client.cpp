@@ -59,12 +59,12 @@ int main(int argc, char* argv[]) {
                 uint32_t response_serial_id = 0;
                 std::string response_payload;
                 auto begin = std::chrono::steady_clock::now();
-                bool ok = client.call(1, payload, response_serial_id, response_payload, 3000);
+                bool ok = client.call(corpcron::rpc::kEchoRequestSerialId, payload, response_serial_id, response_payload, 3000);
                 auto end = std::chrono::steady_clock::now();
                 int latency = static_cast<int>(
                     std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count());
 
-                if (ok && response_serial_id == 2) {
+                if (ok && response_serial_id == corpcron::rpc::kEchoResponseSerialId) {
                     ++success;
                     std::lock_guard<std::mutex> lock(latencies_mutex);
                     latencies_ms.push_back(latency);

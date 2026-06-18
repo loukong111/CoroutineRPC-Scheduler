@@ -1,6 +1,6 @@
-# Deployment
+# 部署说明
 
-## Local Dependencies
+## 本地依赖环境
 
 ```bash
 docker compose up -d
@@ -9,7 +9,7 @@ cmake --build build -j
 ./build/corpcron_server --config config/server.conf
 ```
 
-## Container Image
+## 容器镜像
 
 ```bash
 docker build -t corpcron:local .
@@ -20,11 +20,11 @@ docker run --rm -p 8081:8081 \
   corpcron:local
 ```
 
-On Linux, replace `host.docker.internal` with a reachable host address or run the service in the same Compose network.
+在 Linux 环境下，如果 `host.docker.internal` 不可用，可以替换成宿主机可访问的地址，或者让服务和 MySQL/Redis 运行在同一个 Compose 网络中。
 
 ## systemd
 
-Install binary and config:
+安装二进制文件和配置：
 
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin corpcron
@@ -34,14 +34,14 @@ sudo cp config/server.example.conf /etc/corpcron/server.conf
 sudo cp systemd/corpcron.service /etc/systemd/system/
 ```
 
-Put secrets in `/etc/corpcron/corpcron.env`:
+将敏感配置放到 `/etc/corpcron/corpcron.env`：
 
 ```bash
 CORPCRON_MYSQL_PASSWORD=your_password
 CORPCRON_SERVER_ADVERTISE_HOST=10.0.0.12
 ```
 
-Start:
+启动服务：
 
 ```bash
 sudo systemctl daemon-reload

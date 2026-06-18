@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     corpcron::RpcClient client(host, port);
     uint32_t response_serial_id = 0;
     std::string resp_payload;
-    if (!client.call(3, payload, response_serial_id, resp_payload, 3000)) {
+    if (!client.call(corpcron::rpc::kSubmitTaskRequestSerialId, payload, response_serial_id, resp_payload, 3000)) {
         std::cerr << "SubmitTask RPC call failed" << std::endl;
         return 1;
     }

@@ -1,16 +1,16 @@
-# RPC Protocol
+# RPC 协议
 
-Corpcron RPC uses a simple frame format over TCP:
+Corpcron RPC 基于 TCP，自定义了一个简单的二进制帧格式：
 
 ```text
 4 bytes total_len | 4 bytes serial_id | protobuf payload
 ```
 
-- `total_len` is big-endian and includes `serial_id + payload`.
-- The server rejects malformed frames and frames larger than 4 MiB.
-- TCP fragmentation is handled by buffering until a full frame is available.
+- `total_len` 使用大端序，表示 `serial_id + payload` 的总长度。
+- 服务端会拒绝格式错误的帧，以及超过 4 MiB 的超大帧。
+- TCP 半包通过连接级缓冲区处理，直到收齐完整帧后再进入业务解析。
 
-## Serial IDs
+## 消息类型
 
 | Serial ID | Message |
 | --- | --- |
@@ -24,9 +24,9 @@ Corpcron RPC uses a simple frame format over TCP:
 | 8 | `CancelTaskResponse` |
 | 100 | `RpcError` |
 
-## Error Response
+## 错误响应
 
-When the server cannot parse or dispatch a request, it returns serial id `100` with `RpcError`.
+当服务端无法解析或分发请求时，会返回 serial id `100`，payload 为 `RpcError`。
 
 ```protobuf
 enum ErrorCode {
@@ -46,8 +46,8 @@ message RpcError {
 }
 ```
 
-Business responses may still carry business-level failure fields, such as `SubmitTaskResponse.success=false`.
+业务响应仍然可以携带业务级失败信息，例如 `SubmitTaskResponse.success=false`。
 
-## Auth
+## 鉴权
 
-When `rpc.auth_token` is empty, auth is disabled. When configured, clients must set `auth_token` on request messages. Protocol-level auth failure returns `RpcError{UNAUTHORIZED}`.
+当 `rpc.auth_token` 为空时，鉴权关闭。配置该字段后，客户端必须在请求消息中设置同样的 `auth_token`。协议级鉴权失败会返回 `RpcError{UNAUTHORIZED}`。

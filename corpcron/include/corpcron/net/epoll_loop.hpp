@@ -30,8 +30,8 @@ private:
     int epoll_fd_ = -1;
     int wake_fd_ = -1;
     std::atomic<bool> running_{false};
-    std::unordered_map<int, EventCallback> callbacks_;
-    std::unordered_map<int, CoroutineCallback> coro_callbacks_;
+    std::unordered_map<int, EventCallback> callbacks_;//普通同步回调，事件触发当场执行逻辑
+    std::unordered_map<int, CoroutineCallback> coro_callbacks_;//协程唤醒入口，只负责恢复协程
     static constexpr int MAX_EVENTS = 64;
     struct epoll_event events_[MAX_EVENTS];
 };

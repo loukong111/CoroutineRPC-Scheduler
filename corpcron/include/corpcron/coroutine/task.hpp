@@ -6,8 +6,6 @@
 
 namespace corpcron {
 
-class Scheduler; // 暂时未使用，保留
-
 struct Task {
     struct promise_type {
         Task* owner = nullptr;
@@ -37,6 +35,8 @@ struct Task {
         if (handle) handle.promise().owner = this;
     }
     ~Task() { if (handle) handle.destroy(); }
+    Task(const Task&) = delete;
+    Task& operator=(const Task&) = delete;
     Task(Task&& other) noexcept : handle(std::exchange(other.handle, nullptr)), detached_(other.detached_) {
         if (handle) handle.promise().owner = this;
         other.detached_ = false;
@@ -51,7 +51,15 @@ struct Task {
         }
         return *this;
     }
-    void detach() { detached_ = true; }
+
+    static void spawn(Task&& task) {
+        auto* owned = new Task(std::move(task));
+        owned->detached_ = true;
+        if (owned->handle && owned->handle.done()) {
+            owned->detached_ = false;
+            delete owned;
+        }
+    }
 
 private:
     bool detached_ = false;

@@ -12,6 +12,7 @@ find_package(Protobuf REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/../include)
 include_directories(${CMAKE_SOURCE_DIR}/../src)
+include_directories(${CMAKE_SOURCE_DIR}/../generated)
 include_directories(${Protobuf_INCLUDE_DIRS})
 
 
@@ -19,7 +20,7 @@ add_executable(corpcron_client
     main.cpp
     mainwindow.h
     mainwindow.cpp
-    ../src/rpc.pb.cc
+    ../generated/rpc.pb.cc
 )
 
 target_link_libraries(corpcron_client

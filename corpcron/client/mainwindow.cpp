@@ -3,9 +3,13 @@
 #include <QHBoxLayout>
 #include <QMessageBox>
 #include <QHostAddress>
+#include "corpcron/rpc/protocol.hpp"
 #include "rpc.pb.h"
 
 static QByteArray encode(uint32_t serialId, const std::string& payload) {
+    if (payload.size() > corpcron::rpc::kMaxPayloadSize) {
+        return {};
+    }
     uint32_t totalLen = 4 + payload.size();
     QByteArray buf;
     buf.resize(4 + totalLen);
@@ -75,7 +79,11 @@ void MainWindow::sendRequest() {
 
     std::string payload;
     req.SerializeToString(&payload);
-    QByteArray data = encode(3, payload);
+    QByteArray data = encode(corpcron::rpc::kSubmitTaskRequestSerialId, payload);
+    if (data.isEmpty()) {
+        resultLabel->setText("提交失败: 请求过大");
+        return;
+    }
     socket->write(data);
     resultLabel->setText("已提交，等待响应...");
 }
@@ -93,7 +101,7 @@ void MainWindow::onReadyRead() {
                                 ((unsigned char)recvBuffer[6] << 8) |
                                 (unsigned char)recvBuffer[7];
             std::string payload(recvBuffer.constData() + 8, totalLen - 4);
-            if (serialId == 4) {
+            if (serialId == corpcron::rpc::kSubmitTaskResponseSerialId) {
                 corpcron::rpc::SubmitTaskResponse resp;
                 if (resp.ParseFromString(payload)) {
                     if (resp.success()) {

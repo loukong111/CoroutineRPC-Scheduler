@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <string>
 #include <cstring>
+#include <stdexcept>
 
 namespace corpcron {
 namespace rpc {
@@ -10,6 +11,16 @@ namespace rpc {
 constexpr uint32_t kHeaderSize = 8;
 constexpr uint32_t kSerialIdSize = 4;
 constexpr uint32_t kMaxFrameSize = 4 * 1024 * 1024;
+constexpr size_t kMaxPayloadSize = kMaxFrameSize - kSerialIdSize;
+
+constexpr uint32_t kEchoRequestSerialId = 1;
+constexpr uint32_t kEchoResponseSerialId = 2;
+constexpr uint32_t kSubmitTaskRequestSerialId = 3;
+constexpr uint32_t kSubmitTaskResponseSerialId = 4;
+constexpr uint32_t kExecuteTaskRequestSerialId = 5;
+constexpr uint32_t kExecuteTaskResponseSerialId = 6;
+constexpr uint32_t kCancelTaskRequestSerialId = 7;
+constexpr uint32_t kCancelTaskResponseSerialId = 8;
 constexpr uint32_t kRpcErrorSerialId = 100;
 
 enum class DecodeStatus {
@@ -19,9 +30,10 @@ enum class DecodeStatus {
     TooLarge
 };
 
-inline std::string encode(uint32_t serial_id, const std::string& payload) {
-    uint32_t total_len = 4 + payload.size();
-    std::string buffer;
+inline bool tryEncode(uint32_t serial_id, const std::string& payload, std::string& buffer) {
+    if (payload.size() > kMaxPayloadSize) return false;
+    uint32_t total_len = kSerialIdSize + static_cast<uint32_t>(payload.size());
+    buffer.clear();
     buffer.resize(4 + total_len);
     buffer[0] = (total_len >> 24) & 0xFF;
     buffer[1] = (total_len >> 16) & 0xFF;
@@ -32,6 +44,14 @@ inline std::string encode(uint32_t serial_id, const std::string& payload) {
     buffer[6] = (serial_id >> 8) & 0xFF;
     buffer[7] = serial_id & 0xFF;
     memcpy(&buffer[8], payload.data(), payload.size());
+    return true;
+}
+
+inline std::string encode(uint32_t serial_id, const std::string& payload) {
+    std::string buffer;
+    if (!tryEncode(serial_id, payload, buffer)) {
+        throw std::length_error("RPC payload exceeds max frame size");
+    }
     return buffer;
 }
 
@@ -54,6 +74,7 @@ inline DecodeStatus tryDecodeFrame(const char* data, size_t len, uint32_t& seria
     return DecodeStatus::Complete;
 }
 
+//简化版本，如果你只想要知道是否成功解码，并且不关心错误信息，可以使用这个函数
 inline bool decode(const char* data, size_t len, uint32_t& serial_id, std::string& payload) {
     size_t frame_size = 0;
     return tryDecodeFrame(data, len, serial_id, payload, frame_size) == DecodeStatus::Complete;

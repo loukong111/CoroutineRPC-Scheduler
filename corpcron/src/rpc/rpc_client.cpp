@@ -97,7 +97,11 @@ bool RpcClient::call(uint32_t serial_id, const std::string& request_data, uint32
                      std::string& response_data, int timeout_ms) {
     if (!connect()) return false;
 
-    std::string data = rpc::encode(serial_id, request_data);
+    std::string data;
+    if (!rpc::tryEncode(serial_id, request_data, data)) {
+        disconnect();
+        return false;
+    }
     if (!sendAll(sock_fd_, data, timeout_ms)) {
         disconnect();
         return false;

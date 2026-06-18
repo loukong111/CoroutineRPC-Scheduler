@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
+#include <utility>
+#include <vector>
 
 namespace corpcron {
 
@@ -34,6 +36,7 @@ static std::string to_datetime_string(uint64_t timestamp_ms) {
     return buf;
 }
 
+//每失败一次等待时间就增加，最多等待5分钟
 static int retry_delay_seconds(int retry_count) {
     int exponent = std::min(std::max(retry_count - 1, 0), 6);
     return std::min(300, 5 * (1 << exponent));
@@ -53,16 +56,19 @@ TaskScheduler::TaskScheduler(std::shared_ptr<MySQLClient> db,
                              std::shared_ptr<RedisClient> redis,
                              const std::string& node_id)
     : db_(db), redis_(redis), node_id_(node_id), running_(false),
-      thread_pool_(std::make_unique<DynamicThreadPool>(2, 8, 50, 5)) {}
+      thread_pool_(std::make_unique<DynamicThreadPool>(2, 8, 50, 5)),
+      lock_renewer_(std::make_unique<LockRenewer>(redis_)) {}
 
 TaskScheduler::~TaskScheduler() {
     stop();
+    if (lock_renewer_) lock_renewer_->stop();
     if (thread_pool_) thread_pool_->stop();
 }
 
 void TaskScheduler::start() {
     if (running_) return;
     running_ = true;
+    if (lock_renewer_) lock_renewer_->start();
     thread_ = std::make_unique<std::thread>(&TaskScheduler::schedulerLoop, this);
 }
 
@@ -71,6 +77,7 @@ void TaskScheduler::stop() {
     if (thread_ && thread_->joinable()) {
         thread_->join();
     }
+    if (lock_renewer_) lock_renewer_->stop();
 }
 
 void TaskScheduler::schedulerLoop() {
@@ -116,19 +123,8 @@ void TaskScheduler::scanAndDispatch() {
         constexpr int lock_ttl_sec = 60;
         if (redis_->lock(lock_key, lock_value, lock_ttl_sec, 100)) {
             thread_pool_->enqueue([this, task, lock_key, lock_value]() {
-                std::atomic<bool> renew_running{true};
-                std::thread renew_thread([this, &renew_running, lock_key, lock_value]() {
-                    int elapsed = 0;
-                    while (renew_running) {
-                        std::this_thread::sleep_for(std::chrono::seconds(1));
-                        if (!renew_running) break;
-                        if (++elapsed < 20) continue;
-                        elapsed = 0;
-                        if (!redis_->renewLock(lock_key, lock_value, 60)) {
-                            std::cerr << "Failed to renew lock for " << lock_key << std::endl;
-                        }
-                    }
-                });
+                constexpr int lock_ttl_sec = 60;
+                lock_renewer_->add(lock_key, lock_value, lock_ttl_sec);
 
                 auto start = std::chrono::system_clock::now();
                 ExecutionOutcome outcome;
@@ -176,8 +172,7 @@ void TaskScheduler::scanAndDispatch() {
                 }
 
                 db_->updateTaskRuntime(task.id, next_status, next_run_at, history.end_time, next_retry_count);
-                renew_running = false;
-                if (renew_thread.joinable()) renew_thread.join();
+                lock_renewer_->remove(lock_key);
                 redis_->unlock(lock_key, lock_value);
             });
         } else {
@@ -194,7 +189,7 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
         std::cerr << outcome.error << " for task " << task.id << std::endl;
         return outcome;
     }
-
+    //std::mt19937不是多线程安全的，要让每个线程有自己的副本
     thread_local std::mt19937 rng(std::random_device{}());
     std::uniform_int_distribution<> dist(0, endpoints.size() - 1);
     std::string endpoint = endpoints[dist(rng)];
@@ -218,7 +213,7 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
     RpcClient client(host, port);
     uint32_t response_serial_id = 0;
     std::string resp_data;
-    if (client.call(5, req_data, response_serial_id, resp_data, 5000)) {
+    if (client.call(corpcron::rpc::kExecuteTaskRequestSerialId, req_data, response_serial_id, resp_data, 5000)) {
         if (response_serial_id == corpcron::rpc::kRpcErrorSerialId) {
             corpcron::rpc::RpcError error;
             if (error.ParseFromString(resp_data)) {
@@ -244,6 +239,95 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
         std::cerr << outcome.error << std::endl;
     }
     return outcome;
+}
+
+TaskScheduler::LockRenewer::LockRenewer(std::shared_ptr<RedisClient> redis)
+    : redis_(std::move(redis)) {}
+
+TaskScheduler::LockRenewer::~LockRenewer() {
+    stop();
+}
+
+void TaskScheduler::LockRenewer::start() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    if (running_) return;
+    running_ = true;
+    thread_ = std::thread(&LockRenewer::loop, this);
+}
+
+void TaskScheduler::LockRenewer::stop() {
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        if (!running_) return;
+        running_ = false;
+        leases_.clear();
+    }
+    cv_.notify_all();
+    if (thread_.joinable()) thread_.join();
+}
+
+void TaskScheduler::LockRenewer::add(const std::string& key, const std::string& value, int ttl_sec) {
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        leases_[key] = Lease{key, value, ttl_sec, nextRenewTime(ttl_sec)};
+    }
+    cv_.notify_all();
+}
+
+void TaskScheduler::LockRenewer::remove(const std::string& key) {
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        leases_.erase(key);
+    }
+    cv_.notify_all();
+}
+
+void TaskScheduler::LockRenewer::loop() {
+    std::unique_lock<std::mutex> lock(mutex_);
+    while (running_) {
+        if (leases_.empty()) {
+            cv_.wait(lock, [this]() { return !running_ || !leases_.empty(); });
+            continue;
+        }
+
+        auto next_time = leases_.begin()->second.next_renew_at;
+        for (const auto& [_, lease] : leases_) {
+            next_time = std::min(next_time, lease.next_renew_at);
+        }
+
+        if (cv_.wait_until(lock, next_time, [this]() { return !running_; })) {
+            continue;
+        }
+        if (!running_) break;
+
+        auto now = std::chrono::steady_clock::now();
+        std::vector<Lease> due;
+        for (auto& [_, lease] : leases_) {
+            if (lease.next_renew_at <= now) {
+                due.push_back(lease);
+            }
+        }
+
+        lock.unlock();
+        for (const auto& lease : due) {
+            if (!redis_->renewLock(lease.key, lease.value, lease.ttl_sec)) {
+                std::cerr << "Failed to renew lock for " << lease.key << std::endl;
+            }
+        }
+        lock.lock();
+
+        now = std::chrono::steady_clock::now();
+        for (const auto& lease : due) {
+            auto it = leases_.find(lease.key);
+            if (it != leases_.end() && it->second.value == lease.value) {
+                it->second.next_renew_at = now + std::chrono::seconds(std::max(1, lease.ttl_sec / 3));
+            }
+        }
+    }
+}
+
+std::chrono::steady_clock::time_point TaskScheduler::LockRenewer::nextRenewTime(int ttl_sec) const {
+    return std::chrono::steady_clock::now() + std::chrono::seconds(std::max(1, ttl_sec / 3));
 }
 
 } // namespace corpcron

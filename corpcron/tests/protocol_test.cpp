@@ -1,6 +1,7 @@
 #include "corpcron/rpc/protocol.hpp"
 #include <cassert>
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 
 int main() {
@@ -8,10 +9,10 @@ int main() {
     std::string payload;
     size_t frame_size = 0;
 
-    std::string encoded = corpcron::rpc::encode(3, "payload");
+    std::string encoded = corpcron::rpc::encode(corpcron::rpc::kSubmitTaskRequestSerialId, "payload");
     assert(corpcron::rpc::tryDecodeFrame(encoded.data(), encoded.size(), serial_id, payload, frame_size) ==
            corpcron::rpc::DecodeStatus::Complete);
-    assert(serial_id == 3);
+    assert(serial_id == corpcron::rpc::kSubmitTaskRequestSerialId);
     assert(payload == "payload");
     assert(frame_size == encoded.size());
 
@@ -31,6 +32,17 @@ int main() {
     too_large[3] = static_cast<char>(total_len & 0xFF);
     assert(corpcron::rpc::tryDecodeFrame(too_large.data(), too_large.size(), serial_id, payload, frame_size) ==
            corpcron::rpc::DecodeStatus::TooLarge);
+
+    std::string oversized(corpcron::rpc::kMaxPayloadSize + 1, 'x');
+    std::string out;
+    assert(!corpcron::rpc::tryEncode(corpcron::rpc::kSubmitTaskRequestSerialId, oversized, out));
+    bool threw = false;
+    try {
+        (void)corpcron::rpc::encode(corpcron::rpc::kSubmitTaskRequestSerialId, oversized);
+    } catch (const std::length_error&) {
+        threw = true;
+    }
+    assert(threw);
 
     return 0;
 }

@@ -1,8 +1,35 @@
 #include "corpcron/mysql/mysql_client.hpp"
+#include <cppconn/datatype.h>
 #include <iostream>
 #include <sstream>
 
 namespace corpcron {
+
+namespace {
+
+TaskMeta task_from_result(sql::ResultSet& res) {
+    TaskMeta t;
+    t.id = res.getString("id");
+    t.cron_expr = res.getString("cron_expr");
+    t.params = res.getString("params");
+    t.handler = res.getString("handler");
+    t.status = res.getInt("status");
+    t.next_run_at = res.getString("next_run_at");
+    t.last_run_at = res.getString("last_run_at");
+    t.retry_count = res.getInt("retry_count");
+    t.max_retries = res.getInt("max_retries");
+    return t;
+}
+
+void set_datetime_or_null(sql::PreparedStatement& statement, unsigned int index, const std::string& value) {
+    if (value.empty()) {
+        statement.setNull(index, sql::DataType::SQLNULL);
+    } else {
+        statement.setString(index, value);
+    }
+}
+
+} // namespace
 
 MySQLClient::MySQLClient(const std::string& host, int port,
                          const std::string& user, const std::string& password,
@@ -45,7 +72,7 @@ bool MySQLClient::addTask(const TaskMeta& task) {
         pstmt->setString(3, task.params);
         pstmt->setString(4, task.handler);
         pstmt->setInt(5, task.status);
-        pstmt->setString(6, task.next_run_at);
+        set_datetime_or_null(*pstmt, 6, task.next_run_at);
         pstmt->setInt(7, task.retry_count);
         pstmt->setInt(8, task.max_retries);
         pstmt->execute();
@@ -99,12 +126,52 @@ bool MySQLClient::addHistory(const TaskHistory& history) {
         pstmt->setInt(3, history.success ? 1 : 0);
         pstmt->setString(4, history.result);
         pstmt->setString(5, history.error);
-        pstmt->setString(6, history.start_time);
-        pstmt->setString(7, history.end_time);
+        set_datetime_or_null(*pstmt, 6, history.start_time);
+        set_datetime_or_null(*pstmt, 7, history.end_time);
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
         std::cerr << "addHistory error: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+bool MySQLClient::getTask(const std::string& id, TaskMeta& task) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    try {
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
+            "SELECT id, cron_expr, params, handler, status, next_run_at, last_run_at, retry_count, max_retries "
+            "FROM tasks WHERE id=?"));
+        pstmt->setString(1, id);
+        std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
+        if (!res->next()) return false;
+        task = task_from_result(*res);
+        return true;
+    } catch (sql::SQLException &e) {
+        std::cerr << "getTask error: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+bool MySQLClient::getLatestHistory(const std::string& task_id, TaskHistory& history) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    try {
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
+            "SELECT task_id, exec_node, success, result, error, start_time, end_time "
+            "FROM task_history WHERE task_id=? ORDER BY id DESC LIMIT 1"));
+        pstmt->setString(1, task_id);
+        std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
+        if (!res->next()) return false;
+        history.task_id = res->getString("task_id");
+        history.exec_node = res->getString("exec_node");
+        history.success = res->getInt("success") == 1;
+        history.result = res->getString("result");
+        history.error = res->getString("error");
+        history.start_time = res->getString("start_time");
+        history.end_time = res->getString("end_time");
+        return true;
+    } catch (sql::SQLException &e) {
+        std::cerr << "getLatestHistory error: " << e.what() << std::endl;
         return false;
     }
 }
@@ -117,17 +184,7 @@ std::vector<TaskMeta> MySQLClient::getAllTasks() {
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(
             "SELECT id, cron_expr, params, handler, status, next_run_at, last_run_at, retry_count, max_retries FROM tasks"));
         while (res->next()) {
-            TaskMeta t;
-            t.id = res->getString("id");
-            t.cron_expr = res->getString("cron_expr");
-            t.params = res->getString("params");
-            t.handler = res->getString("handler");
-            t.status = res->getInt("status");
-            t.next_run_at = res->getString("next_run_at");
-            t.last_run_at = res->getString("last_run_at");
-            t.retry_count = res->getInt("retry_count");
-            t.max_retries = res->getInt("max_retries");
-            tasks.push_back(t);
+            tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
         std::cerr << "getAllTasks error: " << e.what() << std::endl;
@@ -144,17 +201,7 @@ std::vector<TaskMeta> MySQLClient::getEnabledTasks() {
             "SELECT id, cron_expr, params, handler, status, next_run_at, last_run_at, retry_count, max_retries "
             "FROM tasks WHERE status=1"));
         while (res->next()) {
-            TaskMeta t;
-            t.id = res->getString("id");
-            t.cron_expr = res->getString("cron_expr");
-            t.params = res->getString("params");
-            t.handler = res->getString("handler");
-            t.status = res->getInt("status");
-            t.next_run_at = res->getString("next_run_at");
-            t.last_run_at = res->getString("last_run_at");
-            t.retry_count = res->getInt("retry_count");
-            t.max_retries = res->getInt("max_retries");
-            tasks.push_back(t);
+            tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
         std::cerr << "getEnabledTasks error: " << e.what() << std::endl;
@@ -173,17 +220,7 @@ std::vector<TaskMeta> MySQLClient::getDueTasks(size_t limit) {
         pstmt->setUInt(1, static_cast<unsigned int>(limit));
         std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
         while (res->next()) {
-            TaskMeta t;
-            t.id = res->getString("id");
-            t.cron_expr = res->getString("cron_expr");
-            t.params = res->getString("params");
-            t.handler = res->getString("handler");
-            t.status = res->getInt("status");
-            t.next_run_at = res->getString("next_run_at");
-            t.last_run_at = res->getString("last_run_at");
-            t.retry_count = res->getInt("retry_count");
-            t.max_retries = res->getInt("max_retries");
-            tasks.push_back(t);
+            tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
         std::cerr << "getDueTasks error: " << e.what() << std::endl;
@@ -197,8 +234,8 @@ bool MySQLClient::updateTaskSchedule(const std::string& id, const std::string& n
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET next_run_at=?, last_run_at=?, retry_count=? WHERE id=?"));
-        pstmt->setString(1, next_run_at);
-        pstmt->setString(2, last_run_at);
+        set_datetime_or_null(*pstmt, 1, next_run_at);
+        set_datetime_or_null(*pstmt, 2, last_run_at);
         pstmt->setInt(3, retry_count);
         pstmt->setString(4, id);
         pstmt->execute();
@@ -216,8 +253,8 @@ bool MySQLClient::updateTaskRuntime(const std::string& id, int status, const std
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET status=?, next_run_at=?, last_run_at=?, retry_count=? WHERE id=?"));
         pstmt->setInt(1, status);
-        pstmt->setString(2, next_run_at);
-        pstmt->setString(3, last_run_at);
+        set_datetime_or_null(*pstmt, 2, next_run_at);
+        set_datetime_or_null(*pstmt, 3, last_run_at);
         pstmt->setInt(4, retry_count);
         pstmt->setString(5, id);
         pstmt->execute();

@@ -47,6 +47,8 @@ public:
     bool updateTask(const TaskMeta& task);
     bool deleteTask(const std::string& id);
     bool addHistory(const TaskHistory& history);
+    bool getTask(const std::string& id, TaskMeta& task);
+    bool getLatestHistory(const std::string& task_id, TaskHistory& history);
     std::vector<TaskMeta> getAllTasks();
     std::vector<TaskMeta> getEnabledTasks();
     std::vector<TaskMeta> getDueTasks(size_t limit);

@@ -13,6 +13,7 @@ find_package(Protobuf REQUIRED)
 include_directories(include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
+include_directories(${PROJECT_SOURCE_DIR}/generated)
 include_directories(${Protobuf_INCLUDE_DIRS})
 
 # 复制配置文件
@@ -21,6 +22,7 @@ file(COPY ${PROJECT_SOURCE_DIR}/config DESTINATION ${PROJECT_BINARY_DIR})
 # 主服务器程序
 add_executable(corpcron_server
     src/main.cpp
+    src/app/server_app.cpp
     src/common/logger.cpp
     src/common/config.cpp
     src/common/memory_pool.cpp
@@ -30,9 +32,10 @@ add_executable(corpcron_server
     src/redis/redis_client.cpp
     src/mysql/mysql_client.cpp
     src/rpc/handler_registry.cpp
+    src/rpc/rpc_dispatcher.cpp
     src/scheduler/cron_parser.cpp
     src/scheduler/task_scheduler.cpp
-    src/rpc.pb.cc
+    generated/rpc.pb.cc
     src/rpc/rpc_client.cpp
 )
 
@@ -53,15 +56,15 @@ endif()
 install(TARGETS corpcron_server DESTINATION bin)
 
 add_executable(test_submit_client
-    src/test_submit_client.cpp
-    src/rpc.pb.cc
+    tools/test_submit_client.cpp
+    generated/rpc.pb.cc
     src/rpc/rpc_client.cpp
 )
 target_link_libraries(test_submit_client ${Protobuf_LIBRARIES} pthread)
 
 add_executable(bench_client
-    src/bench_client.cpp
-    src/rpc.pb.cc
+    tools/bench_client.cpp
+    generated/rpc.pb.cc
     src/rpc/rpc_client.cpp
 )
 target_link_libraries(bench_client ${Protobuf_LIBRARIES} pthread)
@@ -71,6 +74,17 @@ add_executable(corpcron_protocol_test
 )
 target_include_directories(corpcron_protocol_test PRIVATE include)
 add_test(NAME protocol_test COMMAND corpcron_protocol_test)
+
+add_executable(corpcron_rpc_dispatcher_test
+    tests/rpc_dispatcher_test.cpp
+    generated/rpc.pb.cc
+    src/mysql/mysql_client.cpp
+    src/rpc/handler_registry.cpp
+    src/rpc/rpc_dispatcher.cpp
+    src/scheduler/cron_parser.cpp
+)
+target_link_libraries(corpcron_rpc_dispatcher_test ${Protobuf_LIBRARIES} pthread mysqlcppconn)
+add_test(NAME rpc_dispatcher_test COMMAND corpcron_rpc_dispatcher_test)
 
 add_executable(corpcron_integration_test
     tests/integration_test.cpp
@@ -90,8 +104,9 @@ add_executable(corpcron_e2e_scheduler_test
     src/net/epoll_loop.cpp
     src/net/tcp_server.cpp
     src/redis/redis_client.cpp
-    src/rpc.pb.cc
+    generated/rpc.pb.cc
     src/rpc/handler_registry.cpp
+    src/rpc/rpc_dispatcher.cpp
     src/rpc/rpc_client.cpp
     src/scheduler/cron_parser.cpp
     src/scheduler/task_scheduler.cpp

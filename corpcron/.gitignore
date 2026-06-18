@@ -16,3 +16,6 @@ core.*
 
 .env
 config/server.local.conf
+
+docs/assets/benchmark/*.txt
+!docs/assets/benchmark/latest.txt

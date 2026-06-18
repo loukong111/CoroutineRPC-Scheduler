@@ -82,8 +82,10 @@ ctest --test-dir build --output-on-failure
 简单压测：
 
 ```bash
-./build/bench_client 127.0.0.1 8081 16 1000
+./scripts/benchmark.sh 127.0.0.1 8081 16 1000
 ```
+
+压测结果会保存到 [docs/assets/benchmark/latest.txt](docs/assets/benchmark/latest.txt)，历史结果按时间戳保存在同一目录。
 
 ## 配置
 
@@ -114,19 +116,22 @@ CORPCRON_RPC_AUTH_TOKEN=your_token
 ```text
 client/          Qt 客户端示例
 config/          配置文件和样例
+generated/       Protobuf 生成代码
 include/         公共头文件
 proto/           Protobuf 定义
 sql/             数据库初始化脚本
+scripts/         启动和压测脚本
 src/             服务端源码
 tests/           自动化测试
+tools/           测试客户端和压测工具
 ```
 
 ## 当前限制
 
-- RPC 还没有鉴权、TLS 和限流，不建议直接暴露到公网。
+- RPC 已支持基础 Token 鉴权和连接数限制，但还没有 TLS，不建议直接暴露到公网。
 - Redis 锁已支持续约，但任务执行仍应尽量设计为幂等。
-- 调度策略已使用 `next_run_at`，但 misfire 和任务取消还需要继续完善。
-- 自动化测试已覆盖协议和基础 Redis/MySQL 链路，后续还需要端到端调度测试和压测。
+- 调度策略已使用 `next_run_at`，并支持 misfire 和任务取消；后续可继续补任务查询/编辑 API。
+- 自动化测试已覆盖协议、Redis/MySQL 集成和端到端调度链路；后续可继续补多节点压测。
 
 ## 文档
 

@@ -2,11 +2,13 @@
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
+#include "corpcron/rpc/rpc_dispatcher.hpp"
 #include "corpcron/scheduler/task_scheduler.hpp"
 #include <cassert>
 #include <chrono>
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <thread>
 
@@ -31,6 +33,32 @@ std::string unique_id(const std::string& prefix) {
     auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
     return prefix + std::to_string(now);
+}
+
+corpcron::TaskMeta make_task(const std::string& id,
+                             const std::string& handler,
+                             const std::string& params,
+                             int max_retries = 3) {
+    corpcron::TaskMeta task;
+    task.id = id;
+    task.cron_expr = "0 0 0 1 1 ?";
+    task.params = params;
+    task.handler = handler;
+    task.status = 1;
+    task.next_run_at = "2000-01-01 00:00:00";
+    task.max_retries = max_retries;
+    return task;
+}
+
+bool wait_for_history(const std::shared_ptr<corpcron::MySQLClient>& db,
+                      const std::string& task_id,
+                      int expected_count,
+                      int timeout_sec) {
+    for (int i = 0; i < timeout_sec; ++i) {
+        if (db->historyCount(task_id) >= expected_count) return true;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    return db->historyCount(task_id) >= expected_count;
 }
 
 } // namespace
@@ -62,8 +90,12 @@ int main() {
     corpcron::HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
         return "Echo: " + params;
     });
+    corpcron::HandlerRegistry::instance().registerHandler("Fail", [](const std::string& params) -> std::string {
+        throw std::runtime_error("boom: " + params);
+    });
 
-    corpcron::TcpServer server("127.0.0.1", port, db, redis, 128);
+    auto dispatcher = std::make_shared<corpcron::RpcDispatcher>(db, "");
+    corpcron::TcpServer server("127.0.0.1", port, dispatcher, 128);
     std::thread server_thread([&]() {
         server.start();
     });
@@ -71,34 +103,69 @@ int main() {
 
     assert(redis->registerService("rpc", endpoint, 30));
 
-    corpcron::TaskMeta task;
-    task.id = unique_id("e2e-task-");
-    task.cron_expr = "* * * * * ?";
-    task.params = "from e2e";
-    task.handler = "Echo";
-    task.status = 1;
-    task.next_run_at = "2000-01-01 00:00:00";
-    task.max_retries = 3;
-    assert(db->addTask(task));
+    auto success_task = make_task(unique_id("e2e-success-"), "Echo", "from e2e");
+    auto failure_task = make_task(unique_id("e2e-failure-"), "Fail", "retry-disabled", 1);
+    auto multi_node_task = make_task(unique_id("e2e-multinode-"), "Echo", "run-once");
+    assert(db->addTask(success_task));
+    assert(db->addTask(failure_task));
+    assert(db->addTask(multi_node_task));
 
-    corpcron::TaskScheduler scheduler(db, redis, node_id);
-    scheduler.start();
+    corpcron::TaskScheduler scheduler_a(db, redis, node_id + "-a");
+    corpcron::TaskScheduler scheduler_b(db, redis, node_id + "-b");
+    scheduler_a.start();
+    scheduler_b.start();
 
-    bool observed = false;
-    for (int i = 0; i < 20; ++i) {
-        if (db->historyCount(task.id) > 0) {
-            observed = true;
-            break;
-        }
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-    }
+    bool success_observed = wait_for_history(db, success_task.id, 1, 25);
+    bool failure_observed = wait_for_history(db, failure_task.id, 1, 25);
+    bool multi_node_observed = wait_for_history(db, multi_node_task.id, 1, 25);
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
-    scheduler.stop();
-    db->deleteTask(task.id);
+    scheduler_a.stop();
+    scheduler_b.stop();
+
+    corpcron::TaskHistory success_history;
+    assert(db->getLatestHistory(success_task.id, success_history));
+    assert(success_history.success);
+    assert(success_history.result == "Echo: from e2e");
+
+    corpcron::TaskHistory failure_history;
+    assert(db->getLatestHistory(failure_task.id, failure_history));
+    assert(!failure_history.success);
+    assert(failure_history.error.find("boom: retry-disabled") != std::string::npos);
+    corpcron::TaskMeta loaded_failure;
+    assert(db->getTask(failure_task.id, loaded_failure));
+    assert(loaded_failure.status == 0);
+    assert(loaded_failure.retry_count == 1);
+
+    assert(db->historyCount(multi_node_task.id) == 1);
+
+    setenv("CORPCRON_SCHEDULER_MISFIRE_POLICY", "skip", 1);
+    setenv("CORPCRON_SCHEDULER_MISFIRE_GRACE_SECONDS", "0", 1);
+    auto misfire_task = make_task(unique_id("e2e-misfire-"), "Echo", "should-skip");
+    assert(db->addTask(misfire_task));
+    corpcron::TaskScheduler scheduler_c(db, redis, node_id + "-misfire");
+    scheduler_c.start();
+    std::this_thread::sleep_for(std::chrono::seconds(7));
+    scheduler_c.stop();
+    unsetenv("CORPCRON_SCHEDULER_MISFIRE_POLICY");
+    unsetenv("CORPCRON_SCHEDULER_MISFIRE_GRACE_SECONDS");
+
+    corpcron::TaskMeta loaded_misfire;
+    assert(db->getTask(misfire_task.id, loaded_misfire));
+    assert(db->historyCount(misfire_task.id) == 0);
+    assert(loaded_misfire.status == 1);
+    assert(loaded_misfire.next_run_at != misfire_task.next_run_at);
+
+    db->deleteTask(success_task.id);
+    db->deleteTask(failure_task.id);
+    db->deleteTask(multi_node_task.id);
+    db->deleteTask(misfire_task.id);
     redis->unregisterService("rpc", endpoint);
     server.stop();
     if (server_thread.joinable()) server_thread.join();
 
-    assert(observed);
+    assert(success_observed);
+    assert(failure_observed);
+    assert(multi_node_observed);
     return 0;
 }

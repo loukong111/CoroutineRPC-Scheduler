@@ -1,0 +1,9 @@
+# CorpCron Benchmark Result
+time=2026-06-18 local smoke test
+host=127.0.0.1
+port=8081
+concurrency=4
+requests=40
+command=build/bench_client 127.0.0.1 8081 4 40
+
+requests=40 concurrency=4 success=40 failure=0 elapsed_sec=0.008932 qps=4478.28 p50_ms=0 p95_ms=1 p99_ms=2

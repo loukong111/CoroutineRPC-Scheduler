@@ -6,16 +6,13 @@
 
 namespace corpcron {
 
-class MySQLClient;
-class RedisClient;
+class RpcDispatcher;
 
 class TcpServer {
 public:
     TcpServer(const std::string& addr, int port,
-              std::shared_ptr<MySQLClient> db,
-              std::shared_ptr<RedisClient> redis,
-              size_t max_connections = 1024,
-              const std::string& auth_token = "");
+              std::shared_ptr<RpcDispatcher> dispatcher,
+              size_t max_connections = 1024);
     ~TcpServer();
 
     bool start();
@@ -28,10 +25,8 @@ private:
     int port_;
     int listen_fd_ = -1;
     std::unique_ptr<EpollLoop> loop_;
-    std::shared_ptr<MySQLClient> db_;
-    std::shared_ptr<RedisClient> redis_;
+    std::shared_ptr<RpcDispatcher> dispatcher_;
     size_t max_connections_;
-    std::string auth_token_;
     std::atomic<size_t> active_connections_{0};
 };
 
