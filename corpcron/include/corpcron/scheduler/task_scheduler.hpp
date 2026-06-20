@@ -65,6 +65,8 @@ private:
     std::shared_ptr<RedisClient> redis_;
     std::string node_id_;
     std::atomic<bool> running_;
+    std::mutex loop_mutex_;
+    std::condition_variable loop_cv_;
     std::unique_ptr<std::thread> thread_;
     std::unique_ptr<DynamicThreadPool> thread_pool_;
     std::unique_ptr<LockRenewer> lock_renewer_;

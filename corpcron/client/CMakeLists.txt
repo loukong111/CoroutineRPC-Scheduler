@@ -10,9 +10,9 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets Network)
 find_package(Protobuf REQUIRED)
 
-include_directories(${CMAKE_SOURCE_DIR}/../include)
-include_directories(${CMAKE_SOURCE_DIR}/../src)
-include_directories(${CMAKE_SOURCE_DIR}/../generated)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../include)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../src)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../generated)
 include_directories(${Protobuf_INCLUDE_DIRS})
 
 

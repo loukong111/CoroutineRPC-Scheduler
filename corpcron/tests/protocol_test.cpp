@@ -19,6 +19,21 @@ int main() {
     assert(corpcron::rpc::tryDecodeFrame(encoded.data(), 3, serial_id, payload, frame_size) ==
            corpcron::rpc::DecodeStatus::Incomplete);
 
+    std::string first = corpcron::rpc::encode(corpcron::rpc::kEchoRequestSerialId, "first");
+    std::string second = corpcron::rpc::encode(corpcron::rpc::kCancelTaskRequestSerialId, "second");
+    std::string sticky = first + second;
+    assert(corpcron::rpc::tryDecodeFrame(sticky.data(), sticky.size(), serial_id, payload, frame_size) ==
+           corpcron::rpc::DecodeStatus::Complete);
+    assert(serial_id == corpcron::rpc::kEchoRequestSerialId);
+    assert(payload == "first");
+    assert(frame_size == first.size());
+    sticky.erase(0, frame_size);
+    assert(corpcron::rpc::tryDecodeFrame(sticky.data(), sticky.size(), serial_id, payload, frame_size) ==
+           corpcron::rpc::DecodeStatus::Complete);
+    assert(serial_id == corpcron::rpc::kCancelTaskRequestSerialId);
+    assert(payload == "second");
+    assert(frame_size == second.size());
+
     std::string malformed(8, '\0');
     malformed[3] = 3;
     assert(corpcron::rpc::tryDecodeFrame(malformed.data(), malformed.size(), serial_id, payload, frame_size) ==

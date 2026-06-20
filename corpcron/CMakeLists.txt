@@ -75,6 +75,15 @@ add_executable(corpcron_protocol_test
 target_include_directories(corpcron_protocol_test PRIVATE include)
 add_test(NAME protocol_test COMMAND corpcron_protocol_test)
 
+add_executable(corpcron_rpc_client_test
+    tests/rpc_client_test.cpp
+    generated/rpc.pb.cc
+    src/rpc/rpc_client.cpp
+)
+target_link_libraries(corpcron_rpc_client_test ${Protobuf_LIBRARIES} pthread)
+add_test(NAME rpc_client_test COMMAND corpcron_rpc_client_test)
+set_tests_properties(rpc_client_test PROPERTIES SKIP_RETURN_CODE 77)
+
 add_executable(corpcron_rpc_dispatcher_test
     tests/rpc_dispatcher_test.cpp
     generated/rpc.pb.cc
@@ -99,6 +108,7 @@ set_tests_properties(integration_test PROPERTIES SKIP_RETURN_CODE 77)
 add_executable(corpcron_e2e_scheduler_test
     tests/e2e_scheduler_test.cpp
     src/common/config.cpp
+    src/common/logger.cpp
     src/common/thread_pool.cpp
     src/mysql/mysql_client.cpp
     src/net/epoll_loop.cpp

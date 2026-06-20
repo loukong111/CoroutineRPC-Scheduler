@@ -1,12 +1,12 @@
 #include "corpcron/scheduler/task_scheduler.hpp"
 #include "corpcron/common/config.hpp"
+#include "corpcron/common/logger.hpp"
 #include "corpcron/scheduler/cron_parser.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
 #include "corpcron/rpc/protocol.hpp"
 #include "corpcron/rpc/rpc_client.hpp"   // for RpcClient
 #include "rpc.pb.h"
 #include <random> 
-#include <iostream>
 #include <chrono>
 #include <thread>
 #include <algorithm>
@@ -74,6 +74,7 @@ void TaskScheduler::start() {
 
 void TaskScheduler::stop() {
     running_ = false;
+    loop_cv_.notify_all();
     if (thread_ && thread_->joinable()) {
         thread_->join();
     }
@@ -85,9 +86,10 @@ void TaskScheduler::schedulerLoop() {
         try {
             scanAndDispatch();
         } catch (const std::exception& e) {
-            std::cerr << "Scheduler error: " << e.what() << std::endl;
+            LOG_ERROR("Scheduler error: " + std::string(e.what()));
         }
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        std::unique_lock<std::mutex> lock(loop_mutex_);
+        loop_cv_.wait_for(lock, std::chrono::seconds(5), [this]() { return !running_; });
     }
 }
 
@@ -111,8 +113,8 @@ void TaskScheduler::scanAndDispatch() {
                     } else {
                         db_->updateTaskRuntime(task.id, 0, task.next_run_at, task.last_run_at, task.retry_count);
                     }
-                    std::cout << "Skipped misfired task " << task.id << " overdue by "
-                              << overdue << " seconds" << std::endl;
+                    LOG_INFO("Skipped misfired task " + task.id + " overdue by " +
+                             std::to_string(overdue) + " seconds");
                     continue;
                 }
             }
@@ -163,8 +165,8 @@ void TaskScheduler::scanAndDispatch() {
                     next_retry_count = task.retry_count + 1;
                     if (next_retry_count >= task.max_retries) {
                         next_status = 0;
-                        std::cerr << "Task " << task.id << " disabled after "
-                                  << next_retry_count << " failed attempts" << std::endl;
+                        LOG_WARN("Task " + task.id + " disabled after " +
+                                 std::to_string(next_retry_count) + " failed attempts");
                     } else {
                         auto retry_at = end + std::chrono::seconds(retry_delay_seconds(next_retry_count));
                         next_run_at = to_datetime_string(retry_at);
@@ -173,10 +175,12 @@ void TaskScheduler::scanAndDispatch() {
 
                 db_->updateTaskRuntime(task.id, next_status, next_run_at, history.end_time, next_retry_count);
                 lock_renewer_->remove(lock_key);
-                redis_->unlock(lock_key, lock_value);
+                if (!redis_->unlock(lock_key, lock_value)) {
+                    LOG_WARN("Failed to unlock " + lock_key + " as " + lock_value);
+                }
             });
         } else {
-            std::cout << "Node " << node_id_ << " failed to get lock for task " << task.id << std::endl;
+            LOG_INFO("Node " + node_id_ + " failed to get lock for task " + task.id);
         }
     }
 }
@@ -186,7 +190,7 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
     auto endpoints = redis_->discoverServices("rpc");
     if (endpoints.empty()) {
         outcome.error = "No RPC service available";
-        std::cerr << outcome.error << " for task " << task.id << std::endl;
+        LOG_ERROR(outcome.error + " for task " + task.id);
         return outcome;
     }
     //std::mt19937不是多线程安全的，要让每个线程有自己的副本
@@ -221,22 +225,22 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
             } else {
                 outcome.error = "RPC error response parse failed";
             }
-            std::cerr << outcome.error << std::endl;
+            LOG_ERROR(outcome.error);
             return outcome;
         }
         corpcron::rpc::ExecuteTaskResponse resp;
         if (resp.ParseFromString(resp_data)) {
-            std::cout << "Remote execution result: " << resp.result() << std::endl;
+            LOG_INFO("Remote execution result: " + resp.result());
             outcome.success = resp.success();
             outcome.result = resp.result();
             outcome.error = resp.error();
         } else {
             outcome.error = "Failed to parse ExecuteTaskResponse";
-            std::cerr << outcome.error << std::endl;
+            LOG_ERROR(outcome.error);
         }
     } else {
         outcome.error = "RPC call to " + endpoint + " failed";
-        std::cerr << outcome.error << std::endl;
+        LOG_ERROR(outcome.error);
     }
     return outcome;
 }
@@ -311,7 +315,7 @@ void TaskScheduler::LockRenewer::loop() {
         lock.unlock();
         for (const auto& lease : due) {
             if (!redis_->renewLock(lease.key, lease.value, lease.ttl_sec)) {
-                std::cerr << "Failed to renew lock for " << lease.key << std::endl;
+                LOG_WARN("Failed to renew lock for " + lease.key);
             }
         }
         lock.lock();

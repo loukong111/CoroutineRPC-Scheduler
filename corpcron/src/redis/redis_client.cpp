@@ -132,7 +132,7 @@ bool RedisClient::renewLock(const std::string& key, const std::string& value, in
     return success;
 }
 
-void RedisClient::unlock(const std::string& key, const std::string& value) {
+bool RedisClient::unlock(const std::string& key, const std::string& value) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::string lock_key = "lock:" + key;
     std::string script = 
@@ -142,7 +142,9 @@ void RedisClient::unlock(const std::string& key, const std::string& value) {
         "   return 0 "
         "end";
     redisReply* reply = (redisReply*)redisCommand(ctx_, "EVAL %s 1 %s %s", script.c_str(), lock_key.c_str(), value.c_str());
+    bool success = reply && reply->type == REDIS_REPLY_INTEGER && reply->integer == 1;
     if (reply) freeReplyObject(reply);
+    return success;
 }
 
 } // namespace corpcron

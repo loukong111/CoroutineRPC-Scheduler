@@ -1,5 +1,6 @@
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/coroutine/task.hpp"
+#include "corpcron/common/logger.hpp"
 #include "corpcron/rpc/rpc_dispatcher.hpp"
 #include "corpcron/rpc/protocol.hpp"
 #include <sys/socket.h>
@@ -8,11 +9,18 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
-#include <iostream>
 #include <atomic>
 #include <utility>
 
 namespace corpcron {
+
+namespace {
+
+std::string errnoMessage(const std::string& action) {
+    return action + ": " + std::strerror(errno);
+}
+
+} // namespace
 
 Task clientHandler(int fd, EpollLoop* loop,
                    std::shared_ptr<RpcDispatcher> dispatcher,
@@ -24,8 +32,8 @@ Task clientHandler(int fd, EpollLoop* loop,
         char chunk[4096];
         ssize_t n = read(fd, chunk, sizeof(chunk));
         if (n <= 0) {
-            if (n == 0) std::cout << "Client closed" << std::endl;
-            else if (errno != EAGAIN) perror("read");
+            if (n == 0) LOG_INFO("Client closed");
+            else if (errno != EAGAIN) LOG_ERROR(errnoMessage("read"));
             break;
         }
         read_buffer.append(chunk, n);
@@ -38,7 +46,7 @@ Task clientHandler(int fd, EpollLoop* loop,
             if (status == rpc::DecodeStatus::Incomplete)
                 break;
             if (status == rpc::DecodeStatus::Malformed || status == rpc::DecodeStatus::TooLarge) {
-                std::cerr << "Invalid RPC frame, closing connection" << std::endl;
+                LOG_WARN("Invalid RPC frame, closing connection");
                 closed = true;
                 break;
             }
@@ -66,7 +74,7 @@ Task clientHandler(int fd, EpollLoop* loop,
                     continue;
                 }
                 if (w < 0 && errno == EINTR) continue;
-                perror("send");
+                LOG_ERROR(errnoMessage("send"));
                 closed = true;
                 break;
             }
@@ -91,7 +99,7 @@ TcpServer::~TcpServer() { stop(); }
 bool TcpServer::start() {
     if (!loop_->init()) return false;
     listen_fd_ = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK, 0);
-    if (listen_fd_ == -1) { perror("socket"); return false; }
+    if (listen_fd_ == -1) { LOG_ERROR(errnoMessage("socket")); return false; }
     int opt = 1;
     setsockopt(listen_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
     struct sockaddr_in addr;
@@ -100,17 +108,17 @@ bool TcpServer::start() {
     addr.sin_port = htons(port_);
     inet_pton(AF_INET, addr_.c_str(), &addr.sin_addr);
     if (bind(listen_fd_, (struct sockaddr*)&addr, sizeof(addr)) == -1) {
-        perror("bind"); 
+        LOG_ERROR(errnoMessage("bind"));
         close(listen_fd_);
         return false;
     }
     if (listen(listen_fd_, 128) == -1) {
-        perror("listen"); 
+        LOG_ERROR(errnoMessage("listen"));
         close(listen_fd_); 
         return false;
     }
     loop_->addFd(listen_fd_, EPOLLIN, [this](int, uint32_t) { handleAccept(); });
-    std::cout << "TcpServer listening on " << addr_ << ":" << port_ << std::endl;
+    LOG_INFO("TcpServer listening on " + addr_ + ":" + std::to_string(port_));
     loop_->run();
     return true;
 }
@@ -127,17 +135,17 @@ void TcpServer::handleAccept() {
         int client_fd = accept4(listen_fd_, (struct sockaddr*)&client_addr, &len, SOCK_NONBLOCK);
         if (client_fd == -1) {
             if (errno == EAGAIN || errno == EWOULDBLOCK) break;
-            perror("accept"); break;
+            LOG_ERROR(errnoMessage("accept")); break;
         }
         char ip[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
         if (active_connections_.load() >= max_connections_) {
-            std::cerr << "Rejecting connection from " << ip << ": connection limit reached" << std::endl;
+            LOG_WARN("Rejecting connection from " + std::string(ip) + ": connection limit reached");
             close(client_fd);
             continue;
         }
         ++active_connections_;
-        std::cout << "New connection from " << ip << ":" << ntohs(client_addr.sin_port) << std::endl;
+        LOG_INFO("New connection from " + std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port)));
         Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_, &active_connections_));
     }
 }

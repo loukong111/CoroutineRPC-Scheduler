@@ -23,7 +23,7 @@ public:
     // 分布式锁
     bool lock(const std::string& key, const std::string& value, int expire_sec = 10, int timeout_ms = 1000);
     bool renewLock(const std::string& key, const std::string& value, int expire_sec = 10);
-    void unlock(const std::string& key, const std::string& value);
+    bool unlock(const std::string& key, const std::string& value);
 
 private:
     mutable std::mutex mutex_;

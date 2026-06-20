@@ -57,14 +57,34 @@ int main() {
     endpoints = redis.discoverServices(service_name);
     assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) != endpoints.end());
 
+    std::string stale_service_name = service_name + "-stale";
+    std::string alive_endpoint = "127.0.0.1:18083";
+    std::string stale_endpoint = "127.0.0.1:18084";
+    assert(redis.registerService(stale_service_name, alive_endpoint, 30));
+    assert(redis.registerService(stale_service_name, stale_endpoint, 1));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    endpoints = redis.discoverServices(stale_service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), alive_endpoint) != endpoints.end());
+    assert(std::find(endpoints.begin(), endpoints.end(), stale_endpoint) == endpoints.end());
+    endpoints = redis.discoverServices(stale_service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), stale_endpoint) == endpoints.end());
+    redis.unregisterService(stale_service_name, alive_endpoint);
+
     std::string lock_key = "itest:" + unique_id("");
     assert(redis.lock(lock_key, "owner-a", 5, 1000));
-    redis.unlock(lock_key, "owner-b");
+    assert(!redis.unlock(lock_key, "owner-b"));
     assert(!redis.lock(lock_key, "owner-c", 5, 100));
     assert(redis.renewLock(lock_key, "owner-a", 5));
-    redis.unlock(lock_key, "owner-a");
+    assert(redis.unlock(lock_key, "owner-a"));
     assert(redis.lock(lock_key, "owner-c", 5, 1000));
-    redis.unlock(lock_key, "owner-c");
+    assert(redis.unlock(lock_key, "owner-c"));
+
+    std::string ttl_lock_key = "itest-ttl:" + unique_id("");
+    assert(redis.lock(ttl_lock_key, "ttl-owner-a", 1, 1000));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    assert(redis.lock(ttl_lock_key, "ttl-owner-b", 5, 1000));
+    assert(redis.unlock(ttl_lock_key, "ttl-owner-b"));
+
     redis.unregisterService(service_name, endpoint1);
     redis.unregisterService(service_name, endpoint2);
     endpoints = redis.discoverServices(service_name);
