@@ -101,7 +101,7 @@ bool ServerApp::setupSignalHandling() {
 
 bool ServerApp::initRedis() {
     std::string redis_host = Config::instance().get("redis.host", "127.0.0.1");
-    int redis_port = Config::instance().getInt("redis.port", 6379);
+    int redis_port = Config::instance().getInt("redis.port", 6380);
     redis_ = std::make_shared<RedisClient>(redis_host, redis_port);
     if (!redis_->connect()) {
         std::cerr << "Failed to connect to Redis" << std::endl;
@@ -112,7 +112,7 @@ bool ServerApp::initRedis() {
 
 bool ServerApp::initMySQL() {
     std::string mysql_host = Config::instance().get("mysql.host", "127.0.0.1");
-    int mysql_port = Config::instance().getInt("mysql.port", 3306);
+    int mysql_port = Config::instance().getInt("mysql.port", 3307);
     std::string mysql_user = Config::instance().get("mysql.user", "root");
     std::string mysql_pass = Config::instance().get("mysql.password", "");
     std::string mysql_db = Config::instance().get("mysql.database", "corpcron");

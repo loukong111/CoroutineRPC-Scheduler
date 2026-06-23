@@ -1,5 +1,7 @@
 #include "corpcron/mysql/mysql_client.hpp"
 #include <cppconn/datatype.h>
+#include <ctime>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -29,6 +31,28 @@ void set_datetime_or_null(sql::PreparedStatement& statement, unsigned int index,
     }
 }
 
+std::string local_timezone_offset() {
+    std::time_t now = std::time(nullptr);
+    std::tm local_tm{};
+    std::tm utc_tm{};
+    localtime_r(&now, &local_tm);
+    gmtime_r(&now, &utc_tm);
+
+    long offset_seconds = static_cast<long>(std::difftime(std::mktime(&local_tm), std::mktime(&utc_tm)));
+    char sign = '+';
+    if (offset_seconds < 0) {
+        sign = '-';
+        offset_seconds = -offset_seconds;
+    }
+
+    long hours = offset_seconds / 3600;
+    long minutes = (offset_seconds % 3600) / 60;
+    std::ostringstream ss;
+    ss << sign << std::setw(2) << std::setfill('0') << hours
+       << ":" << std::setw(2) << std::setfill('0') << minutes;
+    return ss.str();
+}
+
 } // namespace
 
 MySQLClient::MySQLClient(const std::string& host, int port,
@@ -47,6 +71,7 @@ bool MySQLClient::connect() {
         //driver_->connect() 返回的是裸指针 sql::Connection*，而 conn_ 是智能指针。reset() 让 unique_ptr 接管这个裸指针的生命周期
         conn_.reset(driver_->connect(host_ + ":" + std::to_string(port_), user_, password_));
         conn_->setSchema(database_);
+        executeStatement("SET time_zone = '" + local_timezone_offset() + "'");
         return ensureSchema();
     } catch (sql::SQLException &e) {
         std::cerr << "MySQL connection error: " << e.what() << std::endl;
@@ -271,8 +296,13 @@ bool MySQLClient::cancelTask(const std::string& id) {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET status=0 WHERE id=?"));
         pstmt->setString(1, id);
-        pstmt->execute();
-        return pstmt->getUpdateCount() > 0;
+        if (pstmt->executeUpdate() > 0) return true;
+
+        std::unique_ptr<sql::PreparedStatement> exists_stmt(conn_->prepareStatement(
+            "SELECT COUNT(*) AS cnt FROM tasks WHERE id=?"));
+        exists_stmt->setString(1, id);
+        std::unique_ptr<sql::ResultSet> res(exists_stmt->executeQuery());
+        return res->next() && res->getInt("cnt") > 0;
     } catch (sql::SQLException &e) {
         std::cerr << "cancelTask error: " << e.what() << std::endl;
         return false;

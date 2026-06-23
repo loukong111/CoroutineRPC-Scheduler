@@ -9,6 +9,8 @@ cmake --build build -j
 ./build/corpcron_server --config config/server.conf
 ```
 
+本地 Compose 会将 Redis 映射到宿主机 `6380`、MySQL 映射到宿主机 `3307`，避免占用已有的 `6379` 和 `3306` 服务。
+
 ## 容器镜像
 
 ```bash

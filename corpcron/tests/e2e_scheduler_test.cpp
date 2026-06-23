@@ -72,12 +72,12 @@ int main() {
 
     auto redis = std::make_shared<corpcron::RedisClient>(
         getenv_or("CORPCRON_REDIS_HOST", "127.0.0.1"),
-        getenv_int_or("CORPCRON_REDIS_PORT", 6379));
+        getenv_int_or("CORPCRON_REDIS_PORT", 6380));
     assert(redis->connect());
 
     auto db = std::make_shared<corpcron::MySQLClient>(
         getenv_or("CORPCRON_MYSQL_HOST", "127.0.0.1"),
-        getenv_int_or("CORPCRON_MYSQL_PORT", 3306),
+        getenv_int_or("CORPCRON_MYSQL_PORT", 3307),
         getenv_or("CORPCRON_MYSQL_USER", "corpcron"),
         getenv_or("CORPCRON_MYSQL_PASSWORD", "corpcron_dev_password"),
         getenv_or("CORPCRON_MYSQL_DATABASE", "corpcron"));
@@ -86,6 +86,7 @@ int main() {
     int port = getenv_int_or("CORPCRON_E2E_PORT", 18081);
     std::string endpoint = "127.0.0.1:" + std::to_string(port);
     std::string node_id = "e2e-node-" + std::to_string(port);
+    std::string service_name = unique_id("e2e-rpc-");
 
     corpcron::HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
         return "Echo: " + params;
@@ -101,7 +102,7 @@ int main() {
     });
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
-    assert(redis->registerService("rpc", endpoint, 30));
+    assert(redis->registerService(service_name, endpoint, 30));
 
     auto success_task = make_task(unique_id("e2e-success-"), "Echo", "from e2e");
     auto failure_task = make_task(unique_id("e2e-failure-"), "Fail", "retry-disabled", 1);
@@ -110,8 +111,8 @@ int main() {
     assert(db->addTask(failure_task));
     assert(db->addTask(multi_node_task));
 
-    corpcron::TaskScheduler scheduler_a(db, redis, node_id + "-a");
-    corpcron::TaskScheduler scheduler_b(db, redis, node_id + "-b");
+    corpcron::TaskScheduler scheduler_a(db, redis, node_id + "-a", service_name);
+    corpcron::TaskScheduler scheduler_b(db, redis, node_id + "-b", service_name);
     scheduler_a.start();
     scheduler_b.start();
 
@@ -143,7 +144,7 @@ int main() {
     setenv("CORPCRON_SCHEDULER_MISFIRE_GRACE_SECONDS", "0", 1);
     auto misfire_task = make_task(unique_id("e2e-misfire-"), "Echo", "should-skip");
     assert(db->addTask(misfire_task));
-    corpcron::TaskScheduler scheduler_c(db, redis, node_id + "-misfire");
+    corpcron::TaskScheduler scheduler_c(db, redis, node_id + "-misfire", service_name);
     scheduler_c.start();
     std::this_thread::sleep_for(std::chrono::seconds(7));
     scheduler_c.stop();
@@ -160,7 +161,7 @@ int main() {
     db->deleteTask(failure_task.id);
     db->deleteTask(multi_node_task.id);
     db->deleteTask(misfire_task.id);
-    redis->unregisterService("rpc", endpoint);
+    redis->unregisterService(service_name, endpoint);
     server.stop();
     if (server_thread.joinable()) server_thread.join();
 

@@ -15,7 +15,7 @@ namespace corpcron {
 class TaskScheduler {
 public:
     TaskScheduler(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis,
-                  const std::string& node_id);
+                  const std::string& node_id, std::string service_name = "rpc");
     ~TaskScheduler();
 
     void start();
@@ -64,6 +64,7 @@ private:
     std::shared_ptr<MySQLClient> db_;
     std::shared_ptr<RedisClient> redis_;
     std::string node_id_;
+    std::string service_name_;
     std::atomic<bool> running_;
     std::mutex loop_mutex_;
     std::condition_variable loop_cv_;

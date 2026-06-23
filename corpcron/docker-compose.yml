@@ -3,7 +3,7 @@ services:
     image: redis:7-alpine
     container_name: corpcron-redis
     ports:
-      - "6379:6379"
+      - "6380:6379"
     command: ["redis-server", "--appendonly", "yes"]
     volumes:
       - redis-data:/data
@@ -12,12 +12,14 @@ services:
     image: mysql:8.4
     container_name: corpcron-mysql
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root_password
       MYSQL_DATABASE: corpcron
       MYSQL_USER: corpcron
       MYSQL_PASSWORD: corpcron_dev_password
+      TZ: Asia/Shanghai
+    command: ["mysqld", "--default-time-zone=+08:00"]
     volumes:
       - mysql-data:/var/lib/mysql
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro

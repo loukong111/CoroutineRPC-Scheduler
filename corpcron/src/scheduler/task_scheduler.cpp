@@ -54,8 +54,9 @@ static bool parse_datetime(const std::string& value, std::chrono::system_clock::
 
 TaskScheduler::TaskScheduler(std::shared_ptr<MySQLClient> db,
                              std::shared_ptr<RedisClient> redis,
-                             const std::string& node_id)
-    : db_(db), redis_(redis), node_id_(node_id), running_(false),
+                             const std::string& node_id,
+                             std::string service_name)
+    : db_(db), redis_(redis), node_id_(node_id), service_name_(std::move(service_name)), running_(false),
       thread_pool_(std::make_unique<DynamicThreadPool>(2, 8, 50, 5)),
       lock_renewer_(std::make_unique<LockRenewer>(redis_)) {}
 
@@ -187,7 +188,7 @@ void TaskScheduler::scanAndDispatch() {
 
 TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task) {
     ExecutionOutcome outcome;
-    auto endpoints = redis_->discoverServices("rpc");
+    auto endpoints = redis_->discoverServices(service_name_);
     if (endpoints.empty()) {
         outcome.error = "No RPC service available";
         LOG_ERROR(outcome.error + " for task " + task.id);

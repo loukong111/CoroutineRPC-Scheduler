@@ -18,6 +18,33 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 - 提供 Dockerfile、systemd unit 和基础部署文档。
 - CTest 接入基础协议单测和可选 Redis/MySQL 集成测试。
 
+## 演示截图
+
+### Qt 可视化客户端
+
+![Qt 可视化客户端](docs/assets/images/qt-client.png)
+
+### 任务元数据
+
+![MySQL tasks 表](docs/assets/images/mysql-tasks.png)
+
+### 执行历史
+
+![task_history 表](docs/assets/images/task-history.png)
+
+### 系统架构
+
+```mermaid
+flowchart LR
+    Client[Qt Client / CLI / Benchmark] -->|Binary RPC + Protobuf| Server[CorpCron RPC Server]
+    Server --> Dispatcher[RpcDispatcher]
+    Dispatcher --> MySQL[(MySQL tasks / task_history)]
+    Server --> Redis[(Redis service registry / lock)]
+    Scheduler[TaskScheduler] -->|scan next_run_at| MySQL
+    Scheduler -->|discover services / acquire lock| Redis
+    Scheduler -->|ExecuteTask RPC| Server
+```
+
 ## 依赖
 
 Ubuntu 22.04/24.04 可安装：
@@ -37,6 +64,8 @@ sudo apt install -y g++ cmake libprotobuf-dev protobuf-compiler \
 ```bash
 docker compose up -d
 ```
+
+Compose 中 Redis 对宿主机暴露为 `6380`，MySQL 暴露为 `3307`，避免占用本机常用的 `6379` 和 `3306`；服务端配置已默认连接这两个端口。
 
 编译：
 
@@ -96,6 +125,8 @@ ctest --test-dir build --output-on-failure
 ```bash
 CORPCRON_SERVER_LISTEN_PORT=8082
 CORPCRON_SERVER_ADVERTISE_HOST=192.168.1.10
+CORPCRON_REDIS_PORT=6380
+CORPCRON_MYSQL_PORT=3307
 CORPCRON_MYSQL_PASSWORD=your_password
 CORPCRON_RPC_AUTH_TOKEN=your_token
 ```

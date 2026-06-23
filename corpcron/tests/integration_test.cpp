@@ -41,7 +41,7 @@ int main() {
     }
 
     corpcron::RedisClient redis(getenv_or("CORPCRON_REDIS_HOST", "127.0.0.1"),
-                                getenv_int_or("CORPCRON_REDIS_PORT", 6379));
+                                getenv_int_or("CORPCRON_REDIS_PORT", 6380));
     assert(redis.connect());
 
     std::string service_name = "itest-" + unique_id("");
@@ -92,7 +92,7 @@ int main() {
     assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) == endpoints.end());
 
     corpcron::MySQLClient db(getenv_or("CORPCRON_MYSQL_HOST", "127.0.0.1"),
-                             getenv_int_or("CORPCRON_MYSQL_PORT", 3306),
+                             getenv_int_or("CORPCRON_MYSQL_PORT", 3307),
                              getenv_or("CORPCRON_MYSQL_USER", "corpcron"),
                              getenv_or("CORPCRON_MYSQL_PASSWORD", "corpcron_dev_password"),
                              getenv_or("CORPCRON_MYSQL_DATABASE", "corpcron"));

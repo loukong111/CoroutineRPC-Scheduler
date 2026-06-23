@@ -154,12 +154,13 @@ void MainWindow::onSubmit() {
 }
 
 void MainWindow::onCancelTask() {
-    if (cancelTaskIdEdit->text().isEmpty()) {
+    QString taskId = cancelTaskIdEdit->text().trimmed();
+    if (taskId.isEmpty()) {
         QMessageBox::warning(this, "提示", "请填写 task_id");
         return;
     }
     corpcron::rpc::CancelTaskRequest req;
-    req.set_task_id(cancelTaskIdEdit->text().toStdString());
+    req.set_task_id(taskId.toStdString());
     req.set_auth_token(authToken());
 
     std::string payload;
