@@ -153,9 +153,252 @@ struct CancelTaskResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 CancelTaskResponseDefaultTypeInternal _CancelTaskResponse_default_instance_;
+PROTOBUF_CONSTEXPR TaskInfo::TaskInfo(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.cron_expr_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.params_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.handler_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.next_run_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.last_run_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.status_)*/0
+  , /*decltype(_impl_.retry_count_)*/0
+  , /*decltype(_impl_.max_retries_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TaskInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TaskInfoDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TaskInfoDefaultTypeInternal() {}
+  union {
+    TaskInfo _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TaskInfoDefaultTypeInternal _TaskInfo_default_instance_;
+PROTOBUF_CONSTEXPR ListTasksRequest::ListTasksRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.limit_)*/0
+  , /*decltype(_impl_.enabled_only_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListTasksRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListTasksRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListTasksRequestDefaultTypeInternal() {}
+  union {
+    ListTasksRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListTasksRequestDefaultTypeInternal _ListTasksRequest_default_instance_;
+PROTOBUF_CONSTEXPR ListTasksResponse::ListTasksResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.tasks_)*/{}
+  , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListTasksResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListTasksResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListTasksResponseDefaultTypeInternal() {}
+  union {
+    ListTasksResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListTasksResponseDefaultTypeInternal _ListTasksResponse_default_instance_;
+PROTOBUF_CONSTEXPR TaskHistoryInfo::TaskHistoryInfo(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.exec_node_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.result_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.start_time_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.end_time_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TaskHistoryInfoDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TaskHistoryInfoDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TaskHistoryInfoDefaultTypeInternal() {}
+  union {
+    TaskHistoryInfo _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TaskHistoryInfoDefaultTypeInternal _TaskHistoryInfo_default_instance_;
+PROTOBUF_CONSTEXPR ListHistoryRequest::ListHistoryRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.limit_)*/0
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListHistoryRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListHistoryRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListHistoryRequestDefaultTypeInternal() {}
+  union {
+    ListHistoryRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListHistoryRequestDefaultTypeInternal _ListHistoryRequest_default_instance_;
+PROTOBUF_CONSTEXPR ListHistoryResponse::ListHistoryResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.history_)*/{}
+  , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListHistoryResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListHistoryResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListHistoryResponseDefaultTypeInternal() {}
+  union {
+    ListHistoryResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListHistoryResponseDefaultTypeInternal _ListHistoryResponse_default_instance_;
+PROTOBUF_CONSTEXPR ListServicesRequest::ListServicesRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.service_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListServicesRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListServicesRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListServicesRequestDefaultTypeInternal() {}
+  union {
+    ListServicesRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListServicesRequestDefaultTypeInternal _ListServicesRequest_default_instance_;
+PROTOBUF_CONSTEXPR ListServicesResponse::ListServicesResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.endpoints_)*/{}
+  , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct ListServicesResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR ListServicesResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~ListServicesResponseDefaultTypeInternal() {}
+  union {
+    ListServicesResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListServicesResponseDefaultTypeInternal _ListServicesResponse_default_instance_;
+PROTOBUF_CONSTEXPR UpdateTaskRequest::UpdateTaskRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_)*/nullptr
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct UpdateTaskRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR UpdateTaskRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~UpdateTaskRequestDefaultTypeInternal() {}
+  union {
+    UpdateTaskRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UpdateTaskRequestDefaultTypeInternal _UpdateTaskRequest_default_instance_;
+PROTOBUF_CONSTEXPR UpdateTaskResponse::UpdateTaskResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct UpdateTaskResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR UpdateTaskResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~UpdateTaskResponseDefaultTypeInternal() {}
+  union {
+    UpdateTaskResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 UpdateTaskResponseDefaultTypeInternal _UpdateTaskResponse_default_instance_;
+PROTOBUF_CONSTEXPR EnableTaskRequest::EnableTaskRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.enabled_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EnableTaskRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EnableTaskRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EnableTaskRequestDefaultTypeInternal() {}
+  union {
+    EnableTaskRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EnableTaskRequestDefaultTypeInternal _EnableTaskRequest_default_instance_;
+PROTOBUF_CONSTEXPR EnableTaskResponse::EnableTaskResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct EnableTaskResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR EnableTaskResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~EnableTaskResponseDefaultTypeInternal() {}
+  union {
+    EnableTaskResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 EnableTaskResponseDefaultTypeInternal _EnableTaskResponse_default_instance_;
+PROTOBUF_CONSTEXPR DeleteTaskRequest::DeleteTaskRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct DeleteTaskRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DeleteTaskRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DeleteTaskRequestDefaultTypeInternal() {}
+  union {
+    DeleteTaskRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteTaskRequestDefaultTypeInternal _DeleteTaskRequest_default_instance_;
+PROTOBUF_CONSTEXPR DeleteTaskResponse::DeleteTaskResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct DeleteTaskResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR DeleteTaskResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~DeleteTaskResponseDefaultTypeInternal() {}
+  union {
+    DeleteTaskResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 DeleteTaskResponseDefaultTypeInternal _DeleteTaskResponse_default_instance_;
+PROTOBUF_CONSTEXPR RunTaskNowRequest::RunTaskNowRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RunTaskNowRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RunTaskNowRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RunTaskNowRequestDefaultTypeInternal() {}
+  union {
+    RunTaskNowRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RunTaskNowRequestDefaultTypeInternal _RunTaskNowRequest_default_instance_;
+PROTOBUF_CONSTEXPR RunTaskNowResponse::RunTaskNowResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.result_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct RunTaskNowResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR RunTaskNowResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~RunTaskNowResponseDefaultTypeInternal() {}
+  union {
+    RunTaskNowResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 RunTaskNowResponseDefaultTypeInternal _RunTaskNowResponse_default_instance_;
 }  // namespace rpc
 }  // namespace corpcron
-static ::_pb::Metadata file_level_metadata_rpc_2eproto[9];
+static ::_pb::Metadata file_level_metadata_rpc_2eproto[25];
 static const ::_pb::EnumDescriptor* file_level_enum_descriptors_rpc_2eproto[1];
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_rpc_2eproto = nullptr;
 
@@ -237,6 +480,153 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskResponse, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::CancelTaskResponse, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.cron_expr_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.params_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.handler_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.status_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.next_run_at_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.last_run_at_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.retry_count_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.max_retries_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.limit_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.enabled_only_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.error_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.tasks_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.task_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.exec_node_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.error_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.start_time_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.end_time_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.task_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.limit_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.error_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.history_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesRequest, _impl_.service_name_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesResponse, _impl_.error_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesResponse, _impl_.endpoints_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskRequest, _impl_.task_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::UpdateTaskResponse, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskRequest, _impl_.task_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskRequest, _impl_.enabled_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::EnableTaskResponse, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskRequest, _impl_.task_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::DeleteTaskResponse, _impl_.error_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowRequest, _impl_.task_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowResponse, _impl_.success_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowResponse, _impl_.result_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::RunTaskNowResponse, _impl_.error_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::corpcron::rpc::RpcError)},
@@ -248,6 +638,22 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 52, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskResponse)},
   { 61, -1, -1, sizeof(::corpcron::rpc::CancelTaskRequest)},
   { 69, -1, -1, sizeof(::corpcron::rpc::CancelTaskResponse)},
+  { 77, -1, -1, sizeof(::corpcron::rpc::TaskInfo)},
+  { 92, -1, -1, sizeof(::corpcron::rpc::ListTasksRequest)},
+  { 101, -1, -1, sizeof(::corpcron::rpc::ListTasksResponse)},
+  { 110, -1, -1, sizeof(::corpcron::rpc::TaskHistoryInfo)},
+  { 123, -1, -1, sizeof(::corpcron::rpc::ListHistoryRequest)},
+  { 132, -1, -1, sizeof(::corpcron::rpc::ListHistoryResponse)},
+  { 141, -1, -1, sizeof(::corpcron::rpc::ListServicesRequest)},
+  { 149, -1, -1, sizeof(::corpcron::rpc::ListServicesResponse)},
+  { 158, -1, -1, sizeof(::corpcron::rpc::UpdateTaskRequest)},
+  { 166, -1, -1, sizeof(::corpcron::rpc::UpdateTaskResponse)},
+  { 174, -1, -1, sizeof(::corpcron::rpc::EnableTaskRequest)},
+  { 183, -1, -1, sizeof(::corpcron::rpc::EnableTaskResponse)},
+  { 191, -1, -1, sizeof(::corpcron::rpc::DeleteTaskRequest)},
+  { 199, -1, -1, sizeof(::corpcron::rpc::DeleteTaskResponse)},
+  { 207, -1, -1, sizeof(::corpcron::rpc::RunTaskNowRequest)},
+  { 215, -1, -1, sizeof(::corpcron::rpc::RunTaskNowResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -260,6 +666,22 @@ static const ::_pb::Message* const file_default_instances[] = {
   &::corpcron::rpc::_ExecuteTaskResponse_default_instance_._instance,
   &::corpcron::rpc::_CancelTaskRequest_default_instance_._instance,
   &::corpcron::rpc::_CancelTaskResponse_default_instance_._instance,
+  &::corpcron::rpc::_TaskInfo_default_instance_._instance,
+  &::corpcron::rpc::_ListTasksRequest_default_instance_._instance,
+  &::corpcron::rpc::_ListTasksResponse_default_instance_._instance,
+  &::corpcron::rpc::_TaskHistoryInfo_default_instance_._instance,
+  &::corpcron::rpc::_ListHistoryRequest_default_instance_._instance,
+  &::corpcron::rpc::_ListHistoryResponse_default_instance_._instance,
+  &::corpcron::rpc::_ListServicesRequest_default_instance_._instance,
+  &::corpcron::rpc::_ListServicesResponse_default_instance_._instance,
+  &::corpcron::rpc::_UpdateTaskRequest_default_instance_._instance,
+  &::corpcron::rpc::_UpdateTaskResponse_default_instance_._instance,
+  &::corpcron::rpc::_EnableTaskRequest_default_instance_._instance,
+  &::corpcron::rpc::_EnableTaskResponse_default_instance_._instance,
+  &::corpcron::rpc::_DeleteTaskRequest_default_instance_._instance,
+  &::corpcron::rpc::_DeleteTaskResponse_default_instance_._instance,
+  &::corpcron::rpc::_RunTaskNowRequest_default_instance_._instance,
+  &::corpcron::rpc::_RunTaskNowResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_rpc_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
@@ -278,17 +700,50 @@ const char descriptor_table_protodef_rpc_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "sult\030\002 \001(\t\022\r\n\005error\030\003 \001(\t\"8\n\021CancelTaskR"
   "equest\022\017\n\007task_id\030\001 \001(\t\022\022\n\nauth_token\030\002 "
   "\001(\t\"4\n\022CancelTaskResponse\022\017\n\007success\030\001 \001"
-  "(\010\022\r\n\005error\030\002 \001(\t*\232\001\n\tErrorCode\022\006\n\002OK\020\000\022"
-  "\017\n\013BAD_REQUEST\020\001\022\022\n\016UNKNOWN_METHOD\020\002\022\025\n\021"
-  "PAYLOAD_TOO_LARGE\020\003\022\022\n\016INTERNAL_ERROR\020\004\022"
-  "\014\n\010DB_ERROR\020\005\022\025\n\021HANDLER_NOT_FOUND\020\006\022\020\n\014"
-  "UNAUTHORIZED\020\007b\006proto3"
+  "(\010\022\r\n\005error\030\002 \001(\t\"\256\001\n\010TaskInfo\022\n\n\002id\030\001 \001"
+  "(\t\022\021\n\tcron_expr\030\002 \001(\t\022\016\n\006params\030\003 \001(\t\022\017\n"
+  "\007handler\030\004 \001(\t\022\016\n\006status\030\005 \001(\005\022\023\n\013next_r"
+  "un_at\030\006 \001(\t\022\023\n\013last_run_at\030\007 \001(\t\022\023\n\013retr"
+  "y_count\030\010 \001(\005\022\023\n\013max_retries\030\t \001(\005\"K\n\020Li"
+  "stTasksRequest\022\022\n\nauth_token\030\001 \001(\t\022\r\n\005li"
+  "mit\030\002 \001(\005\022\024\n\014enabled_only\030\003 \001(\010\"Z\n\021ListT"
+  "asksResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002"
+  " \001(\t\022%\n\005tasks\030\003 \003(\0132\026.corpcron.rpc.TaskI"
+  "nfo\"\213\001\n\017TaskHistoryInfo\022\017\n\007task_id\030\001 \001(\t"
+  "\022\021\n\texec_node\030\002 \001(\t\022\017\n\007success\030\003 \001(\010\022\016\n\006"
+  "result\030\004 \001(\t\022\r\n\005error\030\005 \001(\t\022\022\n\nstart_tim"
+  "e\030\006 \001(\t\022\020\n\010end_time\030\007 \001(\t\"H\n\022ListHistory"
+  "Request\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007task_id\030\002"
+  " \001(\t\022\r\n\005limit\030\003 \001(\005\"e\n\023ListHistoryRespon"
+  "se\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022.\n\007hi"
+  "story\030\003 \003(\0132\035.corpcron.rpc.TaskHistoryIn"
+  "fo\"\?\n\023ListServicesRequest\022\022\n\nauth_token\030"
+  "\001 \001(\t\022\024\n\014service_name\030\002 \001(\t\"I\n\024ListServi"
+  "cesResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 "
+  "\001(\t\022\021\n\tendpoints\030\003 \003(\t\"M\n\021UpdateTaskRequ"
+  "est\022\022\n\nauth_token\030\001 \001(\t\022$\n\004task\030\002 \001(\0132\026."
+  "corpcron.rpc.TaskInfo\"4\n\022UpdateTaskRespo"
+  "nse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"I\n\021E"
+  "nableTaskRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007"
+  "task_id\030\002 \001(\t\022\017\n\007enabled\030\003 \001(\010\"4\n\022Enable"
+  "TaskResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002"
+  " \001(\t\"8\n\021DeleteTaskRequest\022\022\n\nauth_token\030"
+  "\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\"4\n\022DeleteTaskResp"
+  "onse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"8\n\021"
+  "RunTaskNowRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n"
+  "\007task_id\030\002 \001(\t\"D\n\022RunTaskNowResponse\022\017\n\007"
+  "success\030\001 \001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005error\030\003"
+  " \001(\t*\232\001\n\tErrorCode\022\006\n\002OK\020\000\022\017\n\013BAD_REQUES"
+  "T\020\001\022\022\n\016UNKNOWN_METHOD\020\002\022\025\n\021PAYLOAD_TOO_L"
+  "ARGE\020\003\022\022\n\016INTERNAL_ERROR\020\004\022\014\n\010DB_ERROR\020\005"
+  "\022\025\n\021HANDLER_NOT_FOUND\020\006\022\020\n\014UNAUTHORIZED\020"
+  "\007b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_rpc_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_rpc_2eproto = {
-    false, false, 782, descriptor_table_protodef_rpc_2eproto,
+    false, false, 2089, descriptor_table_protodef_rpc_2eproto,
     "rpc.proto",
-    &descriptor_table_rpc_2eproto_once, nullptr, 0, 9,
+    &descriptor_table_rpc_2eproto_once, nullptr, 0, 25,
     schemas, file_default_instances, TableStruct_rpc_2eproto::offsets,
     file_level_metadata_rpc_2eproto, file_level_enum_descriptors_rpc_2eproto,
     file_level_service_descriptors_rpc_2eproto,
@@ -2760,6 +3215,4617 @@ void CancelTaskResponse::InternalSwap(CancelTaskResponse* other) {
       file_level_metadata_rpc_2eproto[8]);
 }
 
+// ===================================================================
+
+class TaskInfo::_Internal {
+ public:
+};
+
+TaskInfo::TaskInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.TaskInfo)
+}
+TaskInfo::TaskInfo(const TaskInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TaskInfo* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.id_){}
+    , decltype(_impl_.cron_expr_){}
+    , decltype(_impl_.params_){}
+    , decltype(_impl_.handler_){}
+    , decltype(_impl_.next_run_at_){}
+    , decltype(_impl_.last_run_at_){}
+    , decltype(_impl_.status_){}
+    , decltype(_impl_.retry_count_){}
+    , decltype(_impl_.max_retries_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_id().empty()) {
+    _this->_impl_.id_.Set(from._internal_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.cron_expr_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cron_expr_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_cron_expr().empty()) {
+    _this->_impl_.cron_expr_.Set(from._internal_cron_expr(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.params_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.params_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_params().empty()) {
+    _this->_impl_.params_.Set(from._internal_params(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.handler_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.handler_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_handler().empty()) {
+    _this->_impl_.handler_.Set(from._internal_handler(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.next_run_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.next_run_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_next_run_at().empty()) {
+    _this->_impl_.next_run_at_.Set(from._internal_next_run_at(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.last_run_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.last_run_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_last_run_at().empty()) {
+    _this->_impl_.last_run_at_.Set(from._internal_last_run_at(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.status_, &from._impl_.status_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.max_retries_) -
+    reinterpret_cast<char*>(&_impl_.status_)) + sizeof(_impl_.max_retries_));
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.TaskInfo)
+}
+
+inline void TaskInfo::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.id_){}
+    , decltype(_impl_.cron_expr_){}
+    , decltype(_impl_.params_){}
+    , decltype(_impl_.handler_){}
+    , decltype(_impl_.next_run_at_){}
+    , decltype(_impl_.last_run_at_){}
+    , decltype(_impl_.status_){0}
+    , decltype(_impl_.retry_count_){0}
+    , decltype(_impl_.max_retries_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.cron_expr_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.cron_expr_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.params_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.params_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.handler_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.handler_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.next_run_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.next_run_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.last_run_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.last_run_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TaskInfo::~TaskInfo() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.TaskInfo)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TaskInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.id_.Destroy();
+  _impl_.cron_expr_.Destroy();
+  _impl_.params_.Destroy();
+  _impl_.handler_.Destroy();
+  _impl_.next_run_at_.Destroy();
+  _impl_.last_run_at_.Destroy();
+}
+
+void TaskInfo::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TaskInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.TaskInfo)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.id_.ClearToEmpty();
+  _impl_.cron_expr_.ClearToEmpty();
+  _impl_.params_.ClearToEmpty();
+  _impl_.handler_.ClearToEmpty();
+  _impl_.next_run_at_.ClearToEmpty();
+  _impl_.last_run_at_.ClearToEmpty();
+  ::memset(&_impl_.status_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.max_retries_) -
+      reinterpret_cast<char*>(&_impl_.status_)) + sizeof(_impl_.max_retries_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TaskInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string cron_expr = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_cron_expr();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.cron_expr"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string params = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_params();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.params"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string handler = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_handler();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.handler"));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 status = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.status_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string next_run_at = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_next_run_at();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.next_run_at"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string last_run_at = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_last_run_at();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.last_run_at"));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 retry_count = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 64)) {
+          _impl_.retry_count_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 max_retries = 9;
+      case 9:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
+          _impl_.max_retries_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TaskInfo::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.TaskInfo)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string id = 1;
+  if (!this->_internal_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_id().data(), static_cast<int>(this->_internal_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_id(), target);
+  }
+
+  // string cron_expr = 2;
+  if (!this->_internal_cron_expr().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_cron_expr().data(), static_cast<int>(this->_internal_cron_expr().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.cron_expr");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_cron_expr(), target);
+  }
+
+  // string params = 3;
+  if (!this->_internal_params().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_params().data(), static_cast<int>(this->_internal_params().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.params");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_params(), target);
+  }
+
+  // string handler = 4;
+  if (!this->_internal_handler().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_handler().data(), static_cast<int>(this->_internal_handler().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.handler");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_handler(), target);
+  }
+
+  // int32 status = 5;
+  if (this->_internal_status() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_status(), target);
+  }
+
+  // string next_run_at = 6;
+  if (!this->_internal_next_run_at().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_next_run_at().data(), static_cast<int>(this->_internal_next_run_at().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.next_run_at");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_next_run_at(), target);
+  }
+
+  // string last_run_at = 7;
+  if (!this->_internal_last_run_at().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_last_run_at().data(), static_cast<int>(this->_internal_last_run_at().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.last_run_at");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_last_run_at(), target);
+  }
+
+  // int32 retry_count = 8;
+  if (this->_internal_retry_count() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(8, this->_internal_retry_count(), target);
+  }
+
+  // int32 max_retries = 9;
+  if (this->_internal_max_retries() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(9, this->_internal_max_retries(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.TaskInfo)
+  return target;
+}
+
+size_t TaskInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.TaskInfo)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string id = 1;
+  if (!this->_internal_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_id());
+  }
+
+  // string cron_expr = 2;
+  if (!this->_internal_cron_expr().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_cron_expr());
+  }
+
+  // string params = 3;
+  if (!this->_internal_params().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_params());
+  }
+
+  // string handler = 4;
+  if (!this->_internal_handler().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_handler());
+  }
+
+  // string next_run_at = 6;
+  if (!this->_internal_next_run_at().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_next_run_at());
+  }
+
+  // string last_run_at = 7;
+  if (!this->_internal_last_run_at().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_last_run_at());
+  }
+
+  // int32 status = 5;
+  if (this->_internal_status() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_status());
+  }
+
+  // int32 retry_count = 8;
+  if (this->_internal_retry_count() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_retry_count());
+  }
+
+  // int32 max_retries = 9;
+  if (this->_internal_max_retries() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_max_retries());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TaskInfo::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TaskInfo::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TaskInfo::GetClassData() const { return &_class_data_; }
+
+
+void TaskInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TaskInfo*>(&to_msg);
+  auto& from = static_cast<const TaskInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.TaskInfo)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_id().empty()) {
+    _this->_internal_set_id(from._internal_id());
+  }
+  if (!from._internal_cron_expr().empty()) {
+    _this->_internal_set_cron_expr(from._internal_cron_expr());
+  }
+  if (!from._internal_params().empty()) {
+    _this->_internal_set_params(from._internal_params());
+  }
+  if (!from._internal_handler().empty()) {
+    _this->_internal_set_handler(from._internal_handler());
+  }
+  if (!from._internal_next_run_at().empty()) {
+    _this->_internal_set_next_run_at(from._internal_next_run_at());
+  }
+  if (!from._internal_last_run_at().empty()) {
+    _this->_internal_set_last_run_at(from._internal_last_run_at());
+  }
+  if (from._internal_status() != 0) {
+    _this->_internal_set_status(from._internal_status());
+  }
+  if (from._internal_retry_count() != 0) {
+    _this->_internal_set_retry_count(from._internal_retry_count());
+  }
+  if (from._internal_max_retries() != 0) {
+    _this->_internal_set_max_retries(from._internal_max_retries());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TaskInfo::CopyFrom(const TaskInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.TaskInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskInfo::IsInitialized() const {
+  return true;
+}
+
+void TaskInfo::InternalSwap(TaskInfo* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.id_, lhs_arena,
+      &other->_impl_.id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.cron_expr_, lhs_arena,
+      &other->_impl_.cron_expr_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.params_, lhs_arena,
+      &other->_impl_.params_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.handler_, lhs_arena,
+      &other->_impl_.handler_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.next_run_at_, lhs_arena,
+      &other->_impl_.next_run_at_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.last_run_at_, lhs_arena,
+      &other->_impl_.last_run_at_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(TaskInfo, _impl_.max_retries_)
+      + sizeof(TaskInfo::_impl_.max_retries_)
+      - PROTOBUF_FIELD_OFFSET(TaskInfo, _impl_.status_)>(
+          reinterpret_cast<char*>(&_impl_.status_),
+          reinterpret_cast<char*>(&other->_impl_.status_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TaskInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[9]);
+}
+
+// ===================================================================
+
+class ListTasksRequest::_Internal {
+ public:
+};
+
+ListTasksRequest::ListTasksRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListTasksRequest)
+}
+ListTasksRequest::ListTasksRequest(const ListTasksRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListTasksRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.limit_){}
+    , decltype(_impl_.enabled_only_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.limit_, &from._impl_.limit_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.enabled_only_) -
+    reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.enabled_only_));
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListTasksRequest)
+}
+
+inline void ListTasksRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.limit_){0}
+    , decltype(_impl_.enabled_only_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListTasksRequest::~ListTasksRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListTasksRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListTasksRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+}
+
+void ListTasksRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListTasksRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListTasksRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  ::memset(&_impl_.limit_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.enabled_only_) -
+      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.enabled_only_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListTasksRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListTasksRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 limit = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 16)) {
+          _impl_.limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // bool enabled_only = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.enabled_only_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListTasksRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListTasksRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListTasksRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // int32 limit = 2;
+  if (this->_internal_limit() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(2, this->_internal_limit(), target);
+  }
+
+  // bool enabled_only = 3;
+  if (this->_internal_enabled_only() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_enabled_only(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListTasksRequest)
+  return target;
+}
+
+size_t ListTasksRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListTasksRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // int32 limit = 2;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
+  }
+
+  // bool enabled_only = 3;
+  if (this->_internal_enabled_only() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListTasksRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListTasksRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListTasksRequest::GetClassData() const { return &_class_data_; }
+
+
+void ListTasksRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListTasksRequest*>(&to_msg);
+  auto& from = static_cast<const ListTasksRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListTasksRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
+  if (from._internal_enabled_only() != 0) {
+    _this->_internal_set_enabled_only(from._internal_enabled_only());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListTasksRequest::CopyFrom(const ListTasksRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListTasksRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListTasksRequest::IsInitialized() const {
+  return true;
+}
+
+void ListTasksRequest::InternalSwap(ListTasksRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ListTasksRequest, _impl_.enabled_only_)
+      + sizeof(ListTasksRequest::_impl_.enabled_only_)
+      - PROTOBUF_FIELD_OFFSET(ListTasksRequest, _impl_.limit_)>(
+          reinterpret_cast<char*>(&_impl_.limit_),
+          reinterpret_cast<char*>(&other->_impl_.limit_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListTasksRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[10]);
+}
+
+// ===================================================================
+
+class ListTasksResponse::_Internal {
+ public:
+};
+
+ListTasksResponse::ListTasksResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListTasksResponse)
+}
+ListTasksResponse::ListTasksResponse(const ListTasksResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListTasksResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.tasks_){from._impl_.tasks_}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListTasksResponse)
+}
+
+inline void ListTasksResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.tasks_){arena}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListTasksResponse::~ListTasksResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListTasksResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListTasksResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.tasks_.~RepeatedPtrField();
+  _impl_.error_.Destroy();
+}
+
+void ListTasksResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListTasksResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListTasksResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.tasks_.Clear();
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListTasksResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListTasksResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .corpcron.rpc.TaskInfo tasks = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_tasks(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListTasksResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListTasksResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListTasksResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  // repeated .corpcron.rpc.TaskInfo tasks = 3;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_tasks_size()); i < n; i++) {
+    const auto& repfield = this->_internal_tasks(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListTasksResponse)
+  return target;
+}
+
+size_t ListTasksResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListTasksResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .corpcron.rpc.TaskInfo tasks = 3;
+  total_size += 1UL * this->_internal_tasks_size();
+  for (const auto& msg : this->_impl_.tasks_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListTasksResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListTasksResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListTasksResponse::GetClassData() const { return &_class_data_; }
+
+
+void ListTasksResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListTasksResponse*>(&to_msg);
+  auto& from = static_cast<const ListTasksResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListTasksResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.tasks_.MergeFrom(from._impl_.tasks_);
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListTasksResponse::CopyFrom(const ListTasksResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListTasksResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListTasksResponse::IsInitialized() const {
+  return true;
+}
+
+void ListTasksResponse::InternalSwap(ListTasksResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.tasks_.InternalSwap(&other->_impl_.tasks_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListTasksResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[11]);
+}
+
+// ===================================================================
+
+class TaskHistoryInfo::_Internal {
+ public:
+};
+
+TaskHistoryInfo::TaskHistoryInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.TaskHistoryInfo)
+}
+TaskHistoryInfo::TaskHistoryInfo(const TaskHistoryInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TaskHistoryInfo* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_id_){}
+    , decltype(_impl_.exec_node_){}
+    , decltype(_impl_.result_){}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.start_time_){}
+    , decltype(_impl_.end_time_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.exec_node_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.exec_node_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_exec_node().empty()) {
+    _this->_impl_.exec_node_.Set(from._internal_exec_node(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.result_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.result_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_result().empty()) {
+    _this->_impl_.result_.Set(from._internal_result(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.start_time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.start_time_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_start_time().empty()) {
+    _this->_impl_.start_time_.Set(from._internal_start_time(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.end_time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.end_time_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_end_time().empty()) {
+    _this->_impl_.end_time_.Set(from._internal_end_time(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.TaskHistoryInfo)
+}
+
+inline void TaskHistoryInfo::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_id_){}
+    , decltype(_impl_.exec_node_){}
+    , decltype(_impl_.result_){}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.start_time_){}
+    , decltype(_impl_.end_time_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.exec_node_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.exec_node_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.result_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.result_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.start_time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.start_time_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.end_time_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.end_time_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TaskHistoryInfo::~TaskHistoryInfo() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.TaskHistoryInfo)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TaskHistoryInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.task_id_.Destroy();
+  _impl_.exec_node_.Destroy();
+  _impl_.result_.Destroy();
+  _impl_.error_.Destroy();
+  _impl_.start_time_.Destroy();
+  _impl_.end_time_.Destroy();
+}
+
+void TaskHistoryInfo::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TaskHistoryInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.TaskHistoryInfo)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.task_id_.ClearToEmpty();
+  _impl_.exec_node_.ClearToEmpty();
+  _impl_.result_.ClearToEmpty();
+  _impl_.error_.ClearToEmpty();
+  _impl_.start_time_.ClearToEmpty();
+  _impl_.end_time_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string task_id = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string exec_node = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_exec_node();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.exec_node"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool success = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string result = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+          auto str = _internal_mutable_result();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.result"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string start_time = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_start_time();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.start_time"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string end_time = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+          auto str = _internal_mutable_end_time();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.end_time"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TaskHistoryInfo::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.TaskHistoryInfo)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.task_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_task_id(), target);
+  }
+
+  // string exec_node = 2;
+  if (!this->_internal_exec_node().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_exec_node().data(), static_cast<int>(this->_internal_exec_node().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.exec_node");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_exec_node(), target);
+  }
+
+  // bool success = 3;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_success(), target);
+  }
+
+  // string result = 4;
+  if (!this->_internal_result().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_result().data(), static_cast<int>(this->_internal_result().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.result");
+    target = stream->WriteStringMaybeAliased(
+        4, this->_internal_result(), target);
+  }
+
+  // string error = 5;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.error");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_error(), target);
+  }
+
+  // string start_time = 6;
+  if (!this->_internal_start_time().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_start_time().data(), static_cast<int>(this->_internal_start_time().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.start_time");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_start_time(), target);
+  }
+
+  // string end_time = 7;
+  if (!this->_internal_end_time().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_end_time().data(), static_cast<int>(this->_internal_end_time().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.end_time");
+    target = stream->WriteStringMaybeAliased(
+        7, this->_internal_end_time(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.TaskHistoryInfo)
+  return target;
+}
+
+size_t TaskHistoryInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.TaskHistoryInfo)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string task_id = 1;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  // string exec_node = 2;
+  if (!this->_internal_exec_node().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_exec_node());
+  }
+
+  // string result = 4;
+  if (!this->_internal_result().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_result());
+  }
+
+  // string error = 5;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // string start_time = 6;
+  if (!this->_internal_start_time().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_start_time());
+  }
+
+  // string end_time = 7;
+  if (!this->_internal_end_time().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_end_time());
+  }
+
+  // bool success = 3;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TaskHistoryInfo::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TaskHistoryInfo::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TaskHistoryInfo::GetClassData() const { return &_class_data_; }
+
+
+void TaskHistoryInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TaskHistoryInfo*>(&to_msg);
+  auto& from = static_cast<const TaskHistoryInfo&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.TaskHistoryInfo)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  if (!from._internal_exec_node().empty()) {
+    _this->_internal_set_exec_node(from._internal_exec_node());
+  }
+  if (!from._internal_result().empty()) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (!from._internal_start_time().empty()) {
+    _this->_internal_set_start_time(from._internal_start_time());
+  }
+  if (!from._internal_end_time().empty()) {
+    _this->_internal_set_end_time(from._internal_end_time());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TaskHistoryInfo::CopyFrom(const TaskHistoryInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.TaskHistoryInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskHistoryInfo::IsInitialized() const {
+  return true;
+}
+
+void TaskHistoryInfo::InternalSwap(TaskHistoryInfo* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.exec_node_, lhs_arena,
+      &other->_impl_.exec_node_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.result_, lhs_arena,
+      &other->_impl_.result_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.start_time_, lhs_arena,
+      &other->_impl_.start_time_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.end_time_, lhs_arena,
+      &other->_impl_.end_time_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TaskHistoryInfo::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[12]);
+}
+
+// ===================================================================
+
+class ListHistoryRequest::_Internal {
+ public:
+};
+
+ListHistoryRequest::ListHistoryRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListHistoryRequest)
+}
+ListHistoryRequest::ListHistoryRequest(const ListHistoryRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListHistoryRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.limit_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.limit_ = from._impl_.limit_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListHistoryRequest)
+}
+
+inline void ListHistoryRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.limit_){0}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListHistoryRequest::~ListHistoryRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListHistoryRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListHistoryRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  _impl_.task_id_.Destroy();
+}
+
+void ListHistoryRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListHistoryRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListHistoryRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  _impl_.task_id_.ClearToEmpty();
+  _impl_.limit_ = 0;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListHistoryRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListHistoryRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string task_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListHistoryRequest.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 limit = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListHistoryRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListHistoryRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListHistoryRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListHistoryRequest.task_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_task_id(), target);
+  }
+
+  // int32 limit = 3;
+  if (this->_internal_limit() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_limit(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListHistoryRequest)
+  return target;
+}
+
+size_t ListHistoryRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListHistoryRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  // int32 limit = 3;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListHistoryRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListHistoryRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListHistoryRequest::GetClassData() const { return &_class_data_; }
+
+
+void ListHistoryRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListHistoryRequest*>(&to_msg);
+  auto& from = static_cast<const ListHistoryRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListHistoryRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListHistoryRequest::CopyFrom(const ListHistoryRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListHistoryRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListHistoryRequest::IsInitialized() const {
+  return true;
+}
+
+void ListHistoryRequest::InternalSwap(ListHistoryRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+  swap(_impl_.limit_, other->_impl_.limit_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListHistoryRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[13]);
+}
+
+// ===================================================================
+
+class ListHistoryResponse::_Internal {
+ public:
+};
+
+ListHistoryResponse::ListHistoryResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListHistoryResponse)
+}
+ListHistoryResponse::ListHistoryResponse(const ListHistoryResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListHistoryResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.history_){from._impl_.history_}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListHistoryResponse)
+}
+
+inline void ListHistoryResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.history_){arena}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListHistoryResponse::~ListHistoryResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListHistoryResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListHistoryResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.history_.~RepeatedPtrField();
+  _impl_.error_.Destroy();
+}
+
+void ListHistoryResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListHistoryResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListHistoryResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.history_.Clear();
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListHistoryResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListHistoryResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated .corpcron.rpc.TaskHistoryInfo history = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_history(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListHistoryResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListHistoryResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListHistoryResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  // repeated .corpcron.rpc.TaskHistoryInfo history = 3;
+  for (unsigned i = 0,
+      n = static_cast<unsigned>(this->_internal_history_size()); i < n; i++) {
+    const auto& repfield = this->_internal_history(i);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListHistoryResponse)
+  return target;
+}
+
+size_t ListHistoryResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListHistoryResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .corpcron.rpc.TaskHistoryInfo history = 3;
+  total_size += 1UL * this->_internal_history_size();
+  for (const auto& msg : this->_impl_.history_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListHistoryResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListHistoryResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListHistoryResponse::GetClassData() const { return &_class_data_; }
+
+
+void ListHistoryResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListHistoryResponse*>(&to_msg);
+  auto& from = static_cast<const ListHistoryResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListHistoryResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.history_.MergeFrom(from._impl_.history_);
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListHistoryResponse::CopyFrom(const ListHistoryResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListHistoryResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListHistoryResponse::IsInitialized() const {
+  return true;
+}
+
+void ListHistoryResponse::InternalSwap(ListHistoryResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.history_.InternalSwap(&other->_impl_.history_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListHistoryResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[14]);
+}
+
+// ===================================================================
+
+class ListServicesRequest::_Internal {
+ public:
+};
+
+ListServicesRequest::ListServicesRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListServicesRequest)
+}
+ListServicesRequest::ListServicesRequest(const ListServicesRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListServicesRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.service_name_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.service_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.service_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_service_name().empty()) {
+    _this->_impl_.service_name_.Set(from._internal_service_name(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListServicesRequest)
+}
+
+inline void ListServicesRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.service_name_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.service_name_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.service_name_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListServicesRequest::~ListServicesRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListServicesRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListServicesRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  _impl_.service_name_.Destroy();
+}
+
+void ListServicesRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListServicesRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListServicesRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  _impl_.service_name_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListServicesRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListServicesRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string service_name = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_service_name();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListServicesRequest.service_name"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListServicesRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListServicesRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListServicesRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // string service_name = 2;
+  if (!this->_internal_service_name().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_service_name().data(), static_cast<int>(this->_internal_service_name().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListServicesRequest.service_name");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_service_name(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListServicesRequest)
+  return target;
+}
+
+size_t ListServicesRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListServicesRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // string service_name = 2;
+  if (!this->_internal_service_name().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_service_name());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListServicesRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListServicesRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListServicesRequest::GetClassData() const { return &_class_data_; }
+
+
+void ListServicesRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListServicesRequest*>(&to_msg);
+  auto& from = static_cast<const ListServicesRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListServicesRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_service_name().empty()) {
+    _this->_internal_set_service_name(from._internal_service_name());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListServicesRequest::CopyFrom(const ListServicesRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListServicesRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListServicesRequest::IsInitialized() const {
+  return true;
+}
+
+void ListServicesRequest::InternalSwap(ListServicesRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.service_name_, lhs_arena,
+      &other->_impl_.service_name_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListServicesRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[15]);
+}
+
+// ===================================================================
+
+class ListServicesResponse::_Internal {
+ public:
+};
+
+ListServicesResponse::ListServicesResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.ListServicesResponse)
+}
+ListServicesResponse::ListServicesResponse(const ListServicesResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  ListServicesResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.endpoints_){from._impl_.endpoints_}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListServicesResponse)
+}
+
+inline void ListServicesResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.endpoints_){arena}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+ListServicesResponse::~ListServicesResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.ListServicesResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void ListServicesResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.endpoints_.~RepeatedPtrField();
+  _impl_.error_.Destroy();
+}
+
+void ListServicesResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void ListServicesResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.ListServicesResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.endpoints_.Clear();
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* ListServicesResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListServicesResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      // repeated string endpoints = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_endpoints();
+            ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(ptr);
+            CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListServicesResponse.endpoints"));
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* ListServicesResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.ListServicesResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListServicesResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  // repeated string endpoints = 3;
+  for (int i = 0, n = this->_internal_endpoints_size(); i < n; i++) {
+    const auto& s = this->_internal_endpoints(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListServicesResponse.endpoints");
+    target = stream->WriteString(3, s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.ListServicesResponse)
+  return target;
+}
+
+size_t ListServicesResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.ListServicesResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string endpoints = 3;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(_impl_.endpoints_.size());
+  for (int i = 0, n = _impl_.endpoints_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      _impl_.endpoints_.Get(i));
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData ListServicesResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    ListServicesResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*ListServicesResponse::GetClassData() const { return &_class_data_; }
+
+
+void ListServicesResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<ListServicesResponse*>(&to_msg);
+  auto& from = static_cast<const ListServicesResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.ListServicesResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  _this->_impl_.endpoints_.MergeFrom(from._impl_.endpoints_);
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void ListServicesResponse::CopyFrom(const ListServicesResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.ListServicesResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ListServicesResponse::IsInitialized() const {
+  return true;
+}
+
+void ListServicesResponse::InternalSwap(ListServicesResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  _impl_.endpoints_.InternalSwap(&other->_impl_.endpoints_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata ListServicesResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[16]);
+}
+
+// ===================================================================
+
+class UpdateTaskRequest::_Internal {
+ public:
+  static const ::corpcron::rpc::TaskInfo& task(const UpdateTaskRequest* msg);
+};
+
+const ::corpcron::rpc::TaskInfo&
+UpdateTaskRequest::_Internal::task(const UpdateTaskRequest* msg) {
+  return *msg->_impl_.task_;
+}
+UpdateTaskRequest::UpdateTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.UpdateTaskRequest)
+}
+UpdateTaskRequest::UpdateTaskRequest(const UpdateTaskRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  UpdateTaskRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  if (from._internal_has_task()) {
+    _this->_impl_.task_ = new ::corpcron::rpc::TaskInfo(*from._impl_.task_);
+  }
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.UpdateTaskRequest)
+}
+
+inline void UpdateTaskRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_){nullptr}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+UpdateTaskRequest::~UpdateTaskRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.UpdateTaskRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void UpdateTaskRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  if (this != internal_default_instance()) delete _impl_.task_;
+}
+
+void UpdateTaskRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void UpdateTaskRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.UpdateTaskRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  if (GetArenaForAllocation() == nullptr && _impl_.task_ != nullptr) {
+    delete _impl_.task_;
+  }
+  _impl_.task_ = nullptr;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* UpdateTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.UpdateTaskRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // .corpcron.rpc.TaskInfo task = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          ptr = ctx->ParseMessage(_internal_mutable_task(), ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* UpdateTaskRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.UpdateTaskRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.UpdateTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // .corpcron.rpc.TaskInfo task = 2;
+  if (this->_internal_has_task()) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(2, _Internal::task(this),
+        _Internal::task(this).GetCachedSize(), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.UpdateTaskRequest)
+  return target;
+}
+
+size_t UpdateTaskRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.UpdateTaskRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // .corpcron.rpc.TaskInfo task = 2;
+  if (this->_internal_has_task()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *_impl_.task_);
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData UpdateTaskRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    UpdateTaskRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*UpdateTaskRequest::GetClassData() const { return &_class_data_; }
+
+
+void UpdateTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<UpdateTaskRequest*>(&to_msg);
+  auto& from = static_cast<const UpdateTaskRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.UpdateTaskRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (from._internal_has_task()) {
+    _this->_internal_mutable_task()->::corpcron::rpc::TaskInfo::MergeFrom(
+        from._internal_task());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UpdateTaskRequest::CopyFrom(const UpdateTaskRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.UpdateTaskRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UpdateTaskRequest::IsInitialized() const {
+  return true;
+}
+
+void UpdateTaskRequest::InternalSwap(UpdateTaskRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  swap(_impl_.task_, other->_impl_.task_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata UpdateTaskRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[17]);
+}
+
+// ===================================================================
+
+class UpdateTaskResponse::_Internal {
+ public:
+};
+
+UpdateTaskResponse::UpdateTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.UpdateTaskResponse)
+}
+UpdateTaskResponse::UpdateTaskResponse(const UpdateTaskResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  UpdateTaskResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.UpdateTaskResponse)
+}
+
+inline void UpdateTaskResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+UpdateTaskResponse::~UpdateTaskResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.UpdateTaskResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void UpdateTaskResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.error_.Destroy();
+}
+
+void UpdateTaskResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void UpdateTaskResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.UpdateTaskResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* UpdateTaskResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.UpdateTaskResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* UpdateTaskResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.UpdateTaskResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.UpdateTaskResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.UpdateTaskResponse)
+  return target;
+}
+
+size_t UpdateTaskResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.UpdateTaskResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData UpdateTaskResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    UpdateTaskResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*UpdateTaskResponse::GetClassData() const { return &_class_data_; }
+
+
+void UpdateTaskResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<UpdateTaskResponse*>(&to_msg);
+  auto& from = static_cast<const UpdateTaskResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.UpdateTaskResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void UpdateTaskResponse::CopyFrom(const UpdateTaskResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.UpdateTaskResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UpdateTaskResponse::IsInitialized() const {
+  return true;
+}
+
+void UpdateTaskResponse::InternalSwap(UpdateTaskResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata UpdateTaskResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[18]);
+}
+
+// ===================================================================
+
+class EnableTaskRequest::_Internal {
+ public:
+};
+
+EnableTaskRequest::EnableTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.EnableTaskRequest)
+}
+EnableTaskRequest::EnableTaskRequest(const EnableTaskRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EnableTaskRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.enabled_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.enabled_ = from._impl_.enabled_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.EnableTaskRequest)
+}
+
+inline void EnableTaskRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , decltype(_impl_.enabled_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+EnableTaskRequest::~EnableTaskRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.EnableTaskRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void EnableTaskRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  _impl_.task_id_.Destroy();
+}
+
+void EnableTaskRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void EnableTaskRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.EnableTaskRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  _impl_.task_id_.ClearToEmpty();
+  _impl_.enabled_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* EnableTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.EnableTaskRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string task_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.EnableTaskRequest.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool enabled = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+          _impl_.enabled_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* EnableTaskRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.EnableTaskRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.EnableTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.EnableTaskRequest.task_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_task_id(), target);
+  }
+
+  // bool enabled = 3;
+  if (this->_internal_enabled() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_enabled(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.EnableTaskRequest)
+  return target;
+}
+
+size_t EnableTaskRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.EnableTaskRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  // bool enabled = 3;
+  if (this->_internal_enabled() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EnableTaskRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EnableTaskRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EnableTaskRequest::GetClassData() const { return &_class_data_; }
+
+
+void EnableTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EnableTaskRequest*>(&to_msg);
+  auto& from = static_cast<const EnableTaskRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.EnableTaskRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  if (from._internal_enabled() != 0) {
+    _this->_internal_set_enabled(from._internal_enabled());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void EnableTaskRequest::CopyFrom(const EnableTaskRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.EnableTaskRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EnableTaskRequest::IsInitialized() const {
+  return true;
+}
+
+void EnableTaskRequest::InternalSwap(EnableTaskRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+  swap(_impl_.enabled_, other->_impl_.enabled_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EnableTaskRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[19]);
+}
+
+// ===================================================================
+
+class EnableTaskResponse::_Internal {
+ public:
+};
+
+EnableTaskResponse::EnableTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.EnableTaskResponse)
+}
+EnableTaskResponse::EnableTaskResponse(const EnableTaskResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  EnableTaskResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.EnableTaskResponse)
+}
+
+inline void EnableTaskResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+EnableTaskResponse::~EnableTaskResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.EnableTaskResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void EnableTaskResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.error_.Destroy();
+}
+
+void EnableTaskResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void EnableTaskResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.EnableTaskResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* EnableTaskResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.EnableTaskResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* EnableTaskResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.EnableTaskResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.EnableTaskResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.EnableTaskResponse)
+  return target;
+}
+
+size_t EnableTaskResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.EnableTaskResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData EnableTaskResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    EnableTaskResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*EnableTaskResponse::GetClassData() const { return &_class_data_; }
+
+
+void EnableTaskResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<EnableTaskResponse*>(&to_msg);
+  auto& from = static_cast<const EnableTaskResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.EnableTaskResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void EnableTaskResponse::CopyFrom(const EnableTaskResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.EnableTaskResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool EnableTaskResponse::IsInitialized() const {
+  return true;
+}
+
+void EnableTaskResponse::InternalSwap(EnableTaskResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata EnableTaskResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[20]);
+}
+
+// ===================================================================
+
+class DeleteTaskRequest::_Internal {
+ public:
+};
+
+DeleteTaskRequest::DeleteTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.DeleteTaskRequest)
+}
+DeleteTaskRequest::DeleteTaskRequest(const DeleteTaskRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  DeleteTaskRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.DeleteTaskRequest)
+}
+
+inline void DeleteTaskRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+DeleteTaskRequest::~DeleteTaskRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.DeleteTaskRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void DeleteTaskRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  _impl_.task_id_.Destroy();
+}
+
+void DeleteTaskRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void DeleteTaskRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.DeleteTaskRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  _impl_.task_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* DeleteTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.DeleteTaskRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string task_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.DeleteTaskRequest.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* DeleteTaskRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.DeleteTaskRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.DeleteTaskRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.DeleteTaskRequest.task_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_task_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.DeleteTaskRequest)
+  return target;
+}
+
+size_t DeleteTaskRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.DeleteTaskRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DeleteTaskRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    DeleteTaskRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DeleteTaskRequest::GetClassData() const { return &_class_data_; }
+
+
+void DeleteTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DeleteTaskRequest*>(&to_msg);
+  auto& from = static_cast<const DeleteTaskRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.DeleteTaskRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DeleteTaskRequest::CopyFrom(const DeleteTaskRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.DeleteTaskRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DeleteTaskRequest::IsInitialized() const {
+  return true;
+}
+
+void DeleteTaskRequest::InternalSwap(DeleteTaskRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata DeleteTaskRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[21]);
+}
+
+// ===================================================================
+
+class DeleteTaskResponse::_Internal {
+ public:
+};
+
+DeleteTaskResponse::DeleteTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.DeleteTaskResponse)
+}
+DeleteTaskResponse::DeleteTaskResponse(const DeleteTaskResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  DeleteTaskResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.DeleteTaskResponse)
+}
+
+inline void DeleteTaskResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+DeleteTaskResponse::~DeleteTaskResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.DeleteTaskResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void DeleteTaskResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.error_.Destroy();
+}
+
+void DeleteTaskResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void DeleteTaskResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.DeleteTaskResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* DeleteTaskResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.DeleteTaskResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* DeleteTaskResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.DeleteTaskResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.DeleteTaskResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.DeleteTaskResponse)
+  return target;
+}
+
+size_t DeleteTaskResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.DeleteTaskResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string error = 2;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData DeleteTaskResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    DeleteTaskResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*DeleteTaskResponse::GetClassData() const { return &_class_data_; }
+
+
+void DeleteTaskResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<DeleteTaskResponse*>(&to_msg);
+  auto& from = static_cast<const DeleteTaskResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.DeleteTaskResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void DeleteTaskResponse::CopyFrom(const DeleteTaskResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.DeleteTaskResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DeleteTaskResponse::IsInitialized() const {
+  return true;
+}
+
+void DeleteTaskResponse::InternalSwap(DeleteTaskResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata DeleteTaskResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[22]);
+}
+
+// ===================================================================
+
+class RunTaskNowRequest::_Internal {
+ public:
+};
+
+RunTaskNowRequest::RunTaskNowRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.RunTaskNowRequest)
+}
+RunTaskNowRequest::RunTaskNowRequest(const RunTaskNowRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RunTaskNowRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_auth_token().empty()) {
+    _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_id().empty()) {
+    _this->_impl_.task_id_.Set(from._internal_task_id(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.RunTaskNowRequest)
+}
+
+inline void RunTaskNowRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.auth_token_){}
+    , decltype(_impl_.task_id_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.auth_token_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.task_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RunTaskNowRequest::~RunTaskNowRequest() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.RunTaskNowRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RunTaskNowRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.auth_token_.Destroy();
+  _impl_.task_id_.Destroy();
+}
+
+void RunTaskNowRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RunTaskNowRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.RunTaskNowRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.auth_token_.ClearToEmpty();
+  _impl_.task_id_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RunTaskNowRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string auth_token = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_auth_token();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.RunTaskNowRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string task_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_task_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.RunTaskNowRequest.task_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RunTaskNowRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.RunTaskNowRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_auth_token().data(), static_cast<int>(this->_internal_auth_token().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.RunTaskNowRequest.auth_token");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_auth_token(), target);
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.RunTaskNowRequest.task_id");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_task_id(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.RunTaskNowRequest)
+  return target;
+}
+
+size_t RunTaskNowRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.RunTaskNowRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string auth_token = 1;
+  if (!this->_internal_auth_token().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_auth_token());
+  }
+
+  // string task_id = 2;
+  if (!this->_internal_task_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_id());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RunTaskNowRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RunTaskNowRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RunTaskNowRequest::GetClassData() const { return &_class_data_; }
+
+
+void RunTaskNowRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RunTaskNowRequest*>(&to_msg);
+  auto& from = static_cast<const RunTaskNowRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.RunTaskNowRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_auth_token().empty()) {
+    _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_task_id().empty()) {
+    _this->_internal_set_task_id(from._internal_task_id());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RunTaskNowRequest::CopyFrom(const RunTaskNowRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.RunTaskNowRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RunTaskNowRequest::IsInitialized() const {
+  return true;
+}
+
+void RunTaskNowRequest::InternalSwap(RunTaskNowRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.auth_token_, lhs_arena,
+      &other->_impl_.auth_token_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_id_, lhs_arena,
+      &other->_impl_.task_id_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RunTaskNowRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[23]);
+}
+
+// ===================================================================
+
+class RunTaskNowResponse::_Internal {
+ public:
+};
+
+RunTaskNowResponse::RunTaskNowResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:corpcron.rpc.RunTaskNowResponse)
+}
+RunTaskNowResponse::RunTaskNowResponse(const RunTaskNowResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  RunTaskNowResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.result_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.result_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_result().empty()) {
+    _this->_impl_.result_.Set(from._internal_result(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_error().empty()) {
+    _this->_impl_.error_.Set(from._internal_error(), 
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.success_ = from._impl_.success_;
+  // @@protoc_insertion_point(copy_constructor:corpcron.rpc.RunTaskNowResponse)
+}
+
+inline void RunTaskNowResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.result_){}
+    , decltype(_impl_.error_){}
+    , decltype(_impl_.success_){false}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.result_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.result_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.error_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.error_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+RunTaskNowResponse::~RunTaskNowResponse() {
+  // @@protoc_insertion_point(destructor:corpcron.rpc.RunTaskNowResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void RunTaskNowResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.result_.Destroy();
+  _impl_.error_.Destroy();
+}
+
+void RunTaskNowResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void RunTaskNowResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:corpcron.rpc.RunTaskNowResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.result_.ClearToEmpty();
+  _impl_.error_.ClearToEmpty();
+  _impl_.success_ = false;
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RunTaskNowResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // bool success = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 8)) {
+          _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string result = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_result();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.RunTaskNowResponse.result"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string error = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
+          auto str = _internal_mutable_error();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.RunTaskNowResponse.error"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* RunTaskNowResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:corpcron.rpc.RunTaskNowResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(1, this->_internal_success(), target);
+  }
+
+  // string result = 2;
+  if (!this->_internal_result().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_result().data(), static_cast<int>(this->_internal_result().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.RunTaskNowResponse.result");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_result(), target);
+  }
+
+  // string error = 3;
+  if (!this->_internal_error().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.RunTaskNowResponse.error");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_error(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:corpcron.rpc.RunTaskNowResponse)
+  return target;
+}
+
+size_t RunTaskNowResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:corpcron.rpc.RunTaskNowResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string result = 2;
+  if (!this->_internal_result().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_result());
+  }
+
+  // string error = 3;
+  if (!this->_internal_error().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_error());
+  }
+
+  // bool success = 1;
+  if (this->_internal_success() != 0) {
+    total_size += 1 + 1;
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData RunTaskNowResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    RunTaskNowResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*RunTaskNowResponse::GetClassData() const { return &_class_data_; }
+
+
+void RunTaskNowResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<RunTaskNowResponse*>(&to_msg);
+  auto& from = static_cast<const RunTaskNowResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:corpcron.rpc.RunTaskNowResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_result().empty()) {
+    _this->_internal_set_result(from._internal_result());
+  }
+  if (!from._internal_error().empty()) {
+    _this->_internal_set_error(from._internal_error());
+  }
+  if (from._internal_success() != 0) {
+    _this->_internal_set_success(from._internal_success());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void RunTaskNowResponse::CopyFrom(const RunTaskNowResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:corpcron.rpc.RunTaskNowResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RunTaskNowResponse::IsInitialized() const {
+  return true;
+}
+
+void RunTaskNowResponse::InternalSwap(RunTaskNowResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.result_, lhs_arena,
+      &other->_impl_.result_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.error_, lhs_arena,
+      &other->_impl_.error_, rhs_arena
+  );
+  swap(_impl_.success_, other->_impl_.success_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RunTaskNowResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_rpc_2eproto_getter, &descriptor_table_rpc_2eproto_once,
+      file_level_metadata_rpc_2eproto[24]);
+}
+
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace rpc
 }  // namespace corpcron
@@ -2799,6 +7865,70 @@ Arena::CreateMaybeMessage< ::corpcron::rpc::CancelTaskRequest >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::corpcron::rpc::CancelTaskResponse*
 Arena::CreateMaybeMessage< ::corpcron::rpc::CancelTaskResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::corpcron::rpc::CancelTaskResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::TaskInfo*
+Arena::CreateMaybeMessage< ::corpcron::rpc::TaskInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::TaskInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListTasksRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListTasksRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListTasksRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListTasksResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListTasksResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListTasksResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::TaskHistoryInfo*
+Arena::CreateMaybeMessage< ::corpcron::rpc::TaskHistoryInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::TaskHistoryInfo >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListHistoryRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListHistoryRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListHistoryRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListHistoryResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListHistoryResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListHistoryResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListServicesRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListServicesRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListServicesRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::ListServicesResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::ListServicesResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::ListServicesResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::UpdateTaskRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::UpdateTaskRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::UpdateTaskRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::UpdateTaskResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::UpdateTaskResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::UpdateTaskResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::EnableTaskRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::EnableTaskRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::EnableTaskRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::EnableTaskResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::EnableTaskResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::EnableTaskResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::DeleteTaskRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::DeleteTaskRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::DeleteTaskRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::DeleteTaskResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::DeleteTaskResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::DeleteTaskResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::RunTaskNowRequest*
+Arena::CreateMaybeMessage< ::corpcron::rpc::RunTaskNowRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::RunTaskNowRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::corpcron::rpc::RunTaskNowResponse*
+Arena::CreateMaybeMessage< ::corpcron::rpc::RunTaskNowResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::corpcron::rpc::RunTaskNowResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

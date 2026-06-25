@@ -21,6 +21,20 @@ constexpr uint32_t kExecuteTaskRequestSerialId = 5;
 constexpr uint32_t kExecuteTaskResponseSerialId = 6;
 constexpr uint32_t kCancelTaskRequestSerialId = 7;
 constexpr uint32_t kCancelTaskResponseSerialId = 8;
+constexpr uint32_t kListTasksRequestSerialId = 9;
+constexpr uint32_t kListTasksResponseSerialId = 10;
+constexpr uint32_t kListHistoryRequestSerialId = 11;
+constexpr uint32_t kListHistoryResponseSerialId = 12;
+constexpr uint32_t kListServicesRequestSerialId = 13;
+constexpr uint32_t kListServicesResponseSerialId = 14;
+constexpr uint32_t kUpdateTaskRequestSerialId = 15;
+constexpr uint32_t kUpdateTaskResponseSerialId = 16;
+constexpr uint32_t kEnableTaskRequestSerialId = 17;
+constexpr uint32_t kEnableTaskResponseSerialId = 18;
+constexpr uint32_t kDeleteTaskRequestSerialId = 19;
+constexpr uint32_t kDeleteTaskResponseSerialId = 20;
+constexpr uint32_t kRunTaskNowRequestSerialId = 21;
+constexpr uint32_t kRunTaskNowResponseSerialId = 22;
 constexpr uint32_t kRpcErrorSerialId = 100;
 
 enum class DecodeStatus {

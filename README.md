@@ -13,6 +13,7 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 - 执行期间会续约 Redis 锁，降低长任务重复执行风险。
 - RPC 支持统一错误响应 `RpcError`，便于客户端识别协议级错误。
 - 支持基础 RPC token 鉴权、连接数上限和取消任务接口。
+- Qt 可视化管理端支持任务提交、查询、编辑、启停、删除、立即执行、执行历史和服务发现查看。
 - 支持环境变量覆盖配置，避免在配置文件中提交真实密码。
 - Docker Compose 提供 Redis/MySQL 开发环境。
 - 提供 Dockerfile、systemd unit 和基础部署文档。
@@ -80,6 +81,12 @@ cmake --build build -j
 ./build/corpcron_server --config config/server.conf
 ```
 
+启动 Qt 管理端：
+
+```bash
+./build/client/corpcron_client
+```
+
 提交测试任务：
 
 ```bash
@@ -115,6 +122,18 @@ ctest --test-dir build --output-on-failure
 ```
 
 压测结果会保存到 [docs/assets/benchmark/latest.txt](docs/assets/benchmark/latest.txt)，历史结果按时间戳保存在同一目录。
+
+演示前检查环境：
+
+```bash
+./scripts/demo_check.sh
+```
+
+清理演示数据：
+
+```bash
+./scripts/clean_demo_data.sh
+```
 
 ## 配置
 

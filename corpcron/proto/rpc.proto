@@ -58,3 +58,95 @@ message CancelTaskResponse {
     bool success = 1;
     string error = 2;
 }
+
+message TaskInfo {
+    string id = 1;
+    string cron_expr = 2;
+    string params = 3;
+    string handler = 4;
+    int32 status = 5;
+    string next_run_at = 6;
+    string last_run_at = 7;
+    int32 retry_count = 8;
+    int32 max_retries = 9;
+}
+
+message ListTasksRequest {
+    string auth_token = 1;
+    int32 limit = 2;
+    bool enabled_only = 3;
+}
+message ListTasksResponse {
+    bool success = 1;
+    string error = 2;
+    repeated TaskInfo tasks = 3;
+}
+
+message TaskHistoryInfo {
+    string task_id = 1;
+    string exec_node = 2;
+    bool success = 3;
+    string result = 4;
+    string error = 5;
+    string start_time = 6;
+    string end_time = 7;
+}
+
+message ListHistoryRequest {
+    string auth_token = 1;
+    string task_id = 2;
+    int32 limit = 3;
+}
+message ListHistoryResponse {
+    bool success = 1;
+    string error = 2;
+    repeated TaskHistoryInfo history = 3;
+}
+
+message ListServicesRequest {
+    string auth_token = 1;
+    string service_name = 2;
+}
+message ListServicesResponse {
+    bool success = 1;
+    string error = 2;
+    repeated string endpoints = 3;
+}
+
+message UpdateTaskRequest {
+    string auth_token = 1;
+    TaskInfo task = 2;
+}
+message UpdateTaskResponse {
+    bool success = 1;
+    string error = 2;
+}
+
+message EnableTaskRequest {
+    string auth_token = 1;
+    string task_id = 2;
+    bool enabled = 3;
+}
+message EnableTaskResponse {
+    bool success = 1;
+    string error = 2;
+}
+
+message DeleteTaskRequest {
+    string auth_token = 1;
+    string task_id = 2;
+}
+message DeleteTaskResponse {
+    bool success = 1;
+    string error = 2;
+}
+
+message RunTaskNowRequest {
+    string auth_token = 1;
+    string task_id = 2;
+}
+message RunTaskNowResponse {
+    bool success = 1;
+    string result = 2;
+    string error = 3;
+}

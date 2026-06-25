@@ -53,39 +53,103 @@ extern CancelTaskRequestDefaultTypeInternal _CancelTaskRequest_default_instance_
 class CancelTaskResponse;
 struct CancelTaskResponseDefaultTypeInternal;
 extern CancelTaskResponseDefaultTypeInternal _CancelTaskResponse_default_instance_;
+class DeleteTaskRequest;
+struct DeleteTaskRequestDefaultTypeInternal;
+extern DeleteTaskRequestDefaultTypeInternal _DeleteTaskRequest_default_instance_;
+class DeleteTaskResponse;
+struct DeleteTaskResponseDefaultTypeInternal;
+extern DeleteTaskResponseDefaultTypeInternal _DeleteTaskResponse_default_instance_;
 class EchoRequest;
 struct EchoRequestDefaultTypeInternal;
 extern EchoRequestDefaultTypeInternal _EchoRequest_default_instance_;
 class EchoResponse;
 struct EchoResponseDefaultTypeInternal;
 extern EchoResponseDefaultTypeInternal _EchoResponse_default_instance_;
+class EnableTaskRequest;
+struct EnableTaskRequestDefaultTypeInternal;
+extern EnableTaskRequestDefaultTypeInternal _EnableTaskRequest_default_instance_;
+class EnableTaskResponse;
+struct EnableTaskResponseDefaultTypeInternal;
+extern EnableTaskResponseDefaultTypeInternal _EnableTaskResponse_default_instance_;
 class ExecuteTaskRequest;
 struct ExecuteTaskRequestDefaultTypeInternal;
 extern ExecuteTaskRequestDefaultTypeInternal _ExecuteTaskRequest_default_instance_;
 class ExecuteTaskResponse;
 struct ExecuteTaskResponseDefaultTypeInternal;
 extern ExecuteTaskResponseDefaultTypeInternal _ExecuteTaskResponse_default_instance_;
+class ListHistoryRequest;
+struct ListHistoryRequestDefaultTypeInternal;
+extern ListHistoryRequestDefaultTypeInternal _ListHistoryRequest_default_instance_;
+class ListHistoryResponse;
+struct ListHistoryResponseDefaultTypeInternal;
+extern ListHistoryResponseDefaultTypeInternal _ListHistoryResponse_default_instance_;
+class ListServicesRequest;
+struct ListServicesRequestDefaultTypeInternal;
+extern ListServicesRequestDefaultTypeInternal _ListServicesRequest_default_instance_;
+class ListServicesResponse;
+struct ListServicesResponseDefaultTypeInternal;
+extern ListServicesResponseDefaultTypeInternal _ListServicesResponse_default_instance_;
+class ListTasksRequest;
+struct ListTasksRequestDefaultTypeInternal;
+extern ListTasksRequestDefaultTypeInternal _ListTasksRequest_default_instance_;
+class ListTasksResponse;
+struct ListTasksResponseDefaultTypeInternal;
+extern ListTasksResponseDefaultTypeInternal _ListTasksResponse_default_instance_;
 class RpcError;
 struct RpcErrorDefaultTypeInternal;
 extern RpcErrorDefaultTypeInternal _RpcError_default_instance_;
+class RunTaskNowRequest;
+struct RunTaskNowRequestDefaultTypeInternal;
+extern RunTaskNowRequestDefaultTypeInternal _RunTaskNowRequest_default_instance_;
+class RunTaskNowResponse;
+struct RunTaskNowResponseDefaultTypeInternal;
+extern RunTaskNowResponseDefaultTypeInternal _RunTaskNowResponse_default_instance_;
 class SubmitTaskRequest;
 struct SubmitTaskRequestDefaultTypeInternal;
 extern SubmitTaskRequestDefaultTypeInternal _SubmitTaskRequest_default_instance_;
 class SubmitTaskResponse;
 struct SubmitTaskResponseDefaultTypeInternal;
 extern SubmitTaskResponseDefaultTypeInternal _SubmitTaskResponse_default_instance_;
+class TaskHistoryInfo;
+struct TaskHistoryInfoDefaultTypeInternal;
+extern TaskHistoryInfoDefaultTypeInternal _TaskHistoryInfo_default_instance_;
+class TaskInfo;
+struct TaskInfoDefaultTypeInternal;
+extern TaskInfoDefaultTypeInternal _TaskInfo_default_instance_;
+class UpdateTaskRequest;
+struct UpdateTaskRequestDefaultTypeInternal;
+extern UpdateTaskRequestDefaultTypeInternal _UpdateTaskRequest_default_instance_;
+class UpdateTaskResponse;
+struct UpdateTaskResponseDefaultTypeInternal;
+extern UpdateTaskResponseDefaultTypeInternal _UpdateTaskResponse_default_instance_;
 }  // namespace rpc
 }  // namespace corpcron
 PROTOBUF_NAMESPACE_OPEN
 template<> ::corpcron::rpc::CancelTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::CancelTaskRequest>(Arena*);
 template<> ::corpcron::rpc::CancelTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::CancelTaskResponse>(Arena*);
+template<> ::corpcron::rpc::DeleteTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::DeleteTaskRequest>(Arena*);
+template<> ::corpcron::rpc::DeleteTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::DeleteTaskResponse>(Arena*);
 template<> ::corpcron::rpc::EchoRequest* Arena::CreateMaybeMessage<::corpcron::rpc::EchoRequest>(Arena*);
 template<> ::corpcron::rpc::EchoResponse* Arena::CreateMaybeMessage<::corpcron::rpc::EchoResponse>(Arena*);
+template<> ::corpcron::rpc::EnableTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::EnableTaskRequest>(Arena*);
+template<> ::corpcron::rpc::EnableTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::EnableTaskResponse>(Arena*);
 template<> ::corpcron::rpc::ExecuteTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ExecuteTaskRequest>(Arena*);
 template<> ::corpcron::rpc::ExecuteTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ExecuteTaskResponse>(Arena*);
+template<> ::corpcron::rpc::ListHistoryRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ListHistoryRequest>(Arena*);
+template<> ::corpcron::rpc::ListHistoryResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ListHistoryResponse>(Arena*);
+template<> ::corpcron::rpc::ListServicesRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ListServicesRequest>(Arena*);
+template<> ::corpcron::rpc::ListServicesResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ListServicesResponse>(Arena*);
+template<> ::corpcron::rpc::ListTasksRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ListTasksRequest>(Arena*);
+template<> ::corpcron::rpc::ListTasksResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ListTasksResponse>(Arena*);
 template<> ::corpcron::rpc::RpcError* Arena::CreateMaybeMessage<::corpcron::rpc::RpcError>(Arena*);
+template<> ::corpcron::rpc::RunTaskNowRequest* Arena::CreateMaybeMessage<::corpcron::rpc::RunTaskNowRequest>(Arena*);
+template<> ::corpcron::rpc::RunTaskNowResponse* Arena::CreateMaybeMessage<::corpcron::rpc::RunTaskNowResponse>(Arena*);
 template<> ::corpcron::rpc::SubmitTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::SubmitTaskRequest>(Arena*);
 template<> ::corpcron::rpc::SubmitTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::SubmitTaskResponse>(Arena*);
+template<> ::corpcron::rpc::TaskHistoryInfo* Arena::CreateMaybeMessage<::corpcron::rpc::TaskHistoryInfo>(Arena*);
+template<> ::corpcron::rpc::TaskInfo* Arena::CreateMaybeMessage<::corpcron::rpc::TaskInfo>(Arena*);
+template<> ::corpcron::rpc::UpdateTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::UpdateTaskRequest>(Arena*);
+template<> ::corpcron::rpc::UpdateTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::UpdateTaskResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace corpcron {
 namespace rpc {
@@ -1702,6 +1766,2961 @@ class CancelTaskResponse final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_rpc_2eproto;
 };
+// -------------------------------------------------------------------
+
+class TaskInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.TaskInfo) */ {
+ public:
+  inline TaskInfo() : TaskInfo(nullptr) {}
+  ~TaskInfo() override;
+  explicit PROTOBUF_CONSTEXPR TaskInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TaskInfo(const TaskInfo& from);
+  TaskInfo(TaskInfo&& from) noexcept
+    : TaskInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline TaskInfo& operator=(const TaskInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TaskInfo& operator=(TaskInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TaskInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TaskInfo* internal_default_instance() {
+    return reinterpret_cast<const TaskInfo*>(
+               &_TaskInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(TaskInfo& a, TaskInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TaskInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TaskInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TaskInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TaskInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TaskInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TaskInfo& from) {
+    TaskInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TaskInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.TaskInfo";
+  }
+  protected:
+  explicit TaskInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kIdFieldNumber = 1,
+    kCronExprFieldNumber = 2,
+    kParamsFieldNumber = 3,
+    kHandlerFieldNumber = 4,
+    kNextRunAtFieldNumber = 6,
+    kLastRunAtFieldNumber = 7,
+    kStatusFieldNumber = 5,
+    kRetryCountFieldNumber = 8,
+    kMaxRetriesFieldNumber = 9,
+  };
+  // string id = 1;
+  void clear_id();
+  const std::string& id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_id();
+  PROTOBUF_NODISCARD std::string* release_id();
+  void set_allocated_id(std::string* id);
+  private:
+  const std::string& _internal_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_id(const std::string& value);
+  std::string* _internal_mutable_id();
+  public:
+
+  // string cron_expr = 2;
+  void clear_cron_expr();
+  const std::string& cron_expr() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_cron_expr(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_cron_expr();
+  PROTOBUF_NODISCARD std::string* release_cron_expr();
+  void set_allocated_cron_expr(std::string* cron_expr);
+  private:
+  const std::string& _internal_cron_expr() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_cron_expr(const std::string& value);
+  std::string* _internal_mutable_cron_expr();
+  public:
+
+  // string params = 3;
+  void clear_params();
+  const std::string& params() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_params(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_params();
+  PROTOBUF_NODISCARD std::string* release_params();
+  void set_allocated_params(std::string* params);
+  private:
+  const std::string& _internal_params() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_params(const std::string& value);
+  std::string* _internal_mutable_params();
+  public:
+
+  // string handler = 4;
+  void clear_handler();
+  const std::string& handler() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_handler(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_handler();
+  PROTOBUF_NODISCARD std::string* release_handler();
+  void set_allocated_handler(std::string* handler);
+  private:
+  const std::string& _internal_handler() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_handler(const std::string& value);
+  std::string* _internal_mutable_handler();
+  public:
+
+  // string next_run_at = 6;
+  void clear_next_run_at();
+  const std::string& next_run_at() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_next_run_at(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_next_run_at();
+  PROTOBUF_NODISCARD std::string* release_next_run_at();
+  void set_allocated_next_run_at(std::string* next_run_at);
+  private:
+  const std::string& _internal_next_run_at() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_next_run_at(const std::string& value);
+  std::string* _internal_mutable_next_run_at();
+  public:
+
+  // string last_run_at = 7;
+  void clear_last_run_at();
+  const std::string& last_run_at() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_last_run_at(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_last_run_at();
+  PROTOBUF_NODISCARD std::string* release_last_run_at();
+  void set_allocated_last_run_at(std::string* last_run_at);
+  private:
+  const std::string& _internal_last_run_at() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_last_run_at(const std::string& value);
+  std::string* _internal_mutable_last_run_at();
+  public:
+
+  // int32 status = 5;
+  void clear_status();
+  int32_t status() const;
+  void set_status(int32_t value);
+  private:
+  int32_t _internal_status() const;
+  void _internal_set_status(int32_t value);
+  public:
+
+  // int32 retry_count = 8;
+  void clear_retry_count();
+  int32_t retry_count() const;
+  void set_retry_count(int32_t value);
+  private:
+  int32_t _internal_retry_count() const;
+  void _internal_set_retry_count(int32_t value);
+  public:
+
+  // int32 max_retries = 9;
+  void clear_max_retries();
+  int32_t max_retries() const;
+  void set_max_retries(int32_t value);
+  private:
+  int32_t _internal_max_retries() const;
+  void _internal_set_max_retries(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.TaskInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr cron_expr_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr params_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr handler_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr next_run_at_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_run_at_;
+    int32_t status_;
+    int32_t retry_count_;
+    int32_t max_retries_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListTasksRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListTasksRequest) */ {
+ public:
+  inline ListTasksRequest() : ListTasksRequest(nullptr) {}
+  ~ListTasksRequest() override;
+  explicit PROTOBUF_CONSTEXPR ListTasksRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListTasksRequest(const ListTasksRequest& from);
+  ListTasksRequest(ListTasksRequest&& from) noexcept
+    : ListTasksRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ListTasksRequest& operator=(const ListTasksRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListTasksRequest& operator=(ListTasksRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListTasksRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListTasksRequest* internal_default_instance() {
+    return reinterpret_cast<const ListTasksRequest*>(
+               &_ListTasksRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(ListTasksRequest& a, ListTasksRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListTasksRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListTasksRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListTasksRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListTasksRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListTasksRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListTasksRequest& from) {
+    ListTasksRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListTasksRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListTasksRequest";
+  }
+  protected:
+  explicit ListTasksRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kLimitFieldNumber = 2,
+    kEnabledOnlyFieldNumber = 3,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // int32 limit = 2;
+  void clear_limit();
+  int32_t limit() const;
+  void set_limit(int32_t value);
+  private:
+  int32_t _internal_limit() const;
+  void _internal_set_limit(int32_t value);
+  public:
+
+  // bool enabled_only = 3;
+  void clear_enabled_only();
+  bool enabled_only() const;
+  void set_enabled_only(bool value);
+  private:
+  bool _internal_enabled_only() const;
+  void _internal_set_enabled_only(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListTasksRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    int32_t limit_;
+    bool enabled_only_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListTasksResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListTasksResponse) */ {
+ public:
+  inline ListTasksResponse() : ListTasksResponse(nullptr) {}
+  ~ListTasksResponse() override;
+  explicit PROTOBUF_CONSTEXPR ListTasksResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListTasksResponse(const ListTasksResponse& from);
+  ListTasksResponse(ListTasksResponse&& from) noexcept
+    : ListTasksResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ListTasksResponse& operator=(const ListTasksResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListTasksResponse& operator=(ListTasksResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListTasksResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListTasksResponse* internal_default_instance() {
+    return reinterpret_cast<const ListTasksResponse*>(
+               &_ListTasksResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    11;
+
+  friend void swap(ListTasksResponse& a, ListTasksResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListTasksResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListTasksResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListTasksResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListTasksResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListTasksResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListTasksResponse& from) {
+    ListTasksResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListTasksResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListTasksResponse";
+  }
+  protected:
+  explicit ListTasksResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTasksFieldNumber = 3,
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // repeated .corpcron.rpc.TaskInfo tasks = 3;
+  int tasks_size() const;
+  private:
+  int _internal_tasks_size() const;
+  public:
+  void clear_tasks();
+  ::corpcron::rpc::TaskInfo* mutable_tasks(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo >*
+      mutable_tasks();
+  private:
+  const ::corpcron::rpc::TaskInfo& _internal_tasks(int index) const;
+  ::corpcron::rpc::TaskInfo* _internal_add_tasks();
+  public:
+  const ::corpcron::rpc::TaskInfo& tasks(int index) const;
+  ::corpcron::rpc::TaskInfo* add_tasks();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo >&
+      tasks() const;
+
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListTasksResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo > tasks_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TaskHistoryInfo final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.TaskHistoryInfo) */ {
+ public:
+  inline TaskHistoryInfo() : TaskHistoryInfo(nullptr) {}
+  ~TaskHistoryInfo() override;
+  explicit PROTOBUF_CONSTEXPR TaskHistoryInfo(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TaskHistoryInfo(const TaskHistoryInfo& from);
+  TaskHistoryInfo(TaskHistoryInfo&& from) noexcept
+    : TaskHistoryInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline TaskHistoryInfo& operator=(const TaskHistoryInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TaskHistoryInfo& operator=(TaskHistoryInfo&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TaskHistoryInfo& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TaskHistoryInfo* internal_default_instance() {
+    return reinterpret_cast<const TaskHistoryInfo*>(
+               &_TaskHistoryInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    12;
+
+  friend void swap(TaskHistoryInfo& a, TaskHistoryInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TaskHistoryInfo* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TaskHistoryInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TaskHistoryInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TaskHistoryInfo>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TaskHistoryInfo& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TaskHistoryInfo& from) {
+    TaskHistoryInfo::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TaskHistoryInfo* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.TaskHistoryInfo";
+  }
+  protected:
+  explicit TaskHistoryInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTaskIdFieldNumber = 1,
+    kExecNodeFieldNumber = 2,
+    kResultFieldNumber = 4,
+    kErrorFieldNumber = 5,
+    kStartTimeFieldNumber = 6,
+    kEndTimeFieldNumber = 7,
+    kSuccessFieldNumber = 3,
+  };
+  // string task_id = 1;
+  void clear_task_id();
+  const std::string& task_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_id();
+  PROTOBUF_NODISCARD std::string* release_task_id();
+  void set_allocated_task_id(std::string* task_id);
+  private:
+  const std::string& _internal_task_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
+  std::string* _internal_mutable_task_id();
+  public:
+
+  // string exec_node = 2;
+  void clear_exec_node();
+  const std::string& exec_node() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_exec_node(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_exec_node();
+  PROTOBUF_NODISCARD std::string* release_exec_node();
+  void set_allocated_exec_node(std::string* exec_node);
+  private:
+  const std::string& _internal_exec_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_exec_node(const std::string& value);
+  std::string* _internal_mutable_exec_node();
+  public:
+
+  // string result = 4;
+  void clear_result();
+  const std::string& result() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_result(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_result();
+  PROTOBUF_NODISCARD std::string* release_result();
+  void set_allocated_result(std::string* result);
+  private:
+  const std::string& _internal_result() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_result(const std::string& value);
+  std::string* _internal_mutable_result();
+  public:
+
+  // string error = 5;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // string start_time = 6;
+  void clear_start_time();
+  const std::string& start_time() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_start_time(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_start_time();
+  PROTOBUF_NODISCARD std::string* release_start_time();
+  void set_allocated_start_time(std::string* start_time);
+  private:
+  const std::string& _internal_start_time() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_start_time(const std::string& value);
+  std::string* _internal_mutable_start_time();
+  public:
+
+  // string end_time = 7;
+  void clear_end_time();
+  const std::string& end_time() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_end_time(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_end_time();
+  PROTOBUF_NODISCARD std::string* release_end_time();
+  void set_allocated_end_time(std::string* end_time);
+  private:
+  const std::string& _internal_end_time() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_end_time(const std::string& value);
+  std::string* _internal_mutable_end_time();
+  public:
+
+  // bool success = 3;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.TaskHistoryInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr exec_node_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr start_time_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr end_time_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListHistoryRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListHistoryRequest) */ {
+ public:
+  inline ListHistoryRequest() : ListHistoryRequest(nullptr) {}
+  ~ListHistoryRequest() override;
+  explicit PROTOBUF_CONSTEXPR ListHistoryRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListHistoryRequest(const ListHistoryRequest& from);
+  ListHistoryRequest(ListHistoryRequest&& from) noexcept
+    : ListHistoryRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ListHistoryRequest& operator=(const ListHistoryRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListHistoryRequest& operator=(ListHistoryRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListHistoryRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListHistoryRequest* internal_default_instance() {
+    return reinterpret_cast<const ListHistoryRequest*>(
+               &_ListHistoryRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    13;
+
+  friend void swap(ListHistoryRequest& a, ListHistoryRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListHistoryRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListHistoryRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListHistoryRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListHistoryRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListHistoryRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListHistoryRequest& from) {
+    ListHistoryRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListHistoryRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListHistoryRequest";
+  }
+  protected:
+  explicit ListHistoryRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kTaskIdFieldNumber = 2,
+    kLimitFieldNumber = 3,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // string task_id = 2;
+  void clear_task_id();
+  const std::string& task_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_id();
+  PROTOBUF_NODISCARD std::string* release_task_id();
+  void set_allocated_task_id(std::string* task_id);
+  private:
+  const std::string& _internal_task_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
+  std::string* _internal_mutable_task_id();
+  public:
+
+  // int32 limit = 3;
+  void clear_limit();
+  int32_t limit() const;
+  void set_limit(int32_t value);
+  private:
+  int32_t _internal_limit() const;
+  void _internal_set_limit(int32_t value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListHistoryRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    int32_t limit_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListHistoryResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListHistoryResponse) */ {
+ public:
+  inline ListHistoryResponse() : ListHistoryResponse(nullptr) {}
+  ~ListHistoryResponse() override;
+  explicit PROTOBUF_CONSTEXPR ListHistoryResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListHistoryResponse(const ListHistoryResponse& from);
+  ListHistoryResponse(ListHistoryResponse&& from) noexcept
+    : ListHistoryResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ListHistoryResponse& operator=(const ListHistoryResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListHistoryResponse& operator=(ListHistoryResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListHistoryResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListHistoryResponse* internal_default_instance() {
+    return reinterpret_cast<const ListHistoryResponse*>(
+               &_ListHistoryResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    14;
+
+  friend void swap(ListHistoryResponse& a, ListHistoryResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListHistoryResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListHistoryResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListHistoryResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListHistoryResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListHistoryResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListHistoryResponse& from) {
+    ListHistoryResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListHistoryResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListHistoryResponse";
+  }
+  protected:
+  explicit ListHistoryResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kHistoryFieldNumber = 3,
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // repeated .corpcron.rpc.TaskHistoryInfo history = 3;
+  int history_size() const;
+  private:
+  int _internal_history_size() const;
+  public:
+  void clear_history();
+  ::corpcron::rpc::TaskHistoryInfo* mutable_history(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo >*
+      mutable_history();
+  private:
+  const ::corpcron::rpc::TaskHistoryInfo& _internal_history(int index) const;
+  ::corpcron::rpc::TaskHistoryInfo* _internal_add_history();
+  public:
+  const ::corpcron::rpc::TaskHistoryInfo& history(int index) const;
+  ::corpcron::rpc::TaskHistoryInfo* add_history();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo >&
+      history() const;
+
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListHistoryResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo > history_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListServicesRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListServicesRequest) */ {
+ public:
+  inline ListServicesRequest() : ListServicesRequest(nullptr) {}
+  ~ListServicesRequest() override;
+  explicit PROTOBUF_CONSTEXPR ListServicesRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListServicesRequest(const ListServicesRequest& from);
+  ListServicesRequest(ListServicesRequest&& from) noexcept
+    : ListServicesRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ListServicesRequest& operator=(const ListServicesRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListServicesRequest& operator=(ListServicesRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListServicesRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListServicesRequest* internal_default_instance() {
+    return reinterpret_cast<const ListServicesRequest*>(
+               &_ListServicesRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    15;
+
+  friend void swap(ListServicesRequest& a, ListServicesRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListServicesRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListServicesRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListServicesRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListServicesRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListServicesRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListServicesRequest& from) {
+    ListServicesRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListServicesRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListServicesRequest";
+  }
+  protected:
+  explicit ListServicesRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kServiceNameFieldNumber = 2,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // string service_name = 2;
+  void clear_service_name();
+  const std::string& service_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_service_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_service_name();
+  PROTOBUF_NODISCARD std::string* release_service_name();
+  void set_allocated_service_name(std::string* service_name);
+  private:
+  const std::string& _internal_service_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_service_name(const std::string& value);
+  std::string* _internal_mutable_service_name();
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListServicesRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr service_name_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ListServicesResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.ListServicesResponse) */ {
+ public:
+  inline ListServicesResponse() : ListServicesResponse(nullptr) {}
+  ~ListServicesResponse() override;
+  explicit PROTOBUF_CONSTEXPR ListServicesResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ListServicesResponse(const ListServicesResponse& from);
+  ListServicesResponse(ListServicesResponse&& from) noexcept
+    : ListServicesResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ListServicesResponse& operator=(const ListServicesResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ListServicesResponse& operator=(ListServicesResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ListServicesResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ListServicesResponse* internal_default_instance() {
+    return reinterpret_cast<const ListServicesResponse*>(
+               &_ListServicesResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    16;
+
+  friend void swap(ListServicesResponse& a, ListServicesResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ListServicesResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ListServicesResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ListServicesResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ListServicesResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ListServicesResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ListServicesResponse& from) {
+    ListServicesResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ListServicesResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.ListServicesResponse";
+  }
+  protected:
+  explicit ListServicesResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kEndpointsFieldNumber = 3,
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // repeated string endpoints = 3;
+  int endpoints_size() const;
+  private:
+  int _internal_endpoints_size() const;
+  public:
+  void clear_endpoints();
+  const std::string& endpoints(int index) const;
+  std::string* mutable_endpoints(int index);
+  void set_endpoints(int index, const std::string& value);
+  void set_endpoints(int index, std::string&& value);
+  void set_endpoints(int index, const char* value);
+  void set_endpoints(int index, const char* value, size_t size);
+  std::string* add_endpoints();
+  void add_endpoints(const std::string& value);
+  void add_endpoints(std::string&& value);
+  void add_endpoints(const char* value);
+  void add_endpoints(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& endpoints() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_endpoints();
+  private:
+  const std::string& _internal_endpoints(int index) const;
+  std::string* _internal_add_endpoints();
+  public:
+
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.ListServicesResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> endpoints_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UpdateTaskRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.UpdateTaskRequest) */ {
+ public:
+  inline UpdateTaskRequest() : UpdateTaskRequest(nullptr) {}
+  ~UpdateTaskRequest() override;
+  explicit PROTOBUF_CONSTEXPR UpdateTaskRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UpdateTaskRequest(const UpdateTaskRequest& from);
+  UpdateTaskRequest(UpdateTaskRequest&& from) noexcept
+    : UpdateTaskRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline UpdateTaskRequest& operator=(const UpdateTaskRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UpdateTaskRequest& operator=(UpdateTaskRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UpdateTaskRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UpdateTaskRequest* internal_default_instance() {
+    return reinterpret_cast<const UpdateTaskRequest*>(
+               &_UpdateTaskRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    17;
+
+  friend void swap(UpdateTaskRequest& a, UpdateTaskRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UpdateTaskRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UpdateTaskRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  UpdateTaskRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<UpdateTaskRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UpdateTaskRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const UpdateTaskRequest& from) {
+    UpdateTaskRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UpdateTaskRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.UpdateTaskRequest";
+  }
+  protected:
+  explicit UpdateTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kTaskFieldNumber = 2,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // .corpcron.rpc.TaskInfo task = 2;
+  bool has_task() const;
+  private:
+  bool _internal_has_task() const;
+  public:
+  void clear_task();
+  const ::corpcron::rpc::TaskInfo& task() const;
+  PROTOBUF_NODISCARD ::corpcron::rpc::TaskInfo* release_task();
+  ::corpcron::rpc::TaskInfo* mutable_task();
+  void set_allocated_task(::corpcron::rpc::TaskInfo* task);
+  private:
+  const ::corpcron::rpc::TaskInfo& _internal_task() const;
+  ::corpcron::rpc::TaskInfo* _internal_mutable_task();
+  public:
+  void unsafe_arena_set_allocated_task(
+      ::corpcron::rpc::TaskInfo* task);
+  ::corpcron::rpc::TaskInfo* unsafe_arena_release_task();
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.UpdateTaskRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::corpcron::rpc::TaskInfo* task_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class UpdateTaskResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.UpdateTaskResponse) */ {
+ public:
+  inline UpdateTaskResponse() : UpdateTaskResponse(nullptr) {}
+  ~UpdateTaskResponse() override;
+  explicit PROTOBUF_CONSTEXPR UpdateTaskResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  UpdateTaskResponse(const UpdateTaskResponse& from);
+  UpdateTaskResponse(UpdateTaskResponse&& from) noexcept
+    : UpdateTaskResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline UpdateTaskResponse& operator=(const UpdateTaskResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline UpdateTaskResponse& operator=(UpdateTaskResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const UpdateTaskResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const UpdateTaskResponse* internal_default_instance() {
+    return reinterpret_cast<const UpdateTaskResponse*>(
+               &_UpdateTaskResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    18;
+
+  friend void swap(UpdateTaskResponse& a, UpdateTaskResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(UpdateTaskResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(UpdateTaskResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  UpdateTaskResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<UpdateTaskResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const UpdateTaskResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const UpdateTaskResponse& from) {
+    UpdateTaskResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(UpdateTaskResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.UpdateTaskResponse";
+  }
+  protected:
+  explicit UpdateTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.UpdateTaskResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class EnableTaskRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.EnableTaskRequest) */ {
+ public:
+  inline EnableTaskRequest() : EnableTaskRequest(nullptr) {}
+  ~EnableTaskRequest() override;
+  explicit PROTOBUF_CONSTEXPR EnableTaskRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  EnableTaskRequest(const EnableTaskRequest& from);
+  EnableTaskRequest(EnableTaskRequest&& from) noexcept
+    : EnableTaskRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline EnableTaskRequest& operator=(const EnableTaskRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EnableTaskRequest& operator=(EnableTaskRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const EnableTaskRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const EnableTaskRequest* internal_default_instance() {
+    return reinterpret_cast<const EnableTaskRequest*>(
+               &_EnableTaskRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    19;
+
+  friend void swap(EnableTaskRequest& a, EnableTaskRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EnableTaskRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(EnableTaskRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  EnableTaskRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EnableTaskRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const EnableTaskRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const EnableTaskRequest& from) {
+    EnableTaskRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EnableTaskRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.EnableTaskRequest";
+  }
+  protected:
+  explicit EnableTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kTaskIdFieldNumber = 2,
+    kEnabledFieldNumber = 3,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // string task_id = 2;
+  void clear_task_id();
+  const std::string& task_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_id();
+  PROTOBUF_NODISCARD std::string* release_task_id();
+  void set_allocated_task_id(std::string* task_id);
+  private:
+  const std::string& _internal_task_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
+  std::string* _internal_mutable_task_id();
+  public:
+
+  // bool enabled = 3;
+  void clear_enabled();
+  bool enabled() const;
+  void set_enabled(bool value);
+  private:
+  bool _internal_enabled() const;
+  void _internal_set_enabled(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.EnableTaskRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    bool enabled_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class EnableTaskResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.EnableTaskResponse) */ {
+ public:
+  inline EnableTaskResponse() : EnableTaskResponse(nullptr) {}
+  ~EnableTaskResponse() override;
+  explicit PROTOBUF_CONSTEXPR EnableTaskResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  EnableTaskResponse(const EnableTaskResponse& from);
+  EnableTaskResponse(EnableTaskResponse&& from) noexcept
+    : EnableTaskResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline EnableTaskResponse& operator=(const EnableTaskResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline EnableTaskResponse& operator=(EnableTaskResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const EnableTaskResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const EnableTaskResponse* internal_default_instance() {
+    return reinterpret_cast<const EnableTaskResponse*>(
+               &_EnableTaskResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(EnableTaskResponse& a, EnableTaskResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(EnableTaskResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(EnableTaskResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  EnableTaskResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<EnableTaskResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const EnableTaskResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const EnableTaskResponse& from) {
+    EnableTaskResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(EnableTaskResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.EnableTaskResponse";
+  }
+  protected:
+  explicit EnableTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.EnableTaskResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DeleteTaskRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.DeleteTaskRequest) */ {
+ public:
+  inline DeleteTaskRequest() : DeleteTaskRequest(nullptr) {}
+  ~DeleteTaskRequest() override;
+  explicit PROTOBUF_CONSTEXPR DeleteTaskRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DeleteTaskRequest(const DeleteTaskRequest& from);
+  DeleteTaskRequest(DeleteTaskRequest&& from) noexcept
+    : DeleteTaskRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline DeleteTaskRequest& operator=(const DeleteTaskRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DeleteTaskRequest& operator=(DeleteTaskRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DeleteTaskRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DeleteTaskRequest* internal_default_instance() {
+    return reinterpret_cast<const DeleteTaskRequest*>(
+               &_DeleteTaskRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    21;
+
+  friend void swap(DeleteTaskRequest& a, DeleteTaskRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DeleteTaskRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DeleteTaskRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DeleteTaskRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DeleteTaskRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const DeleteTaskRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const DeleteTaskRequest& from) {
+    DeleteTaskRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DeleteTaskRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.DeleteTaskRequest";
+  }
+  protected:
+  explicit DeleteTaskRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kTaskIdFieldNumber = 2,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // string task_id = 2;
+  void clear_task_id();
+  const std::string& task_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_id();
+  PROTOBUF_NODISCARD std::string* release_task_id();
+  void set_allocated_task_id(std::string* task_id);
+  private:
+  const std::string& _internal_task_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
+  std::string* _internal_mutable_task_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.DeleteTaskRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class DeleteTaskResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.DeleteTaskResponse) */ {
+ public:
+  inline DeleteTaskResponse() : DeleteTaskResponse(nullptr) {}
+  ~DeleteTaskResponse() override;
+  explicit PROTOBUF_CONSTEXPR DeleteTaskResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  DeleteTaskResponse(const DeleteTaskResponse& from);
+  DeleteTaskResponse(DeleteTaskResponse&& from) noexcept
+    : DeleteTaskResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline DeleteTaskResponse& operator=(const DeleteTaskResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline DeleteTaskResponse& operator=(DeleteTaskResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const DeleteTaskResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const DeleteTaskResponse* internal_default_instance() {
+    return reinterpret_cast<const DeleteTaskResponse*>(
+               &_DeleteTaskResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    22;
+
+  friend void swap(DeleteTaskResponse& a, DeleteTaskResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(DeleteTaskResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(DeleteTaskResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  DeleteTaskResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<DeleteTaskResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const DeleteTaskResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const DeleteTaskResponse& from) {
+    DeleteTaskResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(DeleteTaskResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.DeleteTaskResponse";
+  }
+  protected:
+  explicit DeleteTaskResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorFieldNumber = 2,
+    kSuccessFieldNumber = 1,
+  };
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.DeleteTaskResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RunTaskNowRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.RunTaskNowRequest) */ {
+ public:
+  inline RunTaskNowRequest() : RunTaskNowRequest(nullptr) {}
+  ~RunTaskNowRequest() override;
+  explicit PROTOBUF_CONSTEXPR RunTaskNowRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RunTaskNowRequest(const RunTaskNowRequest& from);
+  RunTaskNowRequest(RunTaskNowRequest&& from) noexcept
+    : RunTaskNowRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline RunTaskNowRequest& operator=(const RunTaskNowRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RunTaskNowRequest& operator=(RunTaskNowRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RunTaskNowRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RunTaskNowRequest* internal_default_instance() {
+    return reinterpret_cast<const RunTaskNowRequest*>(
+               &_RunTaskNowRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    23;
+
+  friend void swap(RunTaskNowRequest& a, RunTaskNowRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RunTaskNowRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RunTaskNowRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RunTaskNowRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RunTaskNowRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RunTaskNowRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RunTaskNowRequest& from) {
+    RunTaskNowRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RunTaskNowRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.RunTaskNowRequest";
+  }
+  protected:
+  explicit RunTaskNowRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+    kTaskIdFieldNumber = 2,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // string task_id = 2;
+  void clear_task_id();
+  const std::string& task_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_id();
+  PROTOBUF_NODISCARD std::string* release_task_id();
+  void set_allocated_task_id(std::string* task_id);
+  private:
+  const std::string& _internal_task_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_id(const std::string& value);
+  std::string* _internal_mutable_task_id();
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.RunTaskNowRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class RunTaskNowResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.RunTaskNowResponse) */ {
+ public:
+  inline RunTaskNowResponse() : RunTaskNowResponse(nullptr) {}
+  ~RunTaskNowResponse() override;
+  explicit PROTOBUF_CONSTEXPR RunTaskNowResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  RunTaskNowResponse(const RunTaskNowResponse& from);
+  RunTaskNowResponse(RunTaskNowResponse&& from) noexcept
+    : RunTaskNowResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline RunTaskNowResponse& operator=(const RunTaskNowResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RunTaskNowResponse& operator=(RunTaskNowResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const RunTaskNowResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const RunTaskNowResponse* internal_default_instance() {
+    return reinterpret_cast<const RunTaskNowResponse*>(
+               &_RunTaskNowResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    24;
+
+  friend void swap(RunTaskNowResponse& a, RunTaskNowResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RunTaskNowResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RunTaskNowResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  RunTaskNowResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<RunTaskNowResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const RunTaskNowResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const RunTaskNowResponse& from) {
+    RunTaskNowResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RunTaskNowResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.RunTaskNowResponse";
+  }
+  protected:
+  explicit RunTaskNowResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kResultFieldNumber = 2,
+    kErrorFieldNumber = 3,
+    kSuccessFieldNumber = 1,
+  };
+  // string result = 2;
+  void clear_result();
+  const std::string& result() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_result(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_result();
+  PROTOBUF_NODISCARD std::string* release_result();
+  void set_allocated_result(std::string* result);
+  private:
+  const std::string& _internal_result() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_result(const std::string& value);
+  std::string* _internal_mutable_result();
+  public:
+
+  // string error = 3;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.RunTaskNowResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
 // ===================================================================
 
 
@@ -2775,9 +5794,2250 @@ inline void CancelTaskResponse::set_allocated_error(std::string* error) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.CancelTaskResponse.error)
 }
 
+// -------------------------------------------------------------------
+
+// TaskInfo
+
+// string id = 1;
+inline void TaskInfo::clear_id() {
+  _impl_.id_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.id)
+  return _internal_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.id)
+}
+inline std::string* TaskInfo::mutable_id() {
+  std::string* _s = _internal_mutable_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.id)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_id() const {
+  return _impl_.id_.Get();
+}
+inline void TaskInfo::_internal_set_id(const std::string& value) {
+  
+  _impl_.id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_id() {
+  
+  return _impl_.id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.id)
+  return _impl_.id_.Release();
+}
+inline void TaskInfo::set_allocated_id(std::string* id) {
+  if (id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.id_.SetAllocated(id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.id_.IsDefault()) {
+    _impl_.id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.id)
+}
+
+// string cron_expr = 2;
+inline void TaskInfo::clear_cron_expr() {
+  _impl_.cron_expr_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::cron_expr() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.cron_expr)
+  return _internal_cron_expr();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_cron_expr(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.cron_expr_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.cron_expr)
+}
+inline std::string* TaskInfo::mutable_cron_expr() {
+  std::string* _s = _internal_mutable_cron_expr();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.cron_expr)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_cron_expr() const {
+  return _impl_.cron_expr_.Get();
+}
+inline void TaskInfo::_internal_set_cron_expr(const std::string& value) {
+  
+  _impl_.cron_expr_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_cron_expr() {
+  
+  return _impl_.cron_expr_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_cron_expr() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.cron_expr)
+  return _impl_.cron_expr_.Release();
+}
+inline void TaskInfo::set_allocated_cron_expr(std::string* cron_expr) {
+  if (cron_expr != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.cron_expr_.SetAllocated(cron_expr, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.cron_expr_.IsDefault()) {
+    _impl_.cron_expr_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.cron_expr)
+}
+
+// string params = 3;
+inline void TaskInfo::clear_params() {
+  _impl_.params_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::params() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.params)
+  return _internal_params();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_params(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.params_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.params)
+}
+inline std::string* TaskInfo::mutable_params() {
+  std::string* _s = _internal_mutable_params();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.params)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_params() const {
+  return _impl_.params_.Get();
+}
+inline void TaskInfo::_internal_set_params(const std::string& value) {
+  
+  _impl_.params_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_params() {
+  
+  return _impl_.params_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_params() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.params)
+  return _impl_.params_.Release();
+}
+inline void TaskInfo::set_allocated_params(std::string* params) {
+  if (params != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.params_.SetAllocated(params, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.params_.IsDefault()) {
+    _impl_.params_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.params)
+}
+
+// string handler = 4;
+inline void TaskInfo::clear_handler() {
+  _impl_.handler_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::handler() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.handler)
+  return _internal_handler();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_handler(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.handler_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.handler)
+}
+inline std::string* TaskInfo::mutable_handler() {
+  std::string* _s = _internal_mutable_handler();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.handler)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_handler() const {
+  return _impl_.handler_.Get();
+}
+inline void TaskInfo::_internal_set_handler(const std::string& value) {
+  
+  _impl_.handler_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_handler() {
+  
+  return _impl_.handler_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_handler() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.handler)
+  return _impl_.handler_.Release();
+}
+inline void TaskInfo::set_allocated_handler(std::string* handler) {
+  if (handler != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.handler_.SetAllocated(handler, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.handler_.IsDefault()) {
+    _impl_.handler_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.handler)
+}
+
+// int32 status = 5;
+inline void TaskInfo::clear_status() {
+  _impl_.status_ = 0;
+}
+inline int32_t TaskInfo::_internal_status() const {
+  return _impl_.status_;
+}
+inline int32_t TaskInfo::status() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.status)
+  return _internal_status();
+}
+inline void TaskInfo::_internal_set_status(int32_t value) {
+  
+  _impl_.status_ = value;
+}
+inline void TaskInfo::set_status(int32_t value) {
+  _internal_set_status(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.status)
+}
+
+// string next_run_at = 6;
+inline void TaskInfo::clear_next_run_at() {
+  _impl_.next_run_at_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::next_run_at() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.next_run_at)
+  return _internal_next_run_at();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_next_run_at(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.next_run_at_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.next_run_at)
+}
+inline std::string* TaskInfo::mutable_next_run_at() {
+  std::string* _s = _internal_mutable_next_run_at();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.next_run_at)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_next_run_at() const {
+  return _impl_.next_run_at_.Get();
+}
+inline void TaskInfo::_internal_set_next_run_at(const std::string& value) {
+  
+  _impl_.next_run_at_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_next_run_at() {
+  
+  return _impl_.next_run_at_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_next_run_at() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.next_run_at)
+  return _impl_.next_run_at_.Release();
+}
+inline void TaskInfo::set_allocated_next_run_at(std::string* next_run_at) {
+  if (next_run_at != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.next_run_at_.SetAllocated(next_run_at, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.next_run_at_.IsDefault()) {
+    _impl_.next_run_at_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.next_run_at)
+}
+
+// string last_run_at = 7;
+inline void TaskInfo::clear_last_run_at() {
+  _impl_.last_run_at_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::last_run_at() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.last_run_at)
+  return _internal_last_run_at();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_last_run_at(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.last_run_at_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.last_run_at)
+}
+inline std::string* TaskInfo::mutable_last_run_at() {
+  std::string* _s = _internal_mutable_last_run_at();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.last_run_at)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_last_run_at() const {
+  return _impl_.last_run_at_.Get();
+}
+inline void TaskInfo::_internal_set_last_run_at(const std::string& value) {
+  
+  _impl_.last_run_at_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_last_run_at() {
+  
+  return _impl_.last_run_at_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_last_run_at() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.last_run_at)
+  return _impl_.last_run_at_.Release();
+}
+inline void TaskInfo::set_allocated_last_run_at(std::string* last_run_at) {
+  if (last_run_at != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.last_run_at_.SetAllocated(last_run_at, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.last_run_at_.IsDefault()) {
+    _impl_.last_run_at_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.last_run_at)
+}
+
+// int32 retry_count = 8;
+inline void TaskInfo::clear_retry_count() {
+  _impl_.retry_count_ = 0;
+}
+inline int32_t TaskInfo::_internal_retry_count() const {
+  return _impl_.retry_count_;
+}
+inline int32_t TaskInfo::retry_count() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.retry_count)
+  return _internal_retry_count();
+}
+inline void TaskInfo::_internal_set_retry_count(int32_t value) {
+  
+  _impl_.retry_count_ = value;
+}
+inline void TaskInfo::set_retry_count(int32_t value) {
+  _internal_set_retry_count(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.retry_count)
+}
+
+// int32 max_retries = 9;
+inline void TaskInfo::clear_max_retries() {
+  _impl_.max_retries_ = 0;
+}
+inline int32_t TaskInfo::_internal_max_retries() const {
+  return _impl_.max_retries_;
+}
+inline int32_t TaskInfo::max_retries() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.max_retries)
+  return _internal_max_retries();
+}
+inline void TaskInfo::_internal_set_max_retries(int32_t value) {
+  
+  _impl_.max_retries_ = value;
+}
+inline void TaskInfo::set_max_retries(int32_t value) {
+  _internal_set_max_retries(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.max_retries)
+}
+
+// -------------------------------------------------------------------
+
+// ListTasksRequest
+
+// string auth_token = 1;
+inline void ListTasksRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& ListTasksRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListTasksRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.auth_token)
+}
+inline std::string* ListTasksRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListTasksRequest.auth_token)
+  return _s;
+}
+inline const std::string& ListTasksRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void ListTasksRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListTasksRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListTasksRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListTasksRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void ListTasksRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListTasksRequest.auth_token)
+}
+
+// int32 limit = 2;
+inline void ListTasksRequest::clear_limit() {
+  _impl_.limit_ = 0;
+}
+inline int32_t ListTasksRequest::_internal_limit() const {
+  return _impl_.limit_;
+}
+inline int32_t ListTasksRequest::limit() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.limit)
+  return _internal_limit();
+}
+inline void ListTasksRequest::_internal_set_limit(int32_t value) {
+  
+  _impl_.limit_ = value;
+}
+inline void ListTasksRequest::set_limit(int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.limit)
+}
+
+// bool enabled_only = 3;
+inline void ListTasksRequest::clear_enabled_only() {
+  _impl_.enabled_only_ = false;
+}
+inline bool ListTasksRequest::_internal_enabled_only() const {
+  return _impl_.enabled_only_;
+}
+inline bool ListTasksRequest::enabled_only() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.enabled_only)
+  return _internal_enabled_only();
+}
+inline void ListTasksRequest::_internal_set_enabled_only(bool value) {
+  
+  _impl_.enabled_only_ = value;
+}
+inline void ListTasksRequest::set_enabled_only(bool value) {
+  _internal_set_enabled_only(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.enabled_only)
+}
+
+// -------------------------------------------------------------------
+
+// ListTasksResponse
+
+// bool success = 1;
+inline void ListTasksResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool ListTasksResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool ListTasksResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.success)
+  return _internal_success();
+}
+inline void ListTasksResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void ListTasksResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksResponse.success)
+}
+
+// string error = 2;
+inline void ListTasksResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& ListTasksResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListTasksResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksResponse.error)
+}
+inline std::string* ListTasksResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListTasksResponse.error)
+  return _s;
+}
+inline const std::string& ListTasksResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void ListTasksResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListTasksResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListTasksResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListTasksResponse.error)
+  return _impl_.error_.Release();
+}
+inline void ListTasksResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListTasksResponse.error)
+}
+
+// repeated .corpcron.rpc.TaskInfo tasks = 3;
+inline int ListTasksResponse::_internal_tasks_size() const {
+  return _impl_.tasks_.size();
+}
+inline int ListTasksResponse::tasks_size() const {
+  return _internal_tasks_size();
+}
+inline void ListTasksResponse::clear_tasks() {
+  _impl_.tasks_.Clear();
+}
+inline ::corpcron::rpc::TaskInfo* ListTasksResponse::mutable_tasks(int index) {
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListTasksResponse.tasks)
+  return _impl_.tasks_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo >*
+ListTasksResponse::mutable_tasks() {
+  // @@protoc_insertion_point(field_mutable_list:corpcron.rpc.ListTasksResponse.tasks)
+  return &_impl_.tasks_;
+}
+inline const ::corpcron::rpc::TaskInfo& ListTasksResponse::_internal_tasks(int index) const {
+  return _impl_.tasks_.Get(index);
+}
+inline const ::corpcron::rpc::TaskInfo& ListTasksResponse::tasks(int index) const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.tasks)
+  return _internal_tasks(index);
+}
+inline ::corpcron::rpc::TaskInfo* ListTasksResponse::_internal_add_tasks() {
+  return _impl_.tasks_.Add();
+}
+inline ::corpcron::rpc::TaskInfo* ListTasksResponse::add_tasks() {
+  ::corpcron::rpc::TaskInfo* _add = _internal_add_tasks();
+  // @@protoc_insertion_point(field_add:corpcron.rpc.ListTasksResponse.tasks)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo >&
+ListTasksResponse::tasks() const {
+  // @@protoc_insertion_point(field_list:corpcron.rpc.ListTasksResponse.tasks)
+  return _impl_.tasks_;
+}
+
+// -------------------------------------------------------------------
+
+// TaskHistoryInfo
+
+// string task_id = 1;
+inline void TaskHistoryInfo::clear_task_id() {
+  _impl_.task_id_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::task_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.task_id)
+  return _internal_task_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_task_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.task_id)
+}
+inline std::string* TaskHistoryInfo::mutable_task_id() {
+  std::string* _s = _internal_mutable_task_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.task_id)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_task_id() const {
+  return _impl_.task_id_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_task_id(const std::string& value) {
+  
+  _impl_.task_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_task_id() {
+  
+  return _impl_.task_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_task_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.task_id)
+  return _impl_.task_id_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_task_id(std::string* task_id) {
+  if (task_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_id_.IsDefault()) {
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.task_id)
+}
+
+// string exec_node = 2;
+inline void TaskHistoryInfo::clear_exec_node() {
+  _impl_.exec_node_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::exec_node() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.exec_node)
+  return _internal_exec_node();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_exec_node(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.exec_node_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.exec_node)
+}
+inline std::string* TaskHistoryInfo::mutable_exec_node() {
+  std::string* _s = _internal_mutable_exec_node();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.exec_node)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_exec_node() const {
+  return _impl_.exec_node_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_exec_node(const std::string& value) {
+  
+  _impl_.exec_node_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_exec_node() {
+  
+  return _impl_.exec_node_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_exec_node() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.exec_node)
+  return _impl_.exec_node_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_exec_node(std::string* exec_node) {
+  if (exec_node != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.exec_node_.SetAllocated(exec_node, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.exec_node_.IsDefault()) {
+    _impl_.exec_node_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.exec_node)
+}
+
+// bool success = 3;
+inline void TaskHistoryInfo::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool TaskHistoryInfo::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool TaskHistoryInfo::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.success)
+  return _internal_success();
+}
+inline void TaskHistoryInfo::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void TaskHistoryInfo::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.success)
+}
+
+// string result = 4;
+inline void TaskHistoryInfo::clear_result() {
+  _impl_.result_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::result() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.result)
+  return _internal_result();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_result(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.result_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.result)
+}
+inline std::string* TaskHistoryInfo::mutable_result() {
+  std::string* _s = _internal_mutable_result();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.result)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_result() const {
+  return _impl_.result_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_result(const std::string& value) {
+  
+  _impl_.result_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_result() {
+  
+  return _impl_.result_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_result() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.result)
+  return _impl_.result_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_result(std::string* result) {
+  if (result != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.result_.SetAllocated(result, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.result_.IsDefault()) {
+    _impl_.result_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.result)
+}
+
+// string error = 5;
+inline void TaskHistoryInfo::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.error)
+}
+inline std::string* TaskHistoryInfo::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.error)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.error)
+  return _impl_.error_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.error)
+}
+
+// string start_time = 6;
+inline void TaskHistoryInfo::clear_start_time() {
+  _impl_.start_time_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::start_time() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.start_time)
+  return _internal_start_time();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_start_time(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.start_time_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.start_time)
+}
+inline std::string* TaskHistoryInfo::mutable_start_time() {
+  std::string* _s = _internal_mutable_start_time();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.start_time)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_start_time() const {
+  return _impl_.start_time_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_start_time(const std::string& value) {
+  
+  _impl_.start_time_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_start_time() {
+  
+  return _impl_.start_time_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_start_time() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.start_time)
+  return _impl_.start_time_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_start_time(std::string* start_time) {
+  if (start_time != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.start_time_.SetAllocated(start_time, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.start_time_.IsDefault()) {
+    _impl_.start_time_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.start_time)
+}
+
+// string end_time = 7;
+inline void TaskHistoryInfo::clear_end_time() {
+  _impl_.end_time_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::end_time() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.end_time)
+  return _internal_end_time();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_end_time(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.end_time_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.end_time)
+}
+inline std::string* TaskHistoryInfo::mutable_end_time() {
+  std::string* _s = _internal_mutable_end_time();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.end_time)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_end_time() const {
+  return _impl_.end_time_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_end_time(const std::string& value) {
+  
+  _impl_.end_time_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_end_time() {
+  
+  return _impl_.end_time_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_end_time() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.end_time)
+  return _impl_.end_time_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_end_time(std::string* end_time) {
+  if (end_time != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.end_time_.SetAllocated(end_time, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.end_time_.IsDefault()) {
+    _impl_.end_time_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.end_time)
+}
+
+// -------------------------------------------------------------------
+
+// ListHistoryRequest
+
+// string auth_token = 1;
+inline void ListHistoryRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& ListHistoryRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListHistoryRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.auth_token)
+}
+inline std::string* ListHistoryRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListHistoryRequest.auth_token)
+  return _s;
+}
+inline const std::string& ListHistoryRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void ListHistoryRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListHistoryRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void ListHistoryRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListHistoryRequest.auth_token)
+}
+
+// string task_id = 2;
+inline void ListHistoryRequest::clear_task_id() {
+  _impl_.task_id_.ClearToEmpty();
+}
+inline const std::string& ListHistoryRequest::task_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.task_id)
+  return _internal_task_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListHistoryRequest::set_task_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.task_id)
+}
+inline std::string* ListHistoryRequest::mutable_task_id() {
+  std::string* _s = _internal_mutable_task_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListHistoryRequest.task_id)
+  return _s;
+}
+inline const std::string& ListHistoryRequest::_internal_task_id() const {
+  return _impl_.task_id_.Get();
+}
+inline void ListHistoryRequest::_internal_set_task_id(const std::string& value) {
+  
+  _impl_.task_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::_internal_mutable_task_id() {
+  
+  return _impl_.task_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::release_task_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListHistoryRequest.task_id)
+  return _impl_.task_id_.Release();
+}
+inline void ListHistoryRequest::set_allocated_task_id(std::string* task_id) {
+  if (task_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_id_.IsDefault()) {
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListHistoryRequest.task_id)
+}
+
+// int32 limit = 3;
+inline void ListHistoryRequest::clear_limit() {
+  _impl_.limit_ = 0;
+}
+inline int32_t ListHistoryRequest::_internal_limit() const {
+  return _impl_.limit_;
+}
+inline int32_t ListHistoryRequest::limit() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.limit)
+  return _internal_limit();
+}
+inline void ListHistoryRequest::_internal_set_limit(int32_t value) {
+  
+  _impl_.limit_ = value;
+}
+inline void ListHistoryRequest::set_limit(int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.limit)
+}
+
+// -------------------------------------------------------------------
+
+// ListHistoryResponse
+
+// bool success = 1;
+inline void ListHistoryResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool ListHistoryResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool ListHistoryResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.success)
+  return _internal_success();
+}
+inline void ListHistoryResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void ListHistoryResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryResponse.success)
+}
+
+// string error = 2;
+inline void ListHistoryResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& ListHistoryResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListHistoryResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryResponse.error)
+}
+inline std::string* ListHistoryResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListHistoryResponse.error)
+  return _s;
+}
+inline const std::string& ListHistoryResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void ListHistoryResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListHistoryResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListHistoryResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListHistoryResponse.error)
+  return _impl_.error_.Release();
+}
+inline void ListHistoryResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListHistoryResponse.error)
+}
+
+// repeated .corpcron.rpc.TaskHistoryInfo history = 3;
+inline int ListHistoryResponse::_internal_history_size() const {
+  return _impl_.history_.size();
+}
+inline int ListHistoryResponse::history_size() const {
+  return _internal_history_size();
+}
+inline void ListHistoryResponse::clear_history() {
+  _impl_.history_.Clear();
+}
+inline ::corpcron::rpc::TaskHistoryInfo* ListHistoryResponse::mutable_history(int index) {
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListHistoryResponse.history)
+  return _impl_.history_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo >*
+ListHistoryResponse::mutable_history() {
+  // @@protoc_insertion_point(field_mutable_list:corpcron.rpc.ListHistoryResponse.history)
+  return &_impl_.history_;
+}
+inline const ::corpcron::rpc::TaskHistoryInfo& ListHistoryResponse::_internal_history(int index) const {
+  return _impl_.history_.Get(index);
+}
+inline const ::corpcron::rpc::TaskHistoryInfo& ListHistoryResponse::history(int index) const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.history)
+  return _internal_history(index);
+}
+inline ::corpcron::rpc::TaskHistoryInfo* ListHistoryResponse::_internal_add_history() {
+  return _impl_.history_.Add();
+}
+inline ::corpcron::rpc::TaskHistoryInfo* ListHistoryResponse::add_history() {
+  ::corpcron::rpc::TaskHistoryInfo* _add = _internal_add_history();
+  // @@protoc_insertion_point(field_add:corpcron.rpc.ListHistoryResponse.history)
+  return _add;
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo >&
+ListHistoryResponse::history() const {
+  // @@protoc_insertion_point(field_list:corpcron.rpc.ListHistoryResponse.history)
+  return _impl_.history_;
+}
+
+// -------------------------------------------------------------------
+
+// ListServicesRequest
+
+// string auth_token = 1;
+inline void ListServicesRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& ListServicesRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListServicesRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListServicesRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesRequest.auth_token)
+}
+inline std::string* ListServicesRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListServicesRequest.auth_token)
+  return _s;
+}
+inline const std::string& ListServicesRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void ListServicesRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListServicesRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListServicesRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListServicesRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void ListServicesRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListServicesRequest.auth_token)
+}
+
+// string service_name = 2;
+inline void ListServicesRequest::clear_service_name() {
+  _impl_.service_name_.ClearToEmpty();
+}
+inline const std::string& ListServicesRequest::service_name() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListServicesRequest.service_name)
+  return _internal_service_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListServicesRequest::set_service_name(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.service_name_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesRequest.service_name)
+}
+inline std::string* ListServicesRequest::mutable_service_name() {
+  std::string* _s = _internal_mutable_service_name();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListServicesRequest.service_name)
+  return _s;
+}
+inline const std::string& ListServicesRequest::_internal_service_name() const {
+  return _impl_.service_name_.Get();
+}
+inline void ListServicesRequest::_internal_set_service_name(const std::string& value) {
+  
+  _impl_.service_name_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListServicesRequest::_internal_mutable_service_name() {
+  
+  return _impl_.service_name_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListServicesRequest::release_service_name() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListServicesRequest.service_name)
+  return _impl_.service_name_.Release();
+}
+inline void ListServicesRequest::set_allocated_service_name(std::string* service_name) {
+  if (service_name != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.service_name_.SetAllocated(service_name, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.service_name_.IsDefault()) {
+    _impl_.service_name_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListServicesRequest.service_name)
+}
+
+// -------------------------------------------------------------------
+
+// ListServicesResponse
+
+// bool success = 1;
+inline void ListServicesResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool ListServicesResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool ListServicesResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListServicesResponse.success)
+  return _internal_success();
+}
+inline void ListServicesResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void ListServicesResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesResponse.success)
+}
+
+// string error = 2;
+inline void ListServicesResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& ListServicesResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListServicesResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListServicesResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesResponse.error)
+}
+inline std::string* ListServicesResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListServicesResponse.error)
+  return _s;
+}
+inline const std::string& ListServicesResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void ListServicesResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListServicesResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListServicesResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListServicesResponse.error)
+  return _impl_.error_.Release();
+}
+inline void ListServicesResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListServicesResponse.error)
+}
+
+// repeated string endpoints = 3;
+inline int ListServicesResponse::_internal_endpoints_size() const {
+  return _impl_.endpoints_.size();
+}
+inline int ListServicesResponse::endpoints_size() const {
+  return _internal_endpoints_size();
+}
+inline void ListServicesResponse::clear_endpoints() {
+  _impl_.endpoints_.Clear();
+}
+inline std::string* ListServicesResponse::add_endpoints() {
+  std::string* _s = _internal_add_endpoints();
+  // @@protoc_insertion_point(field_add_mutable:corpcron.rpc.ListServicesResponse.endpoints)
+  return _s;
+}
+inline const std::string& ListServicesResponse::_internal_endpoints(int index) const {
+  return _impl_.endpoints_.Get(index);
+}
+inline const std::string& ListServicesResponse::endpoints(int index) const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListServicesResponse.endpoints)
+  return _internal_endpoints(index);
+}
+inline std::string* ListServicesResponse::mutable_endpoints(int index) {
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListServicesResponse.endpoints)
+  return _impl_.endpoints_.Mutable(index);
+}
+inline void ListServicesResponse::set_endpoints(int index, const std::string& value) {
+  _impl_.endpoints_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::set_endpoints(int index, std::string&& value) {
+  _impl_.endpoints_.Mutable(index)->assign(std::move(value));
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::set_endpoints(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.endpoints_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::set_endpoints(int index, const char* value, size_t size) {
+  _impl_.endpoints_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline std::string* ListServicesResponse::_internal_add_endpoints() {
+  return _impl_.endpoints_.Add();
+}
+inline void ListServicesResponse::add_endpoints(const std::string& value) {
+  _impl_.endpoints_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::add_endpoints(std::string&& value) {
+  _impl_.endpoints_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::add_endpoints(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _impl_.endpoints_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline void ListServicesResponse::add_endpoints(const char* value, size_t size) {
+  _impl_.endpoints_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:corpcron.rpc.ListServicesResponse.endpoints)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+ListServicesResponse::endpoints() const {
+  // @@protoc_insertion_point(field_list:corpcron.rpc.ListServicesResponse.endpoints)
+  return _impl_.endpoints_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+ListServicesResponse::mutable_endpoints() {
+  // @@protoc_insertion_point(field_mutable_list:corpcron.rpc.ListServicesResponse.endpoints)
+  return &_impl_.endpoints_;
+}
+
+// -------------------------------------------------------------------
+
+// UpdateTaskRequest
+
+// string auth_token = 1;
+inline void UpdateTaskRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& UpdateTaskRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.UpdateTaskRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UpdateTaskRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.UpdateTaskRequest.auth_token)
+}
+inline std::string* UpdateTaskRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.UpdateTaskRequest.auth_token)
+  return _s;
+}
+inline const std::string& UpdateTaskRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void UpdateTaskRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* UpdateTaskRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* UpdateTaskRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.UpdateTaskRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void UpdateTaskRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.UpdateTaskRequest.auth_token)
+}
+
+// .corpcron.rpc.TaskInfo task = 2;
+inline bool UpdateTaskRequest::_internal_has_task() const {
+  return this != internal_default_instance() && _impl_.task_ != nullptr;
+}
+inline bool UpdateTaskRequest::has_task() const {
+  return _internal_has_task();
+}
+inline void UpdateTaskRequest::clear_task() {
+  if (GetArenaForAllocation() == nullptr && _impl_.task_ != nullptr) {
+    delete _impl_.task_;
+  }
+  _impl_.task_ = nullptr;
+}
+inline const ::corpcron::rpc::TaskInfo& UpdateTaskRequest::_internal_task() const {
+  const ::corpcron::rpc::TaskInfo* p = _impl_.task_;
+  return p != nullptr ? *p : reinterpret_cast<const ::corpcron::rpc::TaskInfo&>(
+      ::corpcron::rpc::_TaskInfo_default_instance_);
+}
+inline const ::corpcron::rpc::TaskInfo& UpdateTaskRequest::task() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.UpdateTaskRequest.task)
+  return _internal_task();
+}
+inline void UpdateTaskRequest::unsafe_arena_set_allocated_task(
+    ::corpcron::rpc::TaskInfo* task) {
+  if (GetArenaForAllocation() == nullptr) {
+    delete reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(_impl_.task_);
+  }
+  _impl_.task_ = task;
+  if (task) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:corpcron.rpc.UpdateTaskRequest.task)
+}
+inline ::corpcron::rpc::TaskInfo* UpdateTaskRequest::release_task() {
+  
+  ::corpcron::rpc::TaskInfo* temp = _impl_.task_;
+  _impl_.task_ = nullptr;
+#ifdef PROTOBUF_FORCE_COPY_IN_RELEASE
+  auto* old =  reinterpret_cast<::PROTOBUF_NAMESPACE_ID::MessageLite*>(temp);
+  temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  if (GetArenaForAllocation() == nullptr) { delete old; }
+#else  // PROTOBUF_FORCE_COPY_IN_RELEASE
+  if (GetArenaForAllocation() != nullptr) {
+    temp = ::PROTOBUF_NAMESPACE_ID::internal::DuplicateIfNonNull(temp);
+  }
+#endif  // !PROTOBUF_FORCE_COPY_IN_RELEASE
+  return temp;
+}
+inline ::corpcron::rpc::TaskInfo* UpdateTaskRequest::unsafe_arena_release_task() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.UpdateTaskRequest.task)
+  
+  ::corpcron::rpc::TaskInfo* temp = _impl_.task_;
+  _impl_.task_ = nullptr;
+  return temp;
+}
+inline ::corpcron::rpc::TaskInfo* UpdateTaskRequest::_internal_mutable_task() {
+  
+  if (_impl_.task_ == nullptr) {
+    auto* p = CreateMaybeMessage<::corpcron::rpc::TaskInfo>(GetArenaForAllocation());
+    _impl_.task_ = p;
+  }
+  return _impl_.task_;
+}
+inline ::corpcron::rpc::TaskInfo* UpdateTaskRequest::mutable_task() {
+  ::corpcron::rpc::TaskInfo* _msg = _internal_mutable_task();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.UpdateTaskRequest.task)
+  return _msg;
+}
+inline void UpdateTaskRequest::set_allocated_task(::corpcron::rpc::TaskInfo* task) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaForAllocation();
+  if (message_arena == nullptr) {
+    delete _impl_.task_;
+  }
+  if (task) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena =
+        ::PROTOBUF_NAMESPACE_ID::Arena::InternalGetOwningArena(task);
+    if (message_arena != submessage_arena) {
+      task = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, task, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  _impl_.task_ = task;
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.UpdateTaskRequest.task)
+}
+
+// -------------------------------------------------------------------
+
+// UpdateTaskResponse
+
+// bool success = 1;
+inline void UpdateTaskResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool UpdateTaskResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool UpdateTaskResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.UpdateTaskResponse.success)
+  return _internal_success();
+}
+inline void UpdateTaskResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void UpdateTaskResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.UpdateTaskResponse.success)
+}
+
+// string error = 2;
+inline void UpdateTaskResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& UpdateTaskResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.UpdateTaskResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void UpdateTaskResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.UpdateTaskResponse.error)
+}
+inline std::string* UpdateTaskResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.UpdateTaskResponse.error)
+  return _s;
+}
+inline const std::string& UpdateTaskResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void UpdateTaskResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* UpdateTaskResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* UpdateTaskResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.UpdateTaskResponse.error)
+  return _impl_.error_.Release();
+}
+inline void UpdateTaskResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.UpdateTaskResponse.error)
+}
+
+// -------------------------------------------------------------------
+
+// EnableTaskRequest
+
+// string auth_token = 1;
+inline void EnableTaskRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& EnableTaskRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.EnableTaskRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void EnableTaskRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.EnableTaskRequest.auth_token)
+}
+inline std::string* EnableTaskRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.EnableTaskRequest.auth_token)
+  return _s;
+}
+inline const std::string& EnableTaskRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void EnableTaskRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* EnableTaskRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* EnableTaskRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.EnableTaskRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void EnableTaskRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.EnableTaskRequest.auth_token)
+}
+
+// string task_id = 2;
+inline void EnableTaskRequest::clear_task_id() {
+  _impl_.task_id_.ClearToEmpty();
+}
+inline const std::string& EnableTaskRequest::task_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.EnableTaskRequest.task_id)
+  return _internal_task_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void EnableTaskRequest::set_task_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.EnableTaskRequest.task_id)
+}
+inline std::string* EnableTaskRequest::mutable_task_id() {
+  std::string* _s = _internal_mutable_task_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.EnableTaskRequest.task_id)
+  return _s;
+}
+inline const std::string& EnableTaskRequest::_internal_task_id() const {
+  return _impl_.task_id_.Get();
+}
+inline void EnableTaskRequest::_internal_set_task_id(const std::string& value) {
+  
+  _impl_.task_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* EnableTaskRequest::_internal_mutable_task_id() {
+  
+  return _impl_.task_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* EnableTaskRequest::release_task_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.EnableTaskRequest.task_id)
+  return _impl_.task_id_.Release();
+}
+inline void EnableTaskRequest::set_allocated_task_id(std::string* task_id) {
+  if (task_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_id_.IsDefault()) {
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.EnableTaskRequest.task_id)
+}
+
+// bool enabled = 3;
+inline void EnableTaskRequest::clear_enabled() {
+  _impl_.enabled_ = false;
+}
+inline bool EnableTaskRequest::_internal_enabled() const {
+  return _impl_.enabled_;
+}
+inline bool EnableTaskRequest::enabled() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.EnableTaskRequest.enabled)
+  return _internal_enabled();
+}
+inline void EnableTaskRequest::_internal_set_enabled(bool value) {
+  
+  _impl_.enabled_ = value;
+}
+inline void EnableTaskRequest::set_enabled(bool value) {
+  _internal_set_enabled(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.EnableTaskRequest.enabled)
+}
+
+// -------------------------------------------------------------------
+
+// EnableTaskResponse
+
+// bool success = 1;
+inline void EnableTaskResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool EnableTaskResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool EnableTaskResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.EnableTaskResponse.success)
+  return _internal_success();
+}
+inline void EnableTaskResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void EnableTaskResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.EnableTaskResponse.success)
+}
+
+// string error = 2;
+inline void EnableTaskResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& EnableTaskResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.EnableTaskResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void EnableTaskResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.EnableTaskResponse.error)
+}
+inline std::string* EnableTaskResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.EnableTaskResponse.error)
+  return _s;
+}
+inline const std::string& EnableTaskResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void EnableTaskResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* EnableTaskResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* EnableTaskResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.EnableTaskResponse.error)
+  return _impl_.error_.Release();
+}
+inline void EnableTaskResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.EnableTaskResponse.error)
+}
+
+// -------------------------------------------------------------------
+
+// DeleteTaskRequest
+
+// string auth_token = 1;
+inline void DeleteTaskRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& DeleteTaskRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.DeleteTaskRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeleteTaskRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.DeleteTaskRequest.auth_token)
+}
+inline std::string* DeleteTaskRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.DeleteTaskRequest.auth_token)
+  return _s;
+}
+inline const std::string& DeleteTaskRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void DeleteTaskRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DeleteTaskRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DeleteTaskRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.DeleteTaskRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void DeleteTaskRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.DeleteTaskRequest.auth_token)
+}
+
+// string task_id = 2;
+inline void DeleteTaskRequest::clear_task_id() {
+  _impl_.task_id_.ClearToEmpty();
+}
+inline const std::string& DeleteTaskRequest::task_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.DeleteTaskRequest.task_id)
+  return _internal_task_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeleteTaskRequest::set_task_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.DeleteTaskRequest.task_id)
+}
+inline std::string* DeleteTaskRequest::mutable_task_id() {
+  std::string* _s = _internal_mutable_task_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.DeleteTaskRequest.task_id)
+  return _s;
+}
+inline const std::string& DeleteTaskRequest::_internal_task_id() const {
+  return _impl_.task_id_.Get();
+}
+inline void DeleteTaskRequest::_internal_set_task_id(const std::string& value) {
+  
+  _impl_.task_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DeleteTaskRequest::_internal_mutable_task_id() {
+  
+  return _impl_.task_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DeleteTaskRequest::release_task_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.DeleteTaskRequest.task_id)
+  return _impl_.task_id_.Release();
+}
+inline void DeleteTaskRequest::set_allocated_task_id(std::string* task_id) {
+  if (task_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_id_.IsDefault()) {
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.DeleteTaskRequest.task_id)
+}
+
+// -------------------------------------------------------------------
+
+// DeleteTaskResponse
+
+// bool success = 1;
+inline void DeleteTaskResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool DeleteTaskResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool DeleteTaskResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.DeleteTaskResponse.success)
+  return _internal_success();
+}
+inline void DeleteTaskResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void DeleteTaskResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.DeleteTaskResponse.success)
+}
+
+// string error = 2;
+inline void DeleteTaskResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& DeleteTaskResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.DeleteTaskResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void DeleteTaskResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.DeleteTaskResponse.error)
+}
+inline std::string* DeleteTaskResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.DeleteTaskResponse.error)
+  return _s;
+}
+inline const std::string& DeleteTaskResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void DeleteTaskResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* DeleteTaskResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* DeleteTaskResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.DeleteTaskResponse.error)
+  return _impl_.error_.Release();
+}
+inline void DeleteTaskResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.DeleteTaskResponse.error)
+}
+
+// -------------------------------------------------------------------
+
+// RunTaskNowRequest
+
+// string auth_token = 1;
+inline void RunTaskNowRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& RunTaskNowRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.RunTaskNowRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RunTaskNowRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.RunTaskNowRequest.auth_token)
+}
+inline std::string* RunTaskNowRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.RunTaskNowRequest.auth_token)
+  return _s;
+}
+inline const std::string& RunTaskNowRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void RunTaskNowRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RunTaskNowRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RunTaskNowRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.RunTaskNowRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void RunTaskNowRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.RunTaskNowRequest.auth_token)
+}
+
+// string task_id = 2;
+inline void RunTaskNowRequest::clear_task_id() {
+  _impl_.task_id_.ClearToEmpty();
+}
+inline const std::string& RunTaskNowRequest::task_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.RunTaskNowRequest.task_id)
+  return _internal_task_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RunTaskNowRequest::set_task_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.RunTaskNowRequest.task_id)
+}
+inline std::string* RunTaskNowRequest::mutable_task_id() {
+  std::string* _s = _internal_mutable_task_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.RunTaskNowRequest.task_id)
+  return _s;
+}
+inline const std::string& RunTaskNowRequest::_internal_task_id() const {
+  return _impl_.task_id_.Get();
+}
+inline void RunTaskNowRequest::_internal_set_task_id(const std::string& value) {
+  
+  _impl_.task_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RunTaskNowRequest::_internal_mutable_task_id() {
+  
+  return _impl_.task_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RunTaskNowRequest::release_task_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.RunTaskNowRequest.task_id)
+  return _impl_.task_id_.Release();
+}
+inline void RunTaskNowRequest::set_allocated_task_id(std::string* task_id) {
+  if (task_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_id_.SetAllocated(task_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_id_.IsDefault()) {
+    _impl_.task_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.RunTaskNowRequest.task_id)
+}
+
+// -------------------------------------------------------------------
+
+// RunTaskNowResponse
+
+// bool success = 1;
+inline void RunTaskNowResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool RunTaskNowResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool RunTaskNowResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.RunTaskNowResponse.success)
+  return _internal_success();
+}
+inline void RunTaskNowResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void RunTaskNowResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.RunTaskNowResponse.success)
+}
+
+// string result = 2;
+inline void RunTaskNowResponse::clear_result() {
+  _impl_.result_.ClearToEmpty();
+}
+inline const std::string& RunTaskNowResponse::result() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.RunTaskNowResponse.result)
+  return _internal_result();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RunTaskNowResponse::set_result(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.result_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.RunTaskNowResponse.result)
+}
+inline std::string* RunTaskNowResponse::mutable_result() {
+  std::string* _s = _internal_mutable_result();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.RunTaskNowResponse.result)
+  return _s;
+}
+inline const std::string& RunTaskNowResponse::_internal_result() const {
+  return _impl_.result_.Get();
+}
+inline void RunTaskNowResponse::_internal_set_result(const std::string& value) {
+  
+  _impl_.result_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RunTaskNowResponse::_internal_mutable_result() {
+  
+  return _impl_.result_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RunTaskNowResponse::release_result() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.RunTaskNowResponse.result)
+  return _impl_.result_.Release();
+}
+inline void RunTaskNowResponse::set_allocated_result(std::string* result) {
+  if (result != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.result_.SetAllocated(result, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.result_.IsDefault()) {
+    _impl_.result_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.RunTaskNowResponse.result)
+}
+
+// string error = 3;
+inline void RunTaskNowResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& RunTaskNowResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.RunTaskNowResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void RunTaskNowResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.RunTaskNowResponse.error)
+}
+inline std::string* RunTaskNowResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.RunTaskNowResponse.error)
+  return _s;
+}
+inline const std::string& RunTaskNowResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void RunTaskNowResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* RunTaskNowResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* RunTaskNowResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.RunTaskNowResponse.error)
+  return _impl_.error_.Release();
+}
+inline void RunTaskNowResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.RunTaskNowResponse.error)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

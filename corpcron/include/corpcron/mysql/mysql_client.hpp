@@ -45,10 +45,12 @@ public:
 
     bool addTask(const TaskMeta& task);
     bool updateTask(const TaskMeta& task);
+    bool updateTaskDefinition(const TaskMeta& task);
     bool deleteTask(const std::string& id);
     bool addHistory(const TaskHistory& history);
     bool getTask(const std::string& id, TaskMeta& task);
     bool getLatestHistory(const std::string& task_id, TaskHistory& history);
+    std::vector<TaskHistory> getHistory(const std::string& task_id, size_t limit);
     std::vector<TaskMeta> getAllTasks();
     std::vector<TaskMeta> getEnabledTasks();
     std::vector<TaskMeta> getDueTasks(size_t limit);

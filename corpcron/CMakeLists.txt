@@ -88,11 +88,12 @@ add_executable(corpcron_rpc_dispatcher_test
     tests/rpc_dispatcher_test.cpp
     generated/rpc.pb.cc
     src/mysql/mysql_client.cpp
+    src/redis/redis_client.cpp
     src/rpc/handler_registry.cpp
     src/rpc/rpc_dispatcher.cpp
     src/scheduler/cron_parser.cpp
 )
-target_link_libraries(corpcron_rpc_dispatcher_test ${Protobuf_LIBRARIES} pthread mysqlcppconn)
+target_link_libraries(corpcron_rpc_dispatcher_test ${Protobuf_LIBRARIES} pthread mysqlcppconn hiredis)
 add_test(NAME rpc_dispatcher_test COMMAND corpcron_rpc_dispatcher_test)
 
 add_executable(corpcron_integration_test

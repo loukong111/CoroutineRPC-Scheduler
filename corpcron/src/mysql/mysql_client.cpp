@@ -126,6 +126,27 @@ bool MySQLClient::updateTask(const TaskMeta& task) {
     }
 }
 
+bool MySQLClient::updateTaskDefinition(const TaskMeta& task) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    try {
+        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
+            "UPDATE tasks SET cron_expr=?, params=?, handler=?, status=?, next_run_at=?, last_run_at=?, retry_count=?, max_retries=? WHERE id=?"));
+        pstmt->setString(1, task.cron_expr);
+        pstmt->setString(2, task.params);
+        pstmt->setString(3, task.handler);
+        pstmt->setInt(4, task.status);
+        set_datetime_or_null(*pstmt, 5, task.next_run_at);
+        set_datetime_or_null(*pstmt, 6, task.last_run_at);
+        pstmt->setInt(7, task.retry_count);
+        pstmt->setInt(8, task.max_retries);
+        pstmt->setString(9, task.id);
+        return pstmt->executeUpdate() > 0;
+    } catch (sql::SQLException &e) {
+        std::cerr << "updateTaskDefinition error: " << e.what() << std::endl;
+        return false;
+    }
+}
+
 bool MySQLClient::deleteTask(const std::string& id) {
     std::lock_guard<std::mutex> lock(mutex_);
     try {
@@ -199,6 +220,41 @@ bool MySQLClient::getLatestHistory(const std::string& task_id, TaskHistory& hist
         std::cerr << "getLatestHistory error: " << e.what() << std::endl;
         return false;
     }
+}
+
+std::vector<TaskHistory> MySQLClient::getHistory(const std::string& task_id, size_t limit) {
+    std::lock_guard<std::mutex> lock(mutex_);
+    std::vector<TaskHistory> history_items;
+    try {
+        std::unique_ptr<sql::PreparedStatement> pstmt;
+        if (task_id.empty()) {
+            pstmt.reset(conn_->prepareStatement(
+                "SELECT task_id, exec_node, success, result, error, start_time, end_time "
+                "FROM task_history ORDER BY id DESC LIMIT ?"));
+            pstmt->setUInt(1, static_cast<unsigned int>(limit));
+        } else {
+            pstmt.reset(conn_->prepareStatement(
+                "SELECT task_id, exec_node, success, result, error, start_time, end_time "
+                "FROM task_history WHERE task_id=? ORDER BY id DESC LIMIT ?"));
+            pstmt->setString(1, task_id);
+            pstmt->setUInt(2, static_cast<unsigned int>(limit));
+        }
+        std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
+        while (res->next()) {
+            TaskHistory history;
+            history.task_id = res->getString("task_id");
+            history.exec_node = res->getString("exec_node");
+            history.success = res->getInt("success") == 1;
+            history.result = res->getString("result");
+            history.error = res->getString("error");
+            history.start_time = res->getString("start_time");
+            history.end_time = res->getString("end_time");
+            history_items.push_back(history);
+        }
+    } catch (sql::SQLException &e) {
+        std::cerr << "getHistory error: " << e.what() << std::endl;
+    }
+    return history_items;
 }
 
 std::vector<TaskMeta> MySQLClient::getAllTasks() {

@@ -37,7 +37,7 @@ int ServerApp::run() {
     startHeartbeat();
     startSignalThread();
 
-    dispatcher_ = std::make_shared<RpcDispatcher>(db_, auth_token_);
+    dispatcher_ = std::make_shared<RpcDispatcher>(db_, redis_, auth_token_);
     server_ = std::make_unique<TcpServer>(bind_host_, port_, dispatcher_, max_connections_);
 
     bool ok = server_->start();
