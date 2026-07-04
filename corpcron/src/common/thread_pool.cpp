@@ -1,5 +1,5 @@
 #include "corpcron/common/thread_pool.hpp"
-#include <iostream>
+#include "corpcron/common/logger.hpp"
 #include <chrono>
 
 namespace corpcron {
@@ -36,6 +36,7 @@ void DynamicThreadPool::enqueue(std::function<void()> task) {
 }
 
 void DynamicThreadPool::workerLoop(int thread_id) {
+    (void)thread_id;
     while (!stop_) {
         std::function<void()> task;
         {
@@ -45,7 +46,7 @@ void DynamicThreadPool::workerLoop(int thread_id) {
                 auto status = cv_.wait_for(lock, std::chrono::seconds(idle_timeout_sec_));
                 --idle_count_;
                 if (status == std::cv_status::timeout && idle_count_ > 0 && current_threads_ > init_threads_) {
-                    // 超时且当前线程数大于初始值，当前线程退出
+                    --current_threads_;
                     break;
                 }
                 if (tasks_.empty()) continue;
@@ -66,7 +67,7 @@ void DynamicThreadPool::adjustPoolSize() {
             workers_.emplace_back(&DynamicThreadPool::workerLoop, this, i);
         }
         current_threads_ = new_threads;
-        std::cout << "ThreadPool: increased to " << current_threads_ << " threads\n";
+        LOG_INFO("ThreadPool increased to " + std::to_string(current_threads_) + " threads");
     }
 }
 

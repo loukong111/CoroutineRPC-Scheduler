@@ -1,8 +1,8 @@
 #include "corpcron/net/epoll_loop.hpp"
+#include "corpcron/common/logger.hpp"
 #include <sys/eventfd.h>
 #include <unistd.h>
 #include <cstring>
-#include <iostream>
 
 namespace corpcron {
 
@@ -15,12 +15,12 @@ EpollLoop::~EpollLoop() {
 bool EpollLoop::init() {
     epoll_fd_ = epoll_create1(0);
     if (epoll_fd_ == -1) {
-        perror("epoll_create1");
+        LOG_ERROR(std::string("epoll_create1 failed: ") + std::strerror(errno));
         return false;
     }
     wake_fd_ = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
     if (wake_fd_ == -1) {
-        perror("eventfd");
+        LOG_ERROR(std::string("eventfd failed: ") + std::strerror(errno));
         return false;
     }
     addFd(wake_fd_, EPOLLIN, [this](int fd, uint32_t) {
@@ -36,7 +36,7 @@ void EpollLoop::run() {
         int n = epoll_wait(epoll_fd_, events_, MAX_EVENTS, -1);
         if (n == -1) {
             if (errno == EINTR) continue;
-            perror("epoll_wait");
+            LOG_ERROR(std::string("epoll_wait failed: ") + std::strerror(errno));
             break;
         }
         for (int i = 0; i < n; ++i) {
@@ -69,7 +69,7 @@ void EpollLoop::addFd(int fd, uint32_t events, EventCallback cb) {
     ev.events = events;
     ev.data.fd = fd;
     if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, fd, &ev) == -1) {
-        perror("epoll_ctl add");
+        LOG_ERROR(std::string("epoll_ctl add failed: ") + std::strerror(errno));
         return;
     }
     callbacks_[fd] = std::move(cb);
@@ -93,7 +93,7 @@ void EpollLoop::addCoroutine(int fd, uint32_t events, CoroutineCallback cb) {
     ev.events = events;
     ev.data.fd = fd;
     if (epoll_ctl(epoll_fd_, EPOLL_CTL_ADD, fd, &ev) == -1) {
-        perror("epoll_ctl add coro");
+        LOG_ERROR(std::string("epoll_ctl add coroutine failed: ") + std::strerror(errno));
         return;
     }
     coro_callbacks_[fd] = std::move(cb);

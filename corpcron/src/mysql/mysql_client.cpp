@@ -1,8 +1,8 @@
 #include "corpcron/mysql/mysql_client.hpp"
+#include "corpcron/common/logger.hpp"
 #include <cppconn/datatype.h>
 #include <ctime>
 #include <iomanip>
-#include <iostream>
 #include <sstream>
 
 namespace corpcron {
@@ -53,6 +53,10 @@ std::string local_timezone_offset() {
     return ss.str();
 }
 
+void log_sql_error(const std::string& operation, const sql::SQLException& e) {
+    LOG_ERROR(operation + " error: " + e.what());
+}
+
 } // namespace
 
 MySQLClient::MySQLClient(const std::string& host, int port,
@@ -66,7 +70,16 @@ MySQLClient::~MySQLClient() {
 }
 
 bool MySQLClient::connect() {
+    std::lock_guard<std::mutex> lock(mutex_);
+    return connectUnlocked();
+}
+
+bool MySQLClient::connectUnlocked() {
     try {
+        if (conn_) {
+            conn_->close();
+            conn_.reset();
+        }
         driver_ = sql::mysql::get_mysql_driver_instance();
         //driver_->connect() 返回的是裸指针 sql::Connection*，而 conn_ 是智能指针。reset() 让 unique_ptr 接管这个裸指针的生命周期
         conn_.reset(driver_->connect(host_ + ":" + std::to_string(port_), user_, password_));
@@ -74,20 +87,35 @@ bool MySQLClient::connect() {
         executeStatement("SET time_zone = '" + local_timezone_offset() + "'");
         return ensureSchema();
     } catch (sql::SQLException &e) {
-        std::cerr << "MySQL connection error: " << e.what() << std::endl;
+        log_sql_error("MySQL connection", e);
         return false;
     }
 }
 
 void MySQLClient::disconnect() {
+    std::lock_guard<std::mutex> lock(mutex_);
     if (conn_) {
         conn_->close();
         conn_.reset();
     }
 }
 
+bool MySQLClient::ensureConnected() {
+    try {
+        if (conn_ && !conn_->isClosed()) {
+            return true;
+        }
+    } catch (sql::SQLException& e) {
+        log_sql_error("MySQL connection health check", e);
+    }
+
+    LOG_WARN("MySQL connection is closed, reconnecting");
+    return connectUnlocked();
+}
+
 bool MySQLClient::addTask(const TaskMeta& task) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "INSERT INTO tasks (id, cron_expr, params, handler, status, next_run_at, retry_count, max_retries) "
@@ -103,31 +131,14 @@ bool MySQLClient::addTask(const TaskMeta& task) {
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "addTask error: " << e.what() << std::endl;
-        return false;
-    }
-}
-
-bool MySQLClient::updateTask(const TaskMeta& task) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    try {
-        std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
-            "UPDATE tasks SET cron_expr=?, params=?, handler=?, status=? WHERE id=?"));
-        pstmt->setString(1, task.cron_expr);
-        pstmt->setString(2, task.params);
-        pstmt->setString(3, task.handler);
-        pstmt->setInt(4, task.status);
-        pstmt->setString(5, task.id);
-        pstmt->execute();
-        return true;
-    } catch (sql::SQLException &e) {
-        std::cerr << "updateTask error: " << e.what() << std::endl;
+        log_sql_error("addTask", e);
         return false;
     }
 }
 
 bool MySQLClient::updateTaskDefinition(const TaskMeta& task) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET cron_expr=?, params=?, handler=?, status=?, next_run_at=?, last_run_at=?, retry_count=?, max_retries=? WHERE id=?"));
@@ -142,13 +153,14 @@ bool MySQLClient::updateTaskDefinition(const TaskMeta& task) {
         pstmt->setString(9, task.id);
         return pstmt->executeUpdate() > 0;
     } catch (sql::SQLException &e) {
-        std::cerr << "updateTaskDefinition error: " << e.what() << std::endl;
+        log_sql_error("updateTaskDefinition", e);
         return false;
     }
 }
 
 bool MySQLClient::deleteTask(const std::string& id) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "DELETE FROM tasks WHERE id=?"));
@@ -156,13 +168,14 @@ bool MySQLClient::deleteTask(const std::string& id) {
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "deleteTask error: " << e.what() << std::endl;
+        log_sql_error("deleteTask", e);
         return false;
     }
 }
 
 bool MySQLClient::addHistory(const TaskHistory& history) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "INSERT INTO task_history (task_id, exec_node, success, result, error, start_time, end_time) "
@@ -177,13 +190,14 @@ bool MySQLClient::addHistory(const TaskHistory& history) {
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "addHistory error: " << e.what() << std::endl;
+        log_sql_error("addHistory", e);
         return false;
     }
 }
 
 bool MySQLClient::getTask(const std::string& id, TaskMeta& task) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "SELECT id, cron_expr, params, handler, status, next_run_at, last_run_at, retry_count, max_retries "
@@ -194,13 +208,14 @@ bool MySQLClient::getTask(const std::string& id, TaskMeta& task) {
         task = task_from_result(*res);
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "getTask error: " << e.what() << std::endl;
+        log_sql_error("getTask", e);
         return false;
     }
 }
 
 bool MySQLClient::getLatestHistory(const std::string& task_id, TaskHistory& history) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "SELECT task_id, exec_node, success, result, error, start_time, end_time "
@@ -217,7 +232,7 @@ bool MySQLClient::getLatestHistory(const std::string& task_id, TaskHistory& hist
         history.end_time = res->getString("end_time");
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "getLatestHistory error: " << e.what() << std::endl;
+        log_sql_error("getLatestHistory", e);
         return false;
     }
 }
@@ -225,6 +240,7 @@ bool MySQLClient::getLatestHistory(const std::string& task_id, TaskHistory& hist
 std::vector<TaskHistory> MySQLClient::getHistory(const std::string& task_id, size_t limit) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<TaskHistory> history_items;
+    if (!ensureConnected()) return history_items;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt;
         if (task_id.empty()) {
@@ -252,7 +268,7 @@ std::vector<TaskHistory> MySQLClient::getHistory(const std::string& task_id, siz
             history_items.push_back(history);
         }
     } catch (sql::SQLException &e) {
-        std::cerr << "getHistory error: " << e.what() << std::endl;
+        log_sql_error("getHistory", e);
     }
     return history_items;
 }
@@ -260,6 +276,7 @@ std::vector<TaskHistory> MySQLClient::getHistory(const std::string& task_id, siz
 std::vector<TaskMeta> MySQLClient::getAllTasks() {
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<TaskMeta> tasks;
+    if (!ensureConnected()) return tasks;
     try {
         std::unique_ptr<sql::Statement> stmt(conn_->createStatement());
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(
@@ -268,7 +285,7 @@ std::vector<TaskMeta> MySQLClient::getAllTasks() {
             tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
-        std::cerr << "getAllTasks error: " << e.what() << std::endl;
+        log_sql_error("getAllTasks", e);
     }
     return tasks;
 }
@@ -276,6 +293,7 @@ std::vector<TaskMeta> MySQLClient::getAllTasks() {
 std::vector<TaskMeta> MySQLClient::getEnabledTasks() {
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<TaskMeta> tasks;
+    if (!ensureConnected()) return tasks;
     try {
         std::unique_ptr<sql::Statement> stmt(conn_->createStatement());
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery(
@@ -285,7 +303,7 @@ std::vector<TaskMeta> MySQLClient::getEnabledTasks() {
             tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
-        std::cerr << "getEnabledTasks error: " << e.what() << std::endl;
+        log_sql_error("getEnabledTasks", e);
     }
     return tasks;
 }
@@ -293,6 +311,7 @@ std::vector<TaskMeta> MySQLClient::getEnabledTasks() {
 std::vector<TaskMeta> MySQLClient::getDueTasks(size_t limit) {
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<TaskMeta> tasks;
+    if (!ensureConnected()) return tasks;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "SELECT id, cron_expr, params, handler, status, next_run_at, last_run_at, retry_count, max_retries "
@@ -304,7 +323,7 @@ std::vector<TaskMeta> MySQLClient::getDueTasks(size_t limit) {
             tasks.push_back(task_from_result(*res));
         }
     } catch (sql::SQLException &e) {
-        std::cerr << "getDueTasks error: " << e.what() << std::endl;
+        log_sql_error("getDueTasks", e);
     }
     return tasks;
 }
@@ -312,6 +331,7 @@ std::vector<TaskMeta> MySQLClient::getDueTasks(size_t limit) {
 bool MySQLClient::updateTaskSchedule(const std::string& id, const std::string& next_run_at,
                                      const std::string& last_run_at, int retry_count) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET next_run_at=?, last_run_at=?, retry_count=? WHERE id=?"));
@@ -322,7 +342,7 @@ bool MySQLClient::updateTaskSchedule(const std::string& id, const std::string& n
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "updateTaskSchedule error: " << e.what() << std::endl;
+        log_sql_error("updateTaskSchedule", e);
         return false;
     }
 }
@@ -330,6 +350,7 @@ bool MySQLClient::updateTaskSchedule(const std::string& id, const std::string& n
 bool MySQLClient::updateTaskRuntime(const std::string& id, int status, const std::string& next_run_at,
                                     const std::string& last_run_at, int retry_count) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET status=?, next_run_at=?, last_run_at=?, retry_count=? WHERE id=?"));
@@ -341,13 +362,14 @@ bool MySQLClient::updateTaskRuntime(const std::string& id, int status, const std
         pstmt->execute();
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "updateTaskRuntime error: " << e.what() << std::endl;
+        log_sql_error("updateTaskRuntime", e);
         return false;
     }
 }
 
 bool MySQLClient::cancelTask(const std::string& id) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return false;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "UPDATE tasks SET status=0 WHERE id=?"));
@@ -360,13 +382,14 @@ bool MySQLClient::cancelTask(const std::string& id) {
         std::unique_ptr<sql::ResultSet> res(exists_stmt->executeQuery());
         return res->next() && res->getInt("cnt") > 0;
     } catch (sql::SQLException &e) {
-        std::cerr << "cancelTask error: " << e.what() << std::endl;
+        log_sql_error("cancelTask", e);
         return false;
     }
 }
 
 int MySQLClient::historyCount(const std::string& task_id) {
     std::lock_guard<std::mutex> lock(mutex_);
+    if (!ensureConnected()) return 0;
     try {
         std::unique_ptr<sql::PreparedStatement> pstmt(conn_->prepareStatement(
             "SELECT COUNT(*) AS cnt FROM task_history WHERE task_id=?"));
@@ -374,7 +397,7 @@ int MySQLClient::historyCount(const std::string& task_id) {
         std::unique_ptr<sql::ResultSet> res(pstmt->executeQuery());
         if (res->next()) return res->getInt("cnt");
     } catch (sql::SQLException &e) {
-        std::cerr << "historyCount error: " << e.what() << std::endl;
+        log_sql_error("historyCount", e);
     }
     return 0;
 }
@@ -417,7 +440,7 @@ bool MySQLClient::ensureSchema() {
         if (!columnExists("task_history", "success")) executeStatement("ALTER TABLE task_history ADD COLUMN success TINYINT NOT NULL DEFAULT 0 AFTER exec_node");
         return true;
     } catch (sql::SQLException &e) {
-        std::cerr << "ensureSchema error: " << e.what() << std::endl;
+        log_sql_error("ensureSchema", e);
         return false;
     }
 }

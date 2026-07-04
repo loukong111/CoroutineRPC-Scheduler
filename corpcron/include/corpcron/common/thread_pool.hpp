@@ -17,7 +17,6 @@ public:
 
     void enqueue(std::function<void()> task);
     void stop();
-    void waitForAll();
 
     size_t taskCount() const;
 

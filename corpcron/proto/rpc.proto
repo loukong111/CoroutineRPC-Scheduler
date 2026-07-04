@@ -150,3 +150,24 @@ message RunTaskNowResponse {
     string result = 2;
     string error = 3;
 }
+
+message GetMetricsRequest {
+    string auth_token = 1;
+}
+message GetMetricsResponse {
+    bool success = 1;
+    string error = 2;
+    uint64 rpc_requests_total = 3;
+    uint64 rpc_success_total = 4;
+    uint64 rpc_error_total = 5;
+    uint64 active_connections = 6;
+    uint64 rejected_connections = 7;
+    uint64 malformed_frames = 8;
+    uint64 bytes_in_total = 9;
+    uint64 bytes_out_total = 10;
+    uint64 task_success_total = 11;
+    uint64 task_failure_total = 12;
+    uint64 lock_acquire_success_total = 13;
+    uint64 lock_acquire_failure_total = 14;
+    uint64 max_task_duration_ms = 15;
+}

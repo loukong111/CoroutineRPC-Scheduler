@@ -1,8 +1,8 @@
 #include "corpcron/scheduler/cron_parser.hpp"
+#include "corpcron/common/logger.hpp"
 #include "corpcron/third_party/croncpp.h"
 #include <chrono>
 #include <ctime>
-#include <iostream>
 
 namespace corpcron {
 
@@ -21,7 +21,7 @@ uint64_t CronParser::nextExecution(const std::string& cron_expr, uint64_t now_ms
         time_t next_sec = std::mktime(const_cast<std::tm*>(&next));
         return static_cast<uint64_t>(next_sec) * 1000;
     } catch (const std::exception& e) {
-        std::cerr << "Cron parse error: " << e.what() << std::endl;
+        LOG_WARN(std::string("Cron parse error: ") + e.what());
         return 0;
     }
 }

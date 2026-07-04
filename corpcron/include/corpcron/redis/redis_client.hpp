@@ -30,6 +30,10 @@ private:
     std::string host_;
     int port_;
     redisContext* ctx_;
+
+    bool connectLocked();
+    bool reconnectLocked();
+    redisReply* command(const char* format, ...);
 };
 
 } // namespace corpcron

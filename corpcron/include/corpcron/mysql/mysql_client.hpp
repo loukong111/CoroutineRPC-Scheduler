@@ -44,7 +44,6 @@ public:
     void disconnect();
 
     bool addTask(const TaskMeta& task);
-    bool updateTask(const TaskMeta& task);
     bool updateTaskDefinition(const TaskMeta& task);
     bool deleteTask(const std::string& id);
     bool addHistory(const TaskHistory& history);
@@ -71,6 +70,8 @@ private:
     std::unique_ptr<sql::Connection> conn_;
     std::mutex mutex_;
 
+    bool connectUnlocked();
+    bool ensureConnected();
     bool ensureSchema();
     bool columnExists(const std::string& table, const std::string& column);
     bool executeStatement(const std::string& sql);

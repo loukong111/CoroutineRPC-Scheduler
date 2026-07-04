@@ -32,6 +32,8 @@ int main(int argc, char* argv[]) {
     int port = argc > 2 ? std::stoi(argv[2]) : 8081;
     int concurrency = argc > 3 ? std::stoi(argv[3]) : 16;
     int requests = argc > 4 ? std::stoi(argv[4]) : 1000;
+    std::string mode = argc > 5 ? argv[5] : getenv_or("CORPCRON_BENCH_MODE", "short");
+    bool reuse_connection = mode == "reuse";
     std::string auth_token = getenv_or("CORPCRON_RPC_AUTH_TOKEN", "");
 
     std::atomic<int> next_request{0};
@@ -45,6 +47,7 @@ int main(int argc, char* argv[]) {
     std::vector<std::thread> workers;
     for (int i = 0; i < concurrency; ++i) {
         workers.emplace_back([&, i]() {
+            corpcron::RpcClient reusable_client(host, port);
             while (true) {
                 int id = next_request.fetch_add(1);
                 if (id >= requests) break;
@@ -55,7 +58,8 @@ int main(int argc, char* argv[]) {
                 std::string payload;
                 req.SerializeToString(&payload);
 
-                corpcron::RpcClient client(host, port);
+                corpcron::RpcClient one_shot_client(host, port);
+                corpcron::RpcClient& client = reuse_connection ? reusable_client : one_shot_client;
                 uint32_t response_serial_id = 0;
                 std::string response_payload;
                 auto begin = std::chrono::steady_clock::now();
@@ -82,6 +86,7 @@ int main(int argc, char* argv[]) {
 
     std::cout << "requests=" << requests
               << " concurrency=" << concurrency
+              << " mode=" << mode
               << " success=" << success.load()
               << " failure=" << failure.load()
               << " elapsed_sec=" << elapsed

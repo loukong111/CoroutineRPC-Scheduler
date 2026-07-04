@@ -1,5 +1,6 @@
 #include "corpcron/rpc/rpc_dispatcher.hpp"
 #include "corpcron/mysql/mysql_client.hpp"
+#include "corpcron/metrics/metrics.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
 #include "corpcron/rpc/protocol.hpp"
@@ -62,8 +63,12 @@ RpcResponse make_error_response(corpcron::rpc::ErrorCode code, const std::string
 RpcDispatcher::RpcDispatcher(std::shared_ptr<MySQLClient> db, std::string auth_token)
     : db_(std::move(db)), auth_token_(std::move(auth_token)) {}
 
-RpcDispatcher::RpcDispatcher(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis, std::string auth_token)
-    : db_(std::move(db)), redis_(std::move(redis)), auth_token_(std::move(auth_token)) {}
+RpcDispatcher::RpcDispatcher(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis,
+                             std::string auth_token, std::string node_id)
+    : db_(std::move(db)),
+      redis_(std::move(redis)),
+      auth_token_(std::move(auth_token)),
+      node_id_(std::move(node_id)) {}
 
 RpcResponse RpcDispatcher::dispatch(uint32_t serial_id, const std::string& payload) const {
     switch (serial_id) {
@@ -89,6 +94,8 @@ RpcResponse RpcDispatcher::dispatch(uint32_t serial_id, const std::string& paylo
             return handleDeleteTask(payload);
         case rpc::kRunTaskNowRequestSerialId:
             return handleRunTaskNow(payload);
+        case rpc::kGetMetricsRequestSerialId:
+            return handleGetMetrics(payload);
         default:
             return make_error_response(corpcron::rpc::UNKNOWN_METHOD,
                                        "Unknown serial_id: " + std::to_string(serial_id));
@@ -317,7 +324,7 @@ RpcResponse RpcDispatcher::handleUpdateTask(const std::string& payload) const {
     task.handler = req.task().handler();
     task.status = req.task().status();
     task.last_run_at = existing.last_run_at;
-    task.retry_count = req.task().retry_count();
+    task.retry_count = existing.retry_count;
     task.max_retries = req.task().max_retries() > 0 ? req.task().max_retries() : 3;
 
     if (task.cron_expr.empty() || task.handler.empty()) {
@@ -439,7 +446,7 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
 
     TaskHistory history;
     history.task_id = task.id;
-    history.exec_node = "manual-rpc";
+    history.exec_node = node_id_.empty() ? "manual-rpc" : node_id_;
     history.success = error.empty();
     history.result = result;
     history.error = error;
@@ -454,6 +461,34 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
     resp.set_result(result);
     resp.set_error(error);
     return make_response(rpc::kRunTaskNowResponseSerialId, resp);
+}
+
+RpcResponse RpcDispatcher::handleGetMetrics(const std::string& payload) const {
+    corpcron::rpc::GetMetricsRequest req;
+    if (!req.ParseFromString(payload)) {
+        return make_error_response(corpcron::rpc::BAD_REQUEST, "Parse GetMetricsRequest failed");
+    }
+    if (!authorized(req.auth_token())) {
+        return make_error_response(corpcron::rpc::UNAUTHORIZED, "Invalid auth token");
+    }
+
+    auto snapshot = Metrics::instance().snapshot();
+    corpcron::rpc::GetMetricsResponse resp;
+    resp.set_success(true);
+    resp.set_rpc_requests_total(snapshot.rpc_requests_total);
+    resp.set_rpc_success_total(snapshot.rpc_success_total);
+    resp.set_rpc_error_total(snapshot.rpc_error_total);
+    resp.set_active_connections(snapshot.active_connections);
+    resp.set_rejected_connections(snapshot.rejected_connections);
+    resp.set_malformed_frames(snapshot.malformed_frames);
+    resp.set_bytes_in_total(snapshot.bytes_in_total);
+    resp.set_bytes_out_total(snapshot.bytes_out_total);
+    resp.set_task_success_total(snapshot.task_success_total);
+    resp.set_task_failure_total(snapshot.task_failure_total);
+    resp.set_lock_acquire_success_total(snapshot.lock_acquire_success_total);
+    resp.set_lock_acquire_failure_total(snapshot.lock_acquire_failure_total);
+    resp.set_max_task_duration_ms(snapshot.max_task_duration_ms);
+    return make_response(rpc::kGetMetricsResponseSerialId, resp);
 }
 
 bool RpcDispatcher::authorized(const std::string& request_token) const {

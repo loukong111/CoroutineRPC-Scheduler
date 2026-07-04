@@ -1,6 +1,7 @@
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/coroutine/task.hpp"
 #include "corpcron/common/logger.hpp"
+#include "corpcron/metrics/metrics.hpp"
 #include "corpcron/rpc/rpc_dispatcher.hpp"
 #include "corpcron/rpc/protocol.hpp"
 #include <sys/socket.h>
@@ -10,6 +11,7 @@
 #include <fcntl.h>
 #include <cstring>
 #include <atomic>
+#include <chrono>
 #include <utility>
 
 namespace corpcron {
@@ -18,6 +20,13 @@ namespace {
 
 std::string errnoMessage(const std::string& action) {
     return action + ": " + std::strerror(errno);
+}
+
+std::string nextRequestId() {
+    static std::atomic<uint64_t> sequence{0};
+    auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    return std::to_string(now_ms) + "-" + std::to_string(sequence.fetch_add(1, std::memory_order_relaxed));
 }
 
 } // namespace
@@ -36,6 +45,7 @@ Task clientHandler(int fd, EpollLoop* loop,
             else if (errno != EAGAIN) LOG_ERROR(errnoMessage("read"));
             break;
         }
+        Metrics::instance().addBytesIn(static_cast<uint64_t>(n));
         read_buffer.append(chunk, n);
         while (true) {
             uint32_t serial_id;
@@ -47,12 +57,23 @@ Task clientHandler(int fd, EpollLoop* loop,
                 break;
             if (status == rpc::DecodeStatus::Malformed || status == rpc::DecodeStatus::TooLarge) {
                 LOG_WARN("Invalid RPC frame, closing connection");
+                Metrics::instance().incMalformedFrame();
                 closed = true;
                 break;
             }
             read_buffer.erase(0, frame_size);
 
+            std::string request_id = nextRequestId();
+            Metrics::instance().incRpcRequest();
+            LOG_INFO("RPC request_id=" + request_id + " serial_id=" + std::to_string(serial_id));
             RpcResponse rpc_response = dispatcher->dispatch(serial_id, payload);
+            if (rpc_response.serial_id == corpcron::rpc::kRpcErrorSerialId) {
+                Metrics::instance().incRpcError();
+            } else {
+                Metrics::instance().incRpcSuccess();
+            }
+            LOG_INFO("RPC request_id=" + request_id + " response_serial_id=" +
+                     std::to_string(rpc_response.serial_id));
 
             std::string response;
             if (!rpc::tryEncode(rpc_response.serial_id, rpc_response.payload, response)) {
@@ -67,6 +88,7 @@ Task clientHandler(int fd, EpollLoop* loop,
                 ssize_t w = send(fd, response.data() + sent, response.size() - sent, MSG_NOSIGNAL);
                 if (w > 0) {
                     sent += static_cast<size_t>(w);
+                    Metrics::instance().addBytesOut(static_cast<uint64_t>(w));
                     continue;
                 }
                 if (w < 0 && (errno == EAGAIN || errno == EWOULDBLOCK)) {
@@ -85,6 +107,7 @@ Task clientHandler(int fd, EpollLoop* loop,
     loop->delFd(fd);
     close(fd);
     if (active_connections) --(*active_connections);
+    Metrics::instance().decActiveConnection();
     co_return;
 }
 
@@ -141,10 +164,12 @@ void TcpServer::handleAccept() {
         inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
         if (active_connections_.load() >= max_connections_) {
             LOG_WARN("Rejecting connection from " + std::string(ip) + ": connection limit reached");
+            Metrics::instance().incRejectedConnection();
             close(client_fd);
             continue;
         }
         ++active_connections_;
+        Metrics::instance().incActiveConnection();
         LOG_INFO("New connection from " + std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port)));
         Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_, &active_connections_));
     }

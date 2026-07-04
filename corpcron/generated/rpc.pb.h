@@ -77,6 +77,12 @@ extern ExecuteTaskRequestDefaultTypeInternal _ExecuteTaskRequest_default_instanc
 class ExecuteTaskResponse;
 struct ExecuteTaskResponseDefaultTypeInternal;
 extern ExecuteTaskResponseDefaultTypeInternal _ExecuteTaskResponse_default_instance_;
+class GetMetricsRequest;
+struct GetMetricsRequestDefaultTypeInternal;
+extern GetMetricsRequestDefaultTypeInternal _GetMetricsRequest_default_instance_;
+class GetMetricsResponse;
+struct GetMetricsResponseDefaultTypeInternal;
+extern GetMetricsResponseDefaultTypeInternal _GetMetricsResponse_default_instance_;
 class ListHistoryRequest;
 struct ListHistoryRequestDefaultTypeInternal;
 extern ListHistoryRequestDefaultTypeInternal _ListHistoryRequest_default_instance_;
@@ -135,6 +141,8 @@ template<> ::corpcron::rpc::EnableTaskRequest* Arena::CreateMaybeMessage<::corpc
 template<> ::corpcron::rpc::EnableTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::EnableTaskResponse>(Arena*);
 template<> ::corpcron::rpc::ExecuteTaskRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ExecuteTaskRequest>(Arena*);
 template<> ::corpcron::rpc::ExecuteTaskResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ExecuteTaskResponse>(Arena*);
+template<> ::corpcron::rpc::GetMetricsRequest* Arena::CreateMaybeMessage<::corpcron::rpc::GetMetricsRequest>(Arena*);
+template<> ::corpcron::rpc::GetMetricsResponse* Arena::CreateMaybeMessage<::corpcron::rpc::GetMetricsResponse>(Arena*);
 template<> ::corpcron::rpc::ListHistoryRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ListHistoryRequest>(Arena*);
 template<> ::corpcron::rpc::ListHistoryResponse* Arena::CreateMaybeMessage<::corpcron::rpc::ListHistoryResponse>(Arena*);
 template<> ::corpcron::rpc::ListServicesRequest* Arena::CreateMaybeMessage<::corpcron::rpc::ListServicesRequest>(Arena*);
@@ -4721,6 +4729,466 @@ class RunTaskNowResponse final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_rpc_2eproto;
 };
+// -------------------------------------------------------------------
+
+class GetMetricsRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.GetMetricsRequest) */ {
+ public:
+  inline GetMetricsRequest() : GetMetricsRequest(nullptr) {}
+  ~GetMetricsRequest() override;
+  explicit PROTOBUF_CONSTEXPR GetMetricsRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetMetricsRequest(const GetMetricsRequest& from);
+  GetMetricsRequest(GetMetricsRequest&& from) noexcept
+    : GetMetricsRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline GetMetricsRequest& operator=(const GetMetricsRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetMetricsRequest& operator=(GetMetricsRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetMetricsRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetMetricsRequest* internal_default_instance() {
+    return reinterpret_cast<const GetMetricsRequest*>(
+               &_GetMetricsRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    25;
+
+  friend void swap(GetMetricsRequest& a, GetMetricsRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetMetricsRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetMetricsRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetMetricsRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetMetricsRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetMetricsRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetMetricsRequest& from) {
+    GetMetricsRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetMetricsRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.GetMetricsRequest";
+  }
+  protected:
+  explicit GetMetricsRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kAuthTokenFieldNumber = 1,
+  };
+  // string auth_token = 1;
+  void clear_auth_token();
+  const std::string& auth_token() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_auth_token(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_auth_token();
+  PROTOBUF_NODISCARD std::string* release_auth_token();
+  void set_allocated_auth_token(std::string* auth_token);
+  private:
+  const std::string& _internal_auth_token() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_auth_token(const std::string& value);
+  std::string* _internal_mutable_auth_token();
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.GetMetricsRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
+// -------------------------------------------------------------------
+
+class GetMetricsResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:corpcron.rpc.GetMetricsResponse) */ {
+ public:
+  inline GetMetricsResponse() : GetMetricsResponse(nullptr) {}
+  ~GetMetricsResponse() override;
+  explicit PROTOBUF_CONSTEXPR GetMetricsResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  GetMetricsResponse(const GetMetricsResponse& from);
+  GetMetricsResponse(GetMetricsResponse&& from) noexcept
+    : GetMetricsResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline GetMetricsResponse& operator=(const GetMetricsResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline GetMetricsResponse& operator=(GetMetricsResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const GetMetricsResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const GetMetricsResponse* internal_default_instance() {
+    return reinterpret_cast<const GetMetricsResponse*>(
+               &_GetMetricsResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    26;
+
+  friend void swap(GetMetricsResponse& a, GetMetricsResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(GetMetricsResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(GetMetricsResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  GetMetricsResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<GetMetricsResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const GetMetricsResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const GetMetricsResponse& from) {
+    GetMetricsResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(GetMetricsResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "corpcron.rpc.GetMetricsResponse";
+  }
+  protected:
+  explicit GetMetricsResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kErrorFieldNumber = 2,
+    kRpcRequestsTotalFieldNumber = 3,
+    kRpcSuccessTotalFieldNumber = 4,
+    kRpcErrorTotalFieldNumber = 5,
+    kActiveConnectionsFieldNumber = 6,
+    kRejectedConnectionsFieldNumber = 7,
+    kMalformedFramesFieldNumber = 8,
+    kBytesInTotalFieldNumber = 9,
+    kBytesOutTotalFieldNumber = 10,
+    kTaskSuccessTotalFieldNumber = 11,
+    kTaskFailureTotalFieldNumber = 12,
+    kLockAcquireSuccessTotalFieldNumber = 13,
+    kLockAcquireFailureTotalFieldNumber = 14,
+    kMaxTaskDurationMsFieldNumber = 15,
+    kSuccessFieldNumber = 1,
+  };
+  // string error = 2;
+  void clear_error();
+  const std::string& error() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_error(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_error();
+  PROTOBUF_NODISCARD std::string* release_error();
+  void set_allocated_error(std::string* error);
+  private:
+  const std::string& _internal_error() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_error(const std::string& value);
+  std::string* _internal_mutable_error();
+  public:
+
+  // uint64 rpc_requests_total = 3;
+  void clear_rpc_requests_total();
+  uint64_t rpc_requests_total() const;
+  void set_rpc_requests_total(uint64_t value);
+  private:
+  uint64_t _internal_rpc_requests_total() const;
+  void _internal_set_rpc_requests_total(uint64_t value);
+  public:
+
+  // uint64 rpc_success_total = 4;
+  void clear_rpc_success_total();
+  uint64_t rpc_success_total() const;
+  void set_rpc_success_total(uint64_t value);
+  private:
+  uint64_t _internal_rpc_success_total() const;
+  void _internal_set_rpc_success_total(uint64_t value);
+  public:
+
+  // uint64 rpc_error_total = 5;
+  void clear_rpc_error_total();
+  uint64_t rpc_error_total() const;
+  void set_rpc_error_total(uint64_t value);
+  private:
+  uint64_t _internal_rpc_error_total() const;
+  void _internal_set_rpc_error_total(uint64_t value);
+  public:
+
+  // uint64 active_connections = 6;
+  void clear_active_connections();
+  uint64_t active_connections() const;
+  void set_active_connections(uint64_t value);
+  private:
+  uint64_t _internal_active_connections() const;
+  void _internal_set_active_connections(uint64_t value);
+  public:
+
+  // uint64 rejected_connections = 7;
+  void clear_rejected_connections();
+  uint64_t rejected_connections() const;
+  void set_rejected_connections(uint64_t value);
+  private:
+  uint64_t _internal_rejected_connections() const;
+  void _internal_set_rejected_connections(uint64_t value);
+  public:
+
+  // uint64 malformed_frames = 8;
+  void clear_malformed_frames();
+  uint64_t malformed_frames() const;
+  void set_malformed_frames(uint64_t value);
+  private:
+  uint64_t _internal_malformed_frames() const;
+  void _internal_set_malformed_frames(uint64_t value);
+  public:
+
+  // uint64 bytes_in_total = 9;
+  void clear_bytes_in_total();
+  uint64_t bytes_in_total() const;
+  void set_bytes_in_total(uint64_t value);
+  private:
+  uint64_t _internal_bytes_in_total() const;
+  void _internal_set_bytes_in_total(uint64_t value);
+  public:
+
+  // uint64 bytes_out_total = 10;
+  void clear_bytes_out_total();
+  uint64_t bytes_out_total() const;
+  void set_bytes_out_total(uint64_t value);
+  private:
+  uint64_t _internal_bytes_out_total() const;
+  void _internal_set_bytes_out_total(uint64_t value);
+  public:
+
+  // uint64 task_success_total = 11;
+  void clear_task_success_total();
+  uint64_t task_success_total() const;
+  void set_task_success_total(uint64_t value);
+  private:
+  uint64_t _internal_task_success_total() const;
+  void _internal_set_task_success_total(uint64_t value);
+  public:
+
+  // uint64 task_failure_total = 12;
+  void clear_task_failure_total();
+  uint64_t task_failure_total() const;
+  void set_task_failure_total(uint64_t value);
+  private:
+  uint64_t _internal_task_failure_total() const;
+  void _internal_set_task_failure_total(uint64_t value);
+  public:
+
+  // uint64 lock_acquire_success_total = 13;
+  void clear_lock_acquire_success_total();
+  uint64_t lock_acquire_success_total() const;
+  void set_lock_acquire_success_total(uint64_t value);
+  private:
+  uint64_t _internal_lock_acquire_success_total() const;
+  void _internal_set_lock_acquire_success_total(uint64_t value);
+  public:
+
+  // uint64 lock_acquire_failure_total = 14;
+  void clear_lock_acquire_failure_total();
+  uint64_t lock_acquire_failure_total() const;
+  void set_lock_acquire_failure_total(uint64_t value);
+  private:
+  uint64_t _internal_lock_acquire_failure_total() const;
+  void _internal_set_lock_acquire_failure_total(uint64_t value);
+  public:
+
+  // uint64 max_task_duration_ms = 15;
+  void clear_max_task_duration_ms();
+  uint64_t max_task_duration_ms() const;
+  void set_max_task_duration_ms(uint64_t value);
+  private:
+  uint64_t _internal_max_task_duration_ms() const;
+  void _internal_set_max_task_duration_ms(uint64_t value);
+  public:
+
+  // bool success = 1;
+  void clear_success();
+  bool success() const;
+  void set_success(bool value);
+  private:
+  bool _internal_success() const;
+  void _internal_set_success(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:corpcron.rpc.GetMetricsResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
+    uint64_t rpc_requests_total_;
+    uint64_t rpc_success_total_;
+    uint64_t rpc_error_total_;
+    uint64_t active_connections_;
+    uint64_t rejected_connections_;
+    uint64_t malformed_frames_;
+    uint64_t bytes_in_total_;
+    uint64_t bytes_out_total_;
+    uint64_t task_success_total_;
+    uint64_t task_failure_total_;
+    uint64_t lock_acquire_success_total_;
+    uint64_t lock_acquire_failure_total_;
+    uint64_t max_task_duration_ms_;
+    bool success_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_rpc_2eproto;
+};
 // ===================================================================
 
 
@@ -8003,9 +8471,401 @@ inline void RunTaskNowResponse::set_allocated_error(std::string* error) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.RunTaskNowResponse.error)
 }
 
+// -------------------------------------------------------------------
+
+// GetMetricsRequest
+
+// string auth_token = 1;
+inline void GetMetricsRequest::clear_auth_token() {
+  _impl_.auth_token_.ClearToEmpty();
+}
+inline const std::string& GetMetricsRequest::auth_token() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsRequest.auth_token)
+  return _internal_auth_token();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void GetMetricsRequest::set_auth_token(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.auth_token_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsRequest.auth_token)
+}
+inline std::string* GetMetricsRequest::mutable_auth_token() {
+  std::string* _s = _internal_mutable_auth_token();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.GetMetricsRequest.auth_token)
+  return _s;
+}
+inline const std::string& GetMetricsRequest::_internal_auth_token() const {
+  return _impl_.auth_token_.Get();
+}
+inline void GetMetricsRequest::_internal_set_auth_token(const std::string& value) {
+  
+  _impl_.auth_token_.Set(value, GetArenaForAllocation());
+}
+inline std::string* GetMetricsRequest::_internal_mutable_auth_token() {
+  
+  return _impl_.auth_token_.Mutable(GetArenaForAllocation());
+}
+inline std::string* GetMetricsRequest::release_auth_token() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.GetMetricsRequest.auth_token)
+  return _impl_.auth_token_.Release();
+}
+inline void GetMetricsRequest::set_allocated_auth_token(std::string* auth_token) {
+  if (auth_token != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.auth_token_.SetAllocated(auth_token, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.auth_token_.IsDefault()) {
+    _impl_.auth_token_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.GetMetricsRequest.auth_token)
+}
+
+// -------------------------------------------------------------------
+
+// GetMetricsResponse
+
+// bool success = 1;
+inline void GetMetricsResponse::clear_success() {
+  _impl_.success_ = false;
+}
+inline bool GetMetricsResponse::_internal_success() const {
+  return _impl_.success_;
+}
+inline bool GetMetricsResponse::success() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.success)
+  return _internal_success();
+}
+inline void GetMetricsResponse::_internal_set_success(bool value) {
+  
+  _impl_.success_ = value;
+}
+inline void GetMetricsResponse::set_success(bool value) {
+  _internal_set_success(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.success)
+}
+
+// string error = 2;
+inline void GetMetricsResponse::clear_error() {
+  _impl_.error_.ClearToEmpty();
+}
+inline const std::string& GetMetricsResponse::error() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.error)
+  return _internal_error();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void GetMetricsResponse::set_error(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.error_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.error)
+}
+inline std::string* GetMetricsResponse::mutable_error() {
+  std::string* _s = _internal_mutable_error();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.GetMetricsResponse.error)
+  return _s;
+}
+inline const std::string& GetMetricsResponse::_internal_error() const {
+  return _impl_.error_.Get();
+}
+inline void GetMetricsResponse::_internal_set_error(const std::string& value) {
+  
+  _impl_.error_.Set(value, GetArenaForAllocation());
+}
+inline std::string* GetMetricsResponse::_internal_mutable_error() {
+  
+  return _impl_.error_.Mutable(GetArenaForAllocation());
+}
+inline std::string* GetMetricsResponse::release_error() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.GetMetricsResponse.error)
+  return _impl_.error_.Release();
+}
+inline void GetMetricsResponse::set_allocated_error(std::string* error) {
+  if (error != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.error_.SetAllocated(error, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.error_.IsDefault()) {
+    _impl_.error_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.GetMetricsResponse.error)
+}
+
+// uint64 rpc_requests_total = 3;
+inline void GetMetricsResponse::clear_rpc_requests_total() {
+  _impl_.rpc_requests_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_rpc_requests_total() const {
+  return _impl_.rpc_requests_total_;
+}
+inline uint64_t GetMetricsResponse::rpc_requests_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.rpc_requests_total)
+  return _internal_rpc_requests_total();
+}
+inline void GetMetricsResponse::_internal_set_rpc_requests_total(uint64_t value) {
+  
+  _impl_.rpc_requests_total_ = value;
+}
+inline void GetMetricsResponse::set_rpc_requests_total(uint64_t value) {
+  _internal_set_rpc_requests_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.rpc_requests_total)
+}
+
+// uint64 rpc_success_total = 4;
+inline void GetMetricsResponse::clear_rpc_success_total() {
+  _impl_.rpc_success_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_rpc_success_total() const {
+  return _impl_.rpc_success_total_;
+}
+inline uint64_t GetMetricsResponse::rpc_success_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.rpc_success_total)
+  return _internal_rpc_success_total();
+}
+inline void GetMetricsResponse::_internal_set_rpc_success_total(uint64_t value) {
+  
+  _impl_.rpc_success_total_ = value;
+}
+inline void GetMetricsResponse::set_rpc_success_total(uint64_t value) {
+  _internal_set_rpc_success_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.rpc_success_total)
+}
+
+// uint64 rpc_error_total = 5;
+inline void GetMetricsResponse::clear_rpc_error_total() {
+  _impl_.rpc_error_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_rpc_error_total() const {
+  return _impl_.rpc_error_total_;
+}
+inline uint64_t GetMetricsResponse::rpc_error_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.rpc_error_total)
+  return _internal_rpc_error_total();
+}
+inline void GetMetricsResponse::_internal_set_rpc_error_total(uint64_t value) {
+  
+  _impl_.rpc_error_total_ = value;
+}
+inline void GetMetricsResponse::set_rpc_error_total(uint64_t value) {
+  _internal_set_rpc_error_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.rpc_error_total)
+}
+
+// uint64 active_connections = 6;
+inline void GetMetricsResponse::clear_active_connections() {
+  _impl_.active_connections_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_active_connections() const {
+  return _impl_.active_connections_;
+}
+inline uint64_t GetMetricsResponse::active_connections() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.active_connections)
+  return _internal_active_connections();
+}
+inline void GetMetricsResponse::_internal_set_active_connections(uint64_t value) {
+  
+  _impl_.active_connections_ = value;
+}
+inline void GetMetricsResponse::set_active_connections(uint64_t value) {
+  _internal_set_active_connections(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.active_connections)
+}
+
+// uint64 rejected_connections = 7;
+inline void GetMetricsResponse::clear_rejected_connections() {
+  _impl_.rejected_connections_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_rejected_connections() const {
+  return _impl_.rejected_connections_;
+}
+inline uint64_t GetMetricsResponse::rejected_connections() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.rejected_connections)
+  return _internal_rejected_connections();
+}
+inline void GetMetricsResponse::_internal_set_rejected_connections(uint64_t value) {
+  
+  _impl_.rejected_connections_ = value;
+}
+inline void GetMetricsResponse::set_rejected_connections(uint64_t value) {
+  _internal_set_rejected_connections(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.rejected_connections)
+}
+
+// uint64 malformed_frames = 8;
+inline void GetMetricsResponse::clear_malformed_frames() {
+  _impl_.malformed_frames_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_malformed_frames() const {
+  return _impl_.malformed_frames_;
+}
+inline uint64_t GetMetricsResponse::malformed_frames() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.malformed_frames)
+  return _internal_malformed_frames();
+}
+inline void GetMetricsResponse::_internal_set_malformed_frames(uint64_t value) {
+  
+  _impl_.malformed_frames_ = value;
+}
+inline void GetMetricsResponse::set_malformed_frames(uint64_t value) {
+  _internal_set_malformed_frames(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.malformed_frames)
+}
+
+// uint64 bytes_in_total = 9;
+inline void GetMetricsResponse::clear_bytes_in_total() {
+  _impl_.bytes_in_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_bytes_in_total() const {
+  return _impl_.bytes_in_total_;
+}
+inline uint64_t GetMetricsResponse::bytes_in_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.bytes_in_total)
+  return _internal_bytes_in_total();
+}
+inline void GetMetricsResponse::_internal_set_bytes_in_total(uint64_t value) {
+  
+  _impl_.bytes_in_total_ = value;
+}
+inline void GetMetricsResponse::set_bytes_in_total(uint64_t value) {
+  _internal_set_bytes_in_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.bytes_in_total)
+}
+
+// uint64 bytes_out_total = 10;
+inline void GetMetricsResponse::clear_bytes_out_total() {
+  _impl_.bytes_out_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_bytes_out_total() const {
+  return _impl_.bytes_out_total_;
+}
+inline uint64_t GetMetricsResponse::bytes_out_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.bytes_out_total)
+  return _internal_bytes_out_total();
+}
+inline void GetMetricsResponse::_internal_set_bytes_out_total(uint64_t value) {
+  
+  _impl_.bytes_out_total_ = value;
+}
+inline void GetMetricsResponse::set_bytes_out_total(uint64_t value) {
+  _internal_set_bytes_out_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.bytes_out_total)
+}
+
+// uint64 task_success_total = 11;
+inline void GetMetricsResponse::clear_task_success_total() {
+  _impl_.task_success_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_task_success_total() const {
+  return _impl_.task_success_total_;
+}
+inline uint64_t GetMetricsResponse::task_success_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.task_success_total)
+  return _internal_task_success_total();
+}
+inline void GetMetricsResponse::_internal_set_task_success_total(uint64_t value) {
+  
+  _impl_.task_success_total_ = value;
+}
+inline void GetMetricsResponse::set_task_success_total(uint64_t value) {
+  _internal_set_task_success_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.task_success_total)
+}
+
+// uint64 task_failure_total = 12;
+inline void GetMetricsResponse::clear_task_failure_total() {
+  _impl_.task_failure_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_task_failure_total() const {
+  return _impl_.task_failure_total_;
+}
+inline uint64_t GetMetricsResponse::task_failure_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.task_failure_total)
+  return _internal_task_failure_total();
+}
+inline void GetMetricsResponse::_internal_set_task_failure_total(uint64_t value) {
+  
+  _impl_.task_failure_total_ = value;
+}
+inline void GetMetricsResponse::set_task_failure_total(uint64_t value) {
+  _internal_set_task_failure_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.task_failure_total)
+}
+
+// uint64 lock_acquire_success_total = 13;
+inline void GetMetricsResponse::clear_lock_acquire_success_total() {
+  _impl_.lock_acquire_success_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_lock_acquire_success_total() const {
+  return _impl_.lock_acquire_success_total_;
+}
+inline uint64_t GetMetricsResponse::lock_acquire_success_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.lock_acquire_success_total)
+  return _internal_lock_acquire_success_total();
+}
+inline void GetMetricsResponse::_internal_set_lock_acquire_success_total(uint64_t value) {
+  
+  _impl_.lock_acquire_success_total_ = value;
+}
+inline void GetMetricsResponse::set_lock_acquire_success_total(uint64_t value) {
+  _internal_set_lock_acquire_success_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.lock_acquire_success_total)
+}
+
+// uint64 lock_acquire_failure_total = 14;
+inline void GetMetricsResponse::clear_lock_acquire_failure_total() {
+  _impl_.lock_acquire_failure_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_lock_acquire_failure_total() const {
+  return _impl_.lock_acquire_failure_total_;
+}
+inline uint64_t GetMetricsResponse::lock_acquire_failure_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.lock_acquire_failure_total)
+  return _internal_lock_acquire_failure_total();
+}
+inline void GetMetricsResponse::_internal_set_lock_acquire_failure_total(uint64_t value) {
+  
+  _impl_.lock_acquire_failure_total_ = value;
+}
+inline void GetMetricsResponse::set_lock_acquire_failure_total(uint64_t value) {
+  _internal_set_lock_acquire_failure_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.lock_acquire_failure_total)
+}
+
+// uint64 max_task_duration_ms = 15;
+inline void GetMetricsResponse::clear_max_task_duration_ms() {
+  _impl_.max_task_duration_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_max_task_duration_ms() const {
+  return _impl_.max_task_duration_ms_;
+}
+inline uint64_t GetMetricsResponse::max_task_duration_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.max_task_duration_ms)
+  return _internal_max_task_duration_ms();
+}
+inline void GetMetricsResponse::_internal_set_max_task_duration_ms(uint64_t value) {
+  
+  _impl_.max_task_duration_ms_ = value;
+}
+inline void GetMetricsResponse::set_max_task_duration_ms(uint64_t value) {
+  _internal_set_max_task_duration_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.max_task_duration_ms)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

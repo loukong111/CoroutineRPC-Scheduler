@@ -61,5 +61,15 @@ int main() {
     auto db_missing = dispatcher.dispatch(corpcron::rpc::kSubmitTaskRequestSerialId, submit_payload);
     assert_error(db_missing, corpcron::rpc::DB_ERROR);
 
+    corpcron::rpc::GetMetricsRequest metrics_request;
+    metrics_request.set_auth_token("secret");
+    std::string metrics_payload;
+    metrics_request.SerializeToString(&metrics_payload);
+    auto metrics_response = dispatcher.dispatch(corpcron::rpc::kGetMetricsRequestSerialId, metrics_payload);
+    assert(metrics_response.serial_id == corpcron::rpc::kGetMetricsResponseSerialId);
+    corpcron::rpc::GetMetricsResponse metrics;
+    assert(metrics.ParseFromString(metrics_response.payload));
+    assert(metrics.success());
+
     return 0;
 }

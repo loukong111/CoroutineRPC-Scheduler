@@ -1,6 +1,7 @@
 #include "corpcron/scheduler/task_scheduler.hpp"
 #include "corpcron/common/config.hpp"
 #include "corpcron/common/logger.hpp"
+#include "corpcron/metrics/metrics.hpp"
 #include "corpcron/scheduler/cron_parser.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
 #include "corpcron/rpc/protocol.hpp"
@@ -125,6 +126,7 @@ void TaskScheduler::scanAndDispatch() {
         std::string lock_value = node_id_;
         constexpr int lock_ttl_sec = 60;
         if (redis_->lock(lock_key, lock_value, lock_ttl_sec, 100)) {
+            Metrics::instance().incLockAcquireSuccess();
             thread_pool_->enqueue([this, task, lock_key, lock_value]() {
                 constexpr int lock_ttl_sec = 60;
                 lock_renewer_->add(lock_key, lock_value, lock_ttl_sec);
@@ -138,6 +140,14 @@ void TaskScheduler::scanAndDispatch() {
                     outcome.error = e.what();
                 }
                 auto end = std::chrono::system_clock::now();
+                auto duration_ms = static_cast<uint64_t>(
+                    std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                Metrics::instance().observeTaskDuration(duration_ms);
+                if (outcome.success) {
+                    Metrics::instance().incTaskSuccess();
+                } else {
+                    Metrics::instance().incTaskFailure();
+                }
 
                 TaskHistory history;
                 history.task_id = task.id;
@@ -181,6 +191,7 @@ void TaskScheduler::scanAndDispatch() {
                 }
             });
         } else {
+            Metrics::instance().incLockAcquireFailure();
             LOG_INFO("Node " + node_id_ + " failed to get lock for task " + task.id);
         }
     }
@@ -218,7 +229,10 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
     RpcClient client(host, port);
     uint32_t response_serial_id = 0;
     std::string resp_data;
-    if (client.call(corpcron::rpc::kExecuteTaskRequestSerialId, req_data, response_serial_id, resp_data, 5000)) {
+    int task_timeout_ms = Config::instance().getInt("scheduler.task_timeout_ms", 5000);
+    if (task_timeout_ms <= 0) task_timeout_ms = 5000;
+    if (client.call(corpcron::rpc::kExecuteTaskRequestSerialId, req_data, response_serial_id, resp_data,
+                    task_timeout_ms)) {
         if (response_serial_id == corpcron::rpc::kRpcErrorSerialId) {
             corpcron::rpc::RpcError error;
             if (error.ParseFromString(resp_data)) {
@@ -240,7 +254,8 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
             LOG_ERROR(outcome.error);
         }
     } else {
-        outcome.error = "RPC call to " + endpoint + " failed";
+        outcome.error = "RPC call to " + endpoint + " failed or timed out after " +
+                        std::to_string(task_timeout_ms) + " ms";
         LOG_ERROR(outcome.error);
     }
     return outcome;

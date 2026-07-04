@@ -1,8 +1,8 @@
 #include "corpcron/app/server_app.hpp"
 #include "corpcron/common/config.hpp"
+#include "corpcron/common/logger.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
 #include <fcntl.h>
-#include <iostream>
 #include <pthread.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -37,7 +37,7 @@ int ServerApp::run() {
     startHeartbeat();
     startSignalThread();
 
-    dispatcher_ = std::make_shared<RpcDispatcher>(db_, redis_, auth_token_);
+    dispatcher_ = std::make_shared<RpcDispatcher>(db_, redis_, auth_token_, node_id_);
     server_ = std::make_unique<TcpServer>(bind_host_, port_, dispatcher_, max_connections_);
 
     bool ok = server_->start();
@@ -63,7 +63,7 @@ void ServerApp::stop() {
 
 bool ServerApp::loadConfig() {
     if (!Config::instance().load(config_path_)) {
-        std::cerr << "Failed to load config: " << config_path_ << std::endl;
+        LOG_ERROR("Failed to load config: " + config_path_);
         return false;
     }
 
@@ -82,7 +82,7 @@ bool ServerApp::maybeDaemonize() {
     bool daemon = Config::instance().getInt("server.daemon", 1) == 1;
     if (!daemon) return true;
     if (!daemonize()) {
-        std::cerr << "Failed to daemonize" << std::endl;
+        LOG_ERROR("Failed to daemonize");
         return false;
     }
     return true;
@@ -93,7 +93,7 @@ bool ServerApp::setupSignalHandling() {
     sigaddset(&signal_set_, SIGINT);
     sigaddset(&signal_set_, SIGTERM);
     if (pthread_sigmask(SIG_BLOCK, &signal_set_, nullptr) != 0) {
-        std::cerr << "Failed to block signals" << std::endl;
+        LOG_ERROR("Failed to block signals");
         return false;
     }
     return true;
@@ -104,7 +104,7 @@ bool ServerApp::initRedis() {
     int redis_port = Config::instance().getInt("redis.port", 6380);
     redis_ = std::make_shared<RedisClient>(redis_host, redis_port);
     if (!redis_->connect()) {
-        std::cerr << "Failed to connect to Redis" << std::endl;
+        LOG_ERROR("Failed to connect to Redis");
         return false;
     }
     return true;
@@ -118,7 +118,7 @@ bool ServerApp::initMySQL() {
     std::string mysql_db = Config::instance().get("mysql.database", "corpcron");
     db_ = std::make_shared<MySQLClient>(mysql_host, mysql_port, mysql_user, mysql_pass, mysql_db);
     if (!db_->connect()) {
-        std::cerr << "Failed to connect to MySQL" << std::endl;
+        LOG_ERROR("Failed to connect to MySQL");
         return false;
     }
     return true;
@@ -138,7 +138,7 @@ void ServerApp::startScheduler() {
 bool ServerApp::registerService() {
     service_registered_ = redis_->registerService("rpc", endpoint_, 30);
     if (!service_registered_) {
-        std::cerr << "Failed to register RPC service" << std::endl;
+        LOG_ERROR("Failed to register RPC service");
     }
     return service_registered_;
 }

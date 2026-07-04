@@ -35,6 +35,8 @@ constexpr uint32_t kDeleteTaskRequestSerialId = 19;
 constexpr uint32_t kDeleteTaskResponseSerialId = 20;
 constexpr uint32_t kRunTaskNowRequestSerialId = 21;
 constexpr uint32_t kRunTaskNowResponseSerialId = 22;
+constexpr uint32_t kGetMetricsRequestSerialId = 23;
+constexpr uint32_t kGetMetricsResponseSerialId = 24;
 constexpr uint32_t kRpcErrorSerialId = 100;
 
 enum class DecodeStatus {

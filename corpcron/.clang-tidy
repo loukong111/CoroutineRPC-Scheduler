@@ -1,0 +1,18 @@
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*
+WarningsAsErrors: ''
+HeaderFilterRegex: '^(include|src|tests|tools|client)/'
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key: cppcoreguidelines-avoid-magic-numbers.IgnoredIntegerValues
+    value: '0;1;2;3;4;5;8;10;30;50;64;100;1000'
+  - key: readability-magic-numbers.IgnoredIntegerValues
+    value: '0;1;2;3;4;5;8;10;30;50;64;100;1000'
+  - key: readability-function-cognitive-complexity.Threshold
+    value: '35'

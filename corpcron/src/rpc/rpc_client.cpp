@@ -7,7 +7,6 @@
 #include <cstring>
 #include <cerrno>
 #include <poll.h>
-#include <iostream>
 #include <vector>
 
 namespace corpcron {
@@ -62,6 +61,7 @@ RpcClient::~RpcClient() {
 }
 
 bool RpcClient::connect() {
+    if (sock_fd_ != -1) return true;
     sock_fd_ = socket(AF_INET, SOCK_STREAM, 0);
     if (sock_fd_ < 0) return false;
     struct sockaddr_in addr;
@@ -88,6 +88,10 @@ void RpcClient::disconnect() {
     }
 }
 
+bool RpcClient::ensureConnected() {
+    return sock_fd_ != -1 || connect();
+}
+
 bool RpcClient::call(uint32_t serial_id, const std::string& request_data, std::string& response_data, int timeout_ms) {
     uint32_t response_serial_id = 0;
     return call(serial_id, request_data, response_serial_id, response_data, timeout_ms);
@@ -95,7 +99,7 @@ bool RpcClient::call(uint32_t serial_id, const std::string& request_data, std::s
 
 bool RpcClient::call(uint32_t serial_id, const std::string& request_data, uint32_t& response_serial_id,
                      std::string& response_data, int timeout_ms) {
-    if (!connect()) return false;
+    if (!ensureConnected()) return false;
 
     std::string data;
     if (!rpc::tryEncode(serial_id, request_data, data)) {
@@ -131,7 +135,6 @@ bool RpcClient::call(uint32_t serial_id, const std::string& request_data, uint32
     size_t frame_size = 0;
     if (rpc::tryDecodeFrame(frame.data(), frame.size(), response_serial_id, payload, frame_size) == rpc::DecodeStatus::Complete) {
         response_data = payload;
-        disconnect();
         return true;
     }
     disconnect();

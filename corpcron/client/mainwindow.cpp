@@ -9,6 +9,10 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QStringList>
+#include <QVector>
+#include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
 #include "corpcron/rpc/protocol.hpp"
 #include "rpc.pb.h"
 
@@ -189,6 +193,91 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     servicesLayout->addWidget(servicesTable);
     tabs->addTab(servicesTab, "服务发现");
 
+    auto *metricsTab = new QWidget;
+    auto *metricsLayout = new QVBoxLayout(metricsTab);
+    auto *metricsToolbar = new QHBoxLayout;
+    refreshMetricsBtn = new QPushButton("刷新指标");
+    metricsToolbar->addStretch(1);
+    metricsToolbar->addWidget(refreshMetricsBtn);
+    metricsLayout->addLayout(metricsToolbar);
+    metricsTable = new QTableWidget;
+    metricsTable->setColumnCount(2);
+    metricsTable->setHorizontalHeaderLabels({"Metric", "Value"});
+    metricsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    metricsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    metricsTable->horizontalHeader()->setStretchLastSection(true);
+    metricsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    metricsLayout->addWidget(metricsTable);
+    tabs->addTab(metricsTab, "运行指标");
+
+    auto *demoTab = new QWidget;
+    auto *demoLayout = new QVBoxLayout(demoTab);
+    auto *runtimeBox = new QGroupBox("环境与服务");
+    auto *runtimeLayout = new QHBoxLayout(runtimeBox);
+    startDepsBtn = new QPushButton("启动依赖");
+    stopDepsBtn = new QPushButton("停止依赖");
+    resetDepsBtn = new QPushButton("重置依赖");
+    startServerBtn = new QPushButton("启动服务端");
+    stopServerBtn = new QPushButton("停止服务端");
+    startSecondServerBtn = new QPushButton("启动二节点");
+    stopSecondServerBtn = new QPushButton("停止二节点");
+    demoCheckBtn = new QPushButton("环境检查");
+    cleanDataBtn = new QPushButton("清理数据");
+    runCheckBtn = new QPushButton("构建测试");
+    runIntegrationCheckBtn = new QPushButton("集成/E2E");
+    dockerBuildBtn = new QPushButton("构建镜像");
+    showBenchmarkResultBtn = new QPushButton("查看压测结果");
+    showDeployDocBtn = new QPushButton("查看部署文档");
+    runtimeLayout->addWidget(startDepsBtn);
+    runtimeLayout->addWidget(stopDepsBtn);
+    runtimeLayout->addWidget(resetDepsBtn);
+    runtimeLayout->addWidget(startServerBtn);
+    runtimeLayout->addWidget(stopServerBtn);
+    runtimeLayout->addWidget(startSecondServerBtn);
+    runtimeLayout->addWidget(stopSecondServerBtn);
+    runtimeLayout->addWidget(demoCheckBtn);
+    runtimeLayout->addWidget(cleanDataBtn);
+    runtimeLayout->addWidget(runCheckBtn);
+    runtimeLayout->addWidget(runIntegrationCheckBtn);
+    runtimeLayout->addWidget(dockerBuildBtn);
+    runtimeLayout->addWidget(showBenchmarkResultBtn);
+    runtimeLayout->addWidget(showDeployDocBtn);
+    demoLayout->addWidget(runtimeBox);
+
+    auto *benchmarkBox = new QGroupBox("压测");
+    auto *benchmarkLayout = new QHBoxLayout(benchmarkBox);
+    benchConcurrencySpin = new QSpinBox;
+    benchConcurrencySpin->setRange(1, 512);
+    benchConcurrencySpin->setValue(16);
+    benchRequestsSpin = new QSpinBox;
+    benchRequestsSpin->setRange(1, 1000000);
+    benchRequestsSpin->setValue(1000);
+    benchmarkShortBtn = new QPushButton("短连接压测");
+    benchmarkReuseBtn = new QPushButton("长连接压测");
+    benchmarkLayout->addWidget(new QLabel("Concurrency"));
+    benchmarkLayout->addWidget(benchConcurrencySpin);
+    benchmarkLayout->addWidget(new QLabel("Requests"));
+    benchmarkLayout->addWidget(benchRequestsSpin);
+    benchmarkLayout->addWidget(benchmarkShortBtn);
+    benchmarkLayout->addWidget(benchmarkReuseBtn);
+    demoLayout->addWidget(benchmarkBox);
+
+    auto *diagnosticBox = new QGroupBox("协议异常演示");
+    auto *diagnosticLayout = new QHBoxLayout(diagnosticBox);
+    authFailureBtn = new QPushButton("鉴权失败");
+    unknownRpcBtn = new QPushButton("未知方法");
+    badFrameBtn = new QPushButton("坏包断连");
+    diagnosticLayout->addWidget(authFailureBtn);
+    diagnosticLayout->addWidget(unknownRpcBtn);
+    diagnosticLayout->addWidget(badFrameBtn);
+    diagnosticLayout->addStretch(1);
+    demoLayout->addWidget(diagnosticBox);
+
+    toolOutput = new QPlainTextEdit;
+    toolOutput->setReadOnly(true);
+    demoLayout->addWidget(toolOutput, 1);
+    tabs->addTab(demoTab, "演示控制台");
+
     auto *logBox = new QGroupBox("响应日志");
     auto *logLayout = new QVBoxLayout(logBox);
     logView = new QPlainTextEdit;
@@ -211,6 +300,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(refreshTasksBtn, &QPushButton::clicked, this, &MainWindow::onRefreshTasks);
     connect(refreshHistoryBtn, &QPushButton::clicked, this, &MainWindow::onRefreshHistory);
     connect(refreshServicesBtn, &QPushButton::clicked, this, &MainWindow::onRefreshServices);
+    connect(refreshMetricsBtn, &QPushButton::clicked, this, &MainWindow::onRefreshMetrics);
+    connect(startDepsBtn, &QPushButton::clicked, this, &MainWindow::onStartDependencies);
+    connect(stopDepsBtn, &QPushButton::clicked, this, &MainWindow::onStopDependencies);
+    connect(resetDepsBtn, &QPushButton::clicked, this, &MainWindow::onResetDependencies);
+    connect(startServerBtn, &QPushButton::clicked, this, &MainWindow::onStartServer);
+    connect(stopServerBtn, &QPushButton::clicked, this, &MainWindow::onStopServer);
+    connect(startSecondServerBtn, &QPushButton::clicked, this, &MainWindow::onStartSecondServer);
+    connect(stopSecondServerBtn, &QPushButton::clicked, this, &MainWindow::onStopSecondServer);
+    connect(demoCheckBtn, &QPushButton::clicked, this, &MainWindow::onDemoCheck);
+    connect(cleanDataBtn, &QPushButton::clicked, this, &MainWindow::onCleanDemoData);
+    connect(runCheckBtn, &QPushButton::clicked, this, &MainWindow::onRunCheck);
+    connect(runIntegrationCheckBtn, &QPushButton::clicked, this, &MainWindow::onRunIntegrationCheck);
+    connect(dockerBuildBtn, &QPushButton::clicked, this, &MainWindow::onDockerBuild);
+    connect(showBenchmarkResultBtn, &QPushButton::clicked, this, &MainWindow::onShowBenchmarkResult);
+    connect(showDeployDocBtn, &QPushButton::clicked, this, &MainWindow::onShowDeployDoc);
+    connect(benchmarkShortBtn, &QPushButton::clicked, this, &MainWindow::onBenchmarkShort);
+    connect(benchmarkReuseBtn, &QPushButton::clicked, this, &MainWindow::onBenchmarkReuse);
+    connect(authFailureBtn, &QPushButton::clicked, this, &MainWindow::onAuthFailureTest);
+    connect(unknownRpcBtn, &QPushButton::clicked, this, &MainWindow::onUnknownRpcTest);
+    connect(badFrameBtn, &QPushButton::clicked, this, &MainWindow::onBadFrameTest);
     connect(tasksTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::onTaskSelectionChanged);
     connect(autoRefreshCheck, &QCheckBox::toggled, this, &MainWindow::onAutoRefreshChanged);
     connect(clearLogBtn, &QPushButton::clicked, logView, &QPlainTextEdit::clear);
@@ -224,12 +333,67 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(socket, &QTcpSocket::connected, this, &MainWindow::onSocketConnected);
     connect(socket, &QTcpSocket::disconnected, this, &MainWindow::onSocketDisconnected);
     connect(socket, &QTcpSocket::errorOccurred, this, &MainWindow::onSocketError);
+
+    toolProcess = new QProcess(this);
+    toolProcess->setProcessChannelMode(QProcess::MergedChannels);
+    connect(toolProcess, &QProcess::readyReadStandardOutput, this, [this]() {
+        appendToolOutput(QString::fromLocal8Bit(toolProcess->readAllStandardOutput()));
+    });
+    connect(toolProcess, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
+        appendToolOutput(QString("\n[tool finished] exit=%1 status=%2\n")
+                             .arg(exitCode)
+                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+        updateUiState();
+    });
+
+    serverProcess = new QProcess(this);
+    serverProcess->setProcessChannelMode(QProcess::MergedChannels);
+    connect(serverProcess, &QProcess::readyReadStandardOutput, this, [this]() {
+        appendToolOutput(QString::fromLocal8Bit(serverProcess->readAllStandardOutput()));
+    });
+    connect(serverProcess, &QProcess::started, this, [this]() {
+        appendToolOutput("[server started]\n");
+        updateUiState();
+    });
+    connect(serverProcess, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
+        appendToolOutput(QString("\n[server finished] exit=%1 status=%2\n")
+                             .arg(exitCode)
+                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+        updateUiState();
+    });
+
+    server2Process = new QProcess(this);
+    server2Process->setProcessChannelMode(QProcess::MergedChannels);
+    connect(server2Process, &QProcess::readyReadStandardOutput, this, [this]() {
+        appendToolOutput(QString::fromLocal8Bit(server2Process->readAllStandardOutput()));
+    });
+    connect(server2Process, &QProcess::started, this, [this]() {
+        appendToolOutput("[server2 started]\n");
+        updateUiState();
+    });
+    connect(server2Process, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
+        appendToolOutput(QString("\n[server2 finished] exit=%1 status=%2\n")
+                             .arg(exitCode)
+                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+        updateUiState();
+    });
     updateUiState();
 }
 
 MainWindow::~MainWindow() {
     if (socket->state() == QAbstractSocket::ConnectedState)
         socket->disconnectFromHost();
+    if (serverProcess && serverProcess->state() != QProcess::NotRunning) {
+        serverProcess->terminate();
+        if (!serverProcess->waitForFinished(3000)) serverProcess->kill();
+    }
+    if (server2Process && server2Process->state() != QProcess::NotRunning) {
+        server2Process->terminate();
+        if (!server2Process->waitForFinished(3000)) server2Process->kill();
+    }
+    if (toolProcess && toolProcess->state() != QProcess::NotRunning) {
+        toolProcess->kill();
+    }
 }
 
 void MainWindow::onConnect() {
@@ -423,6 +587,135 @@ void MainWindow::onRefreshServices() {
     sendFrame(corpcron::rpc::kListServicesRequestSerialId, payload, "ListServices");
 }
 
+void MainWindow::onRefreshMetrics() {
+    corpcron::rpc::GetMetricsRequest req;
+    req.set_auth_token(authToken());
+
+    std::string payload;
+    req.SerializeToString(&payload);
+    sendFrame(corpcron::rpc::kGetMetricsRequestSerialId, payload, "GetMetrics");
+}
+
+void MainWindow::onStartDependencies() {
+    runTool("docker", {"compose", "up", "-d"}, "docker compose up");
+}
+
+void MainWindow::onStopDependencies() {
+    runTool("docker", {"compose", "down"}, "docker compose down");
+}
+
+void MainWindow::onResetDependencies() {
+    if (QMessageBox::question(this, "确认重置", "这会执行 docker compose down -v 并删除演示数据库卷，确定继续吗？") !=
+        QMessageBox::Yes) {
+        return;
+    }
+    runTool("docker", {"compose", "down", "-v"}, "docker compose down -v");
+}
+
+void MainWindow::onStartServer() {
+    startServerProcess(serverProcess, "config/server.conf", "server");
+}
+
+void MainWindow::onStopServer() {
+    if (serverProcess->state() == QProcess::NotRunning) {
+        appendToolOutput("[server is not running by this Qt client]\n");
+        return;
+    }
+    appendToolOutput("[stopping server]\n");
+    serverProcess->terminate();
+}
+
+void MainWindow::onStartSecondServer() {
+    startServerProcess(server2Process, "config/server2.conf", "server2");
+}
+
+void MainWindow::onStopSecondServer() {
+    if (server2Process->state() == QProcess::NotRunning) {
+        appendToolOutput("[server2 is not running by this Qt client]\n");
+        return;
+    }
+    appendToolOutput("[stopping server2]\n");
+    server2Process->terminate();
+}
+
+void MainWindow::onDemoCheck() {
+    runTool("./scripts/demo_check.sh", {}, "demo_check");
+}
+
+void MainWindow::onCleanDemoData() {
+    runTool("./scripts/clean_demo_data.sh", {}, "clean_demo_data");
+}
+
+void MainWindow::onRunCheck() {
+    runTool("./scripts/check.sh", {}, "check");
+}
+
+void MainWindow::onRunIntegrationCheck() {
+    runTool("./scripts/check.sh", {"--compose"}, "integration check");
+}
+
+void MainWindow::onDockerBuild() {
+    runTool("docker", {"build", "-t", "corpcron:local", "."}, "docker build");
+}
+
+void MainWindow::onShowBenchmarkResult() {
+    runTool("bash", {"-lc", "cat docs/assets/benchmark/latest.txt 2>/dev/null || echo 'No benchmark result yet.'"},
+            "show benchmark result");
+}
+
+void MainWindow::onShowDeployDoc() {
+    runTool("bash", {"-lc", "printf '%s\\n' '== deploy.md ==' && cat docs/deploy.md && printf '%s\\n' '\\n== systemd/corpcron.service ==' && cat systemd/corpcron.service"},
+            "show deploy doc");
+}
+
+void MainWindow::onBenchmarkShort() {
+    runTool("./scripts/benchmark.sh",
+            {hostEdit->text(), QString::number(portSpin->value()),
+             QString::number(benchConcurrencySpin->value()),
+             QString::number(benchRequestsSpin->value()), "short"},
+            "benchmark short");
+}
+
+void MainWindow::onBenchmarkReuse() {
+    runTool("./scripts/benchmark.sh",
+            {hostEdit->text(), QString::number(portSpin->value()),
+             QString::number(benchConcurrencySpin->value()),
+             QString::number(benchRequestsSpin->value()), "reuse"},
+            "benchmark reuse");
+}
+
+void MainWindow::onAuthFailureTest() {
+    corpcron::rpc::EchoRequest req;
+    req.set_message("auth-failure-demo");
+    req.set_auth_token("__wrong_token__");
+    std::string payload;
+    req.SerializeToString(&payload);
+    appendLog("如果服务端未配置 rpc.auth_token，该请求会被正常放行");
+    sendFrame(corpcron::rpc::kEchoRequestSerialId, payload, "AuthFailureTest");
+}
+
+void MainWindow::onUnknownRpcTest() {
+    sendFrame(999999, "", "UnknownRpcTest");
+}
+
+void MainWindow::onBadFrameTest() {
+    if (socket->state() != QAbstractSocket::ConnectedState) {
+        QMessageBox::warning(this, "提示", "请先连接服务器");
+        return;
+    }
+    QByteArray badFrame;
+    badFrame.append(char(0));
+    badFrame.append(char(0));
+    badFrame.append(char(0));
+    badFrame.append(char(1));
+    badFrame.append(char(0));
+    badFrame.append(char(0));
+    badFrame.append(char(0));
+    badFrame.append(char(1));
+    socket->write(badFrame);
+    appendLog("BadFrame 请求已发送，服务端应关闭连接并记录 malformed frame");
+}
+
 void MainWindow::onTaskSelectionChanged() {
     auto items = tasksTable->selectedItems();
     if (items.isEmpty()) return;
@@ -453,6 +746,7 @@ void MainWindow::onAutoRefreshTick() {
     onRefreshServices();
     onRefreshTasks();
     onRefreshHistory();
+    onRefreshMetrics();
 }
 
 void MainWindow::onReadyRead() {
@@ -482,6 +776,7 @@ void MainWindow::onSocketConnected() {
     onRefreshServices();
     onRefreshTasks();
     onRefreshHistory();
+    onRefreshMetrics();
 }
 
 void MainWindow::onSocketDisconnected() {
@@ -517,6 +812,68 @@ std::string MainWindow::authToken() const {
     return tokenEdit->text().toStdString();
 }
 
+QString MainWindow::projectRoot() const {
+    if (QFileInfo::exists(QDir::currentPath() + "/scripts/check.sh")) {
+        return QDir::currentPath();
+    }
+    QDir dir(QCoreApplication::applicationDirPath());
+    if (dir.cd("../..") && QFileInfo::exists(dir.absolutePath() + "/scripts/check.sh")) {
+        return dir.canonicalPath();
+    }
+    return QDir::currentPath();
+}
+
+QProcessEnvironment MainWindow::processEnvironment() const {
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    if (!tokenEdit->text().trimmed().isEmpty()) {
+        env.insert("CORPCRON_RPC_AUTH_TOKEN", tokenEdit->text().trimmed());
+    }
+    env.insert("CORPCRON_REDIS_PORT", "6380");
+    env.insert("CORPCRON_MYSQL_PORT", "3307");
+    env.insert("CORPCRON_MYSQL_PASSWORD", "corpcron_dev_password");
+    return env;
+}
+
+void MainWindow::runTool(const QString& program, const QStringList& arguments, const QString& label) {
+    if (toolProcess->state() != QProcess::NotRunning) {
+        appendToolOutput("[tool is already running]\n");
+        return;
+    }
+    QString root = projectRoot();
+    toolProcess->setWorkingDirectory(root);
+    toolProcess->setProcessEnvironment(processEnvironment());
+    appendToolOutput(QString("\n$ %1 %2\n").arg(program, arguments.join(' ')));
+    appendLog(label + " 已启动");
+    toolProcess->start(program, arguments);
+    updateUiState();
+}
+
+void MainWindow::startServerProcess(QProcess *process, const QString& configPath, const QString& label) {
+    if (process->state() != QProcess::NotRunning) {
+        appendToolOutput("[" + label + " already running]\n");
+        return;
+    }
+    QString root = projectRoot();
+    process->setWorkingDirectory(root);
+    QProcessEnvironment env = processEnvironment();
+    if (configPath == "config/server.conf") {
+        env.insert("CORPCRON_SERVER_LISTEN_PORT", QString::number(portSpin->value()));
+    }
+    process->setProcessEnvironment(env);
+    appendToolOutput(QString("\n$ ./build/corpcron_server --config %1\n").arg(configPath));
+    if (!tokenEdit->text().trimmed().isEmpty()) {
+        appendToolOutput(QString("[env] CORPCRON_RPC_AUTH_TOKEN=%1\n").arg(tokenEdit->text().trimmed()));
+    }
+    process->start(root + "/build/corpcron_server", {"--config", configPath});
+    updateUiState();
+}
+
+void MainWindow::appendToolOutput(const QString& message) {
+    toolOutput->moveCursor(QTextCursor::End);
+    toolOutput->insertPlainText(message);
+    toolOutput->moveCursor(QTextCursor::End);
+}
+
 void MainWindow::appendLog(const QString& message) {
     QString ts = QDateTime::currentDateTime().toString("HH:mm:ss");
     logView->appendPlainText(QString("[%1] %2").arg(ts, message));
@@ -538,6 +895,30 @@ void MainWindow::updateUiState() {
     refreshTasksBtn->setEnabled(connected);
     refreshHistoryBtn->setEnabled(connected);
     refreshServicesBtn->setEnabled(connected);
+    refreshMetricsBtn->setEnabled(connected);
+    authFailureBtn->setEnabled(connected);
+    unknownRpcBtn->setEnabled(connected);
+    badFrameBtn->setEnabled(connected);
+
+    bool toolIdle = toolProcess && toolProcess->state() == QProcess::NotRunning;
+    bool serverIdle = serverProcess && serverProcess->state() == QProcess::NotRunning;
+    bool server2Idle = server2Process && server2Process->state() == QProcess::NotRunning;
+    startDepsBtn->setEnabled(toolIdle);
+    stopDepsBtn->setEnabled(toolIdle);
+    resetDepsBtn->setEnabled(toolIdle);
+    demoCheckBtn->setEnabled(toolIdle);
+    cleanDataBtn->setEnabled(toolIdle);
+    runCheckBtn->setEnabled(toolIdle);
+    runIntegrationCheckBtn->setEnabled(toolIdle);
+    dockerBuildBtn->setEnabled(toolIdle);
+    showBenchmarkResultBtn->setEnabled(toolIdle);
+    showDeployDocBtn->setEnabled(toolIdle);
+    benchmarkShortBtn->setEnabled(toolIdle);
+    benchmarkReuseBtn->setEnabled(toolIdle);
+    startServerBtn->setEnabled(serverIdle);
+    stopServerBtn->setEnabled(!serverIdle);
+    startSecondServerBtn->setEnabled(server2Idle);
+    stopSecondServerBtn->setEnabled(!server2Idle);
     statusLabel->setText(connected ? "已连接" : (connecting ? "连接中" : "未连接"));
 }
 
@@ -698,6 +1079,21 @@ void MainWindow::handleFrame(uint32_t serialId, const std::string& payload) {
         return;
     }
 
+    if (serialId == corpcron::rpc::kGetMetricsResponseSerialId) {
+        corpcron::rpc::GetMetricsResponse resp;
+        if (resp.ParseFromString(payload)) {
+            if (resp.success()) {
+                populateMetrics(resp);
+                appendLog("运行指标已刷新");
+            } else {
+                appendLog("运行指标刷新失败: " + QString::fromStdString(resp.error()));
+            }
+        } else {
+            appendLog("GetMetrics 响应解析失败");
+        }
+        return;
+    }
+
     appendLog(QString("未知响应 serial_id=%1 payload_size=%2")
                   .arg(serialId)
                   .arg(payload.size()));
@@ -748,5 +1144,32 @@ void MainWindow::populateServices(const corpcron::rpc::ListServicesResponse& res
     servicesTable->setRowCount(response.endpoints_size());
     for (int row = 0; row < response.endpoints_size(); ++row) {
         servicesTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(response.endpoints(row))));
+    }
+}
+
+void MainWindow::populateMetrics(const corpcron::rpc::GetMetricsResponse& response) {
+    struct MetricRow {
+        const char* name;
+        qulonglong value;
+    };
+    const QVector<MetricRow> rows{
+        {"rpc_requests_total", response.rpc_requests_total()},
+        {"rpc_success_total", response.rpc_success_total()},
+        {"rpc_error_total", response.rpc_error_total()},
+        {"active_connections", response.active_connections()},
+        {"rejected_connections", response.rejected_connections()},
+        {"malformed_frames", response.malformed_frames()},
+        {"bytes_in_total", response.bytes_in_total()},
+        {"bytes_out_total", response.bytes_out_total()},
+        {"task_success_total", response.task_success_total()},
+        {"task_failure_total", response.task_failure_total()},
+        {"lock_acquire_success_total", response.lock_acquire_success_total()},
+        {"lock_acquire_failure_total", response.lock_acquire_failure_total()},
+        {"max_task_duration_ms", response.max_task_duration_ms()}
+    };
+    metricsTable->setRowCount(rows.size());
+    for (int row = 0; row < rows.size(); ++row) {
+        metricsTable->setItem(row, 0, new QTableWidgetItem(rows[row].name));
+        metricsTable->setItem(row, 1, new QTableWidgetItem(QString::number(rows[row].value)));
     }
 }

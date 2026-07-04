@@ -18,7 +18,8 @@ struct RpcResponse {
 class RpcDispatcher {
 public:
     RpcDispatcher(std::shared_ptr<MySQLClient> db, std::string auth_token);
-    RpcDispatcher(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis, std::string auth_token);
+    RpcDispatcher(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis,
+                  std::string auth_token, std::string node_id = {});
 
     RpcResponse dispatch(uint32_t serial_id, const std::string& payload) const;
     static RpcResponse error(corpcron::rpc::ErrorCode code, const std::string& message);
@@ -35,12 +36,14 @@ private:
     RpcResponse handleEnableTask(const std::string& payload) const;
     RpcResponse handleDeleteTask(const std::string& payload) const;
     RpcResponse handleRunTaskNow(const std::string& payload) const;
+    RpcResponse handleGetMetrics(const std::string& payload) const;
 
     bool authorized(const std::string& request_token) const;
 
     std::shared_ptr<MySQLClient> db_;
     std::shared_ptr<RedisClient> redis_;
     std::string auth_token_;
+    std::string node_id_;
 };
 
 } // namespace corpcron

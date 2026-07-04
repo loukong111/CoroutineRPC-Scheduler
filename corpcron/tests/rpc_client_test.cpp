@@ -116,6 +116,24 @@ void serve_two_requests(int listen_fd) {
     close(listen_fd);
 }
 
+void serve_two_requests_same_connection(int listen_fd) {
+    int fd = accept(listen_fd, nullptr, nullptr);
+    assert(fd >= 0);
+    for (int i = 0; i < 2; ++i) {
+        uint32_t request_serial_id = 0;
+        (void)read_frame_payload(fd, request_serial_id);
+
+        corpcron::rpc::EchoResponse response;
+        response.set_message(i == 0 ? "reuse-1" : "reuse-2");
+        std::string response_payload;
+        response.SerializeToString(&response_payload);
+        std::string frame = corpcron::rpc::encode(corpcron::rpc::kEchoResponseSerialId, response_payload);
+        assert(send_all(fd, frame));
+    }
+    close(fd);
+    close(listen_fd);
+}
+
 } // namespace
 
 int main() {
@@ -154,5 +172,25 @@ int main() {
     corpcron::RpcClient failed_client("127.0.0.1", port);
     assert(!failed_client.call(corpcron::rpc::kEchoRequestSerialId, request_payload,
                                response_serial_id, response_payload, 200));
+
+    uint16_t reuse_port = 0;
+    int reuse_listen_fd = create_listen_socket(reuse_port);
+    if (reuse_listen_fd < 0) {
+        std::cout << "Skipping RpcClient reuse test: loopback socket is not available.\n";
+        return 77;
+    }
+    std::thread reuse_server_thread(serve_two_requests_same_connection, reuse_listen_fd);
+    corpcron::RpcClient reuse_client("127.0.0.1", reuse_port);
+    assert(reuse_client.call(corpcron::rpc::kEchoRequestSerialId, request_payload,
+                             response_serial_id, response_payload, 1000));
+    assert(response_serial_id == corpcron::rpc::kEchoResponseSerialId);
+    assert(echo_response.ParseFromString(response_payload));
+    assert(echo_response.message() == "reuse-1");
+    assert(reuse_client.call(corpcron::rpc::kEchoRequestSerialId, request_payload,
+                             response_serial_id, response_payload, 1000));
+    assert(response_serial_id == corpcron::rpc::kEchoResponseSerialId);
+    assert(echo_response.ParseFromString(response_payload));
+    assert(echo_response.message() == "reuse-2");
+    reuse_server_thread.join();
     return 0;
 }

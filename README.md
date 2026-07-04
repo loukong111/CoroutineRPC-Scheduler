@@ -11,13 +11,17 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 - 调度器按 `next_run_at` 查询到期任务，抢锁后执行并写入历史。
 - 任务失败后按指数退避重试，超过 `max_retries` 后自动禁用。
 - 执行期间会续约 Redis 锁，降低长任务重复执行风险。
+- 调度器支持任务 RPC 执行超时配置，并对 Redis/MySQL 短暂断连做基础重连。
+- 服务端为每个 RPC 请求生成 `request_id` 日志，并支持通过 RPC 查询运行指标。
 - RPC 支持统一错误响应 `RpcError`，便于客户端识别协议级错误。
 - 支持基础 RPC token 鉴权、连接数上限和取消任务接口。
 - Qt 可视化管理端支持任务提交、查询、编辑、启停、删除、立即执行、执行历史和服务发现查看。
+- Qt 演示控制台覆盖项目完整演示链路，支持依赖启停、服务端单/双节点启动、测试、压测、镜像构建、部署材料查看和协议异常演示。
 - 支持环境变量覆盖配置，避免在配置文件中提交真实密码。
 - Docker Compose 提供 Redis/MySQL 开发环境。
 - 提供 Dockerfile、systemd unit 和基础部署文档。
 - CTest 接入基础协议单测和可选 Redis/MySQL 集成测试。
+- 提供工程检查脚本、格式配置和面试讲解文档，便于复现与答辩。
 
 ## 演示截图
 
@@ -87,6 +91,8 @@ cmake --build build -j
 ./build/client/corpcron_client
 ```
 
+Qt 端可以完成项目完整演示链路：启动/重置依赖、启动单节点或双节点服务端、连接 RPC、提交和管理任务、查看执行历史、查看服务发现、查看运行指标、运行默认/集成测试、触发短连接/长连接压测、构建 Docker 镜像、查看部署材料并演示鉴权失败、未知方法和坏包断连。若 Docker 需要 sudo 权限，请先在系统层面配置当前用户访问 Docker。
+
 提交测试任务：
 
 ```bash
@@ -97,6 +103,24 @@ cmake --build build -j
 
 ```bash
 ctest --test-dir build --output-on-failure
+```
+
+一键工程检查：
+
+```bash
+./scripts/check.sh
+```
+
+可选运行格式检查：
+
+```bash
+./scripts/check.sh --format
+```
+
+如需自动启动 Docker 依赖并运行 Redis/MySQL 集成测试：
+
+```bash
+./scripts/check.sh --compose
 ```
 
 运行 Redis/MySQL 集成测试：
@@ -114,6 +138,10 @@ ctest --test-dir build --output-on-failure
 ```
 
 运行端到端调度测试也使用同一个开关。该测试会启动本地 TCP 服务，插入一个到期任务，并等待执行历史落库。
+
+面试讲解提纲见 [docs/interview.md](docs/interview.md)。
+简历描述模板见 [docs/resume.md](docs/resume.md)。
+完整演示流程见 [docs/demo.md](docs/demo.md)。
 
 简单压测：
 
@@ -189,6 +217,9 @@ tools/           测试客户端和压测工具
 - [架构设计](docs/design.md)
 - [RPC 协议](docs/protocol.md)
 - [压测说明](docs/benchmark.md)
+- [演示流程](docs/demo.md)
+- [简历描述](docs/resume.md)
+- [面试提纲](docs/interview.md)
 
 ## 后续路线
 

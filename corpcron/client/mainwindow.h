@@ -12,6 +12,7 @@
 #include <QCheckBox>
 #include <QTableWidget>
 #include <QTimer>
+#include <QProcess>
 #include "rpc.pb.h"
 
 class MainWindow : public QMainWindow {
@@ -34,6 +35,26 @@ private slots:
     void onRefreshTasks();
     void onRefreshHistory();
     void onRefreshServices();
+    void onRefreshMetrics();
+    void onStartDependencies();
+    void onStopDependencies();
+    void onResetDependencies();
+    void onStartServer();
+    void onStopServer();
+    void onStartSecondServer();
+    void onStopSecondServer();
+    void onDemoCheck();
+    void onCleanDemoData();
+    void onRunCheck();
+    void onRunIntegrationCheck();
+    void onDockerBuild();
+    void onShowBenchmarkResult();
+    void onShowDeployDoc();
+    void onBenchmarkShort();
+    void onBenchmarkReuse();
+    void onAuthFailureTest();
+    void onUnknownRpcTest();
+    void onBadFrameTest();
     void onTaskSelectionChanged();
     void onAutoRefreshChanged(bool checked);
     void onAutoRefreshTick();
@@ -86,21 +107,56 @@ private:
     QPushButton *refreshServicesBtn;
     QTableWidget *servicesTable;
 
+    QPushButton *refreshMetricsBtn;
+    QTableWidget *metricsTable;
+
+    QPushButton *startDepsBtn;
+    QPushButton *stopDepsBtn;
+    QPushButton *resetDepsBtn;
+    QPushButton *startServerBtn;
+    QPushButton *stopServerBtn;
+    QPushButton *startSecondServerBtn;
+    QPushButton *stopSecondServerBtn;
+    QPushButton *demoCheckBtn;
+    QPushButton *cleanDataBtn;
+    QPushButton *runCheckBtn;
+    QPushButton *runIntegrationCheckBtn;
+    QPushButton *dockerBuildBtn;
+    QPushButton *showBenchmarkResultBtn;
+    QPushButton *showDeployDocBtn;
+    QSpinBox *benchConcurrencySpin;
+    QSpinBox *benchRequestsSpin;
+    QPushButton *benchmarkShortBtn;
+    QPushButton *benchmarkReuseBtn;
+    QPushButton *authFailureBtn;
+    QPushButton *unknownRpcBtn;
+    QPushButton *badFrameBtn;
+    QPlainTextEdit *toolOutput;
+
     QPlainTextEdit *logView;
     QPushButton *clearLogBtn;
 
     QTcpSocket *socket;
+    QProcess *toolProcess;
+    QProcess *serverProcess;
+    QProcess *server2Process;
     QByteArray recvBuffer;
     QTimer *autoRefreshTimer;
 
     bool sendFrame(uint32_t serialId, const std::string& payload, const QString& action);
     std::string authToken() const;
+    QString projectRoot() const;
+    QProcessEnvironment processEnvironment() const;
+    void runTool(const QString& program, const QStringList& arguments, const QString& label);
+    void startServerProcess(QProcess *process, const QString& configPath, const QString& label);
+    void appendToolOutput(const QString& message);
     void appendLog(const QString& message);
     void updateUiState();
     void handleFrame(uint32_t serialId, const std::string& payload);
     void populateTasks(const corpcron::rpc::ListTasksResponse& response);
     void populateHistory(const corpcron::rpc::ListHistoryResponse& response);
     void populateServices(const corpcron::rpc::ListServicesResponse& response);
+    void populateMetrics(const corpcron::rpc::GetMetricsResponse& response);
 };
 
 #endif

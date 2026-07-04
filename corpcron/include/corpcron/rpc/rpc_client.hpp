@@ -20,6 +20,7 @@ private:
     int port_;
     int sock_fd_;
     bool connect();
+    bool ensureConnected();
     void disconnect();
 };
 
