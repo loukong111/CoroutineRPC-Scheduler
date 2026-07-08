@@ -13,6 +13,8 @@ cmake-build-*/
 *.log
 core
 core.*
+__pycache__/
+*.py[cod]
 
 .env
 config/server.local.conf

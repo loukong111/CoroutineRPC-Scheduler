@@ -25,17 +25,29 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 
 ## 演示截图
 
-### Qt 可视化客户端
+### Qt 控制台概览
 
-![Qt 可视化客户端](docs/assets/images/qt-client.png)
+![Qt 控制台概览](docs/assets/images/qt-overview.png)
 
-### 任务元数据
+### 任务管理
 
-![MySQL tasks 表](docs/assets/images/mysql-tasks.png)
+![Qt 任务管理](docs/assets/images/qt-task-management.png)
 
-### 执行历史
+### 运行指标
 
-![task_history 表](docs/assets/images/task-history.png)
+![Qt 运行指标](docs/assets/images/qt-metrics.png)
+
+### 演示控制台
+
+![Qt 演示控制台](docs/assets/images/qt-demo-console.png)
+
+### Redis 服务发现
+
+![Redis 服务发现](docs/assets/images/redis-service-discovery.png)
+
+### 压测结果
+
+![压测结果](docs/assets/images/benchmark-result.png)
 
 ### 系统架构
 

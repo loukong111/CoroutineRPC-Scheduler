@@ -71,6 +71,16 @@ private:
     QPushButton *disconnectBtn;
     QLabel *statusLabel;
 
+    QLabel *overviewConnectionValue;
+    QLabel *overviewTaskCountValue;
+    QLabel *overviewHistoryCountValue;
+    QLabel *overviewServiceCountValue;
+    QLabel *overviewRpcRequestsValue;
+    QLabel *overviewRpcErrorsValue;
+    QLabel *overviewActiveConnectionsValue;
+    QLabel *overviewTaskSuccessValue;
+    QLabel *overviewTaskFailureValue;
+
     QLineEdit *echoEdit;
     QPushButton *echoBtn;
 
