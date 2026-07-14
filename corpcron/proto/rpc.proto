@@ -69,38 +69,56 @@ message TaskInfo {
     string last_run_at = 7;
     int32 retry_count = 8;
     int32 max_retries = 9;
+    string current_execution_id = 10;
+    string running_node = 11;
+    string started_at = 12;
 }
 
 message ListTasksRequest {
     string auth_token = 1;
     int32 limit = 2;
     bool enabled_only = 3;
+    int32 offset = 4;
+    int32 status_filter = 5; // -1 means all statuses, 0 disabled, 1 scheduled, 2 running.
+    string keyword = 6;
+    bool has_status_filter = 7;
 }
 message ListTasksResponse {
     bool success = 1;
     string error = 2;
     repeated TaskInfo tasks = 3;
+    int32 total = 4;
+    int32 offset = 5;
+    int32 limit = 6;
 }
 
 message TaskHistoryInfo {
-    string task_id = 1;
-    string exec_node = 2;
-    bool success = 3;
-    string result = 4;
-    string error = 5;
-    string start_time = 6;
-    string end_time = 7;
+    string execution_id = 1;
+    string task_id = 2;
+    string exec_node = 3;
+    bool success = 4;
+    string result = 5;
+    string error = 6;
+    string start_time = 7;
+    string end_time = 8;
 }
 
 message ListHistoryRequest {
     string auth_token = 1;
     string task_id = 2;
     int32 limit = 3;
+    int32 offset = 4;
+    int32 success_filter = 5; // -1 means all, 0 failed, 1 succeeded.
+    string keyword = 6;
+    bool has_success_filter = 7;
 }
 message ListHistoryResponse {
     bool success = 1;
     string error = 2;
     repeated TaskHistoryInfo history = 3;
+    int32 total = 4;
+    int32 offset = 5;
+    int32 limit = 6;
 }
 
 message ListServicesRequest {
@@ -170,4 +188,11 @@ message GetMetricsResponse {
     uint64 lock_acquire_success_total = 13;
     uint64 lock_acquire_failure_total = 14;
     uint64 max_task_duration_ms = 15;
+    uint64 task_duration_p95_ms = 16;
+    uint64 task_duration_p99_ms = 17;
+    uint64 task_duration_samples_total = 18;
+    uint64 schedule_delay_max_ms = 19;
+    uint64 schedule_delay_p95_ms = 20;
+    uint64 schedule_delay_p99_ms = 21;
+    uint64 schedule_delay_samples_total = 22;
 }

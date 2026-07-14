@@ -5,9 +5,8 @@
 #include "corpcron/scheduler/cron_parser.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
 #include "corpcron/rpc/protocol.hpp"
-#include "corpcron/rpc/rpc_client.hpp"   // for RpcClient
 #include "rpc.pb.h"
-#include <random> 
+#include <atomic>
 #include <chrono>
 #include <thread>
 #include <algorithm>
@@ -53,13 +52,29 @@ static bool parse_datetime(const std::string& value, std::chrono::system_clock::
     return true;
 }
 
+static std::string next_execution_id(const std::string& task_id, const std::string& node_id) {
+    static std::atomic<uint64_t> sequence{0};
+    auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    return task_id + ":" + node_id + ":" + std::to_string(now_ms) + ":" +
+           std::to_string(sequence.fetch_add(1, std::memory_order_relaxed));
+}
+
 TaskScheduler::TaskScheduler(std::shared_ptr<MySQLClient> db,
                              std::shared_ptr<RedisClient> redis,
                              const std::string& node_id,
                              std::string service_name)
     : db_(db), redis_(redis), node_id_(node_id), service_name_(std::move(service_name)), running_(false),
       thread_pool_(std::make_unique<DynamicThreadPool>(2, 8, 50, 5)),
-      lock_renewer_(std::make_unique<LockRenewer>(redis_)) {}
+      lock_renewer_(std::make_unique<LockRenewer>(redis_)) {
+    RpcClientPool::Options pool_options;
+    int max_idle = Config::instance().getInt("scheduler.rpc_pool_max_idle_per_endpoint", 4);
+    if (max_idle <= 0) max_idle = 1;
+    pool_options.max_idle_per_endpoint = static_cast<size_t>(max_idle);
+    pool_options.failure_threshold = Config::instance().getInt("scheduler.rpc_pool_failure_threshold", 2);
+    pool_options.cooldown_ms = Config::instance().getInt("scheduler.rpc_pool_cooldown_ms", 3000);
+    rpc_client_pool_ = std::make_unique<RpcClientPool>(pool_options);
+}
 
 TaskScheduler::~TaskScheduler() {
     stop();
@@ -88,7 +103,7 @@ void TaskScheduler::schedulerLoop() {
         try {
             scanAndDispatch();
         } catch (const std::exception& e) {
-            LOG_ERROR("Scheduler error: " + std::string(e.what()));
+            LOG_ERROR_EVENT("scheduler_loop_error", {{"error", e.what()}});
         }
         std::unique_lock<std::mutex> lock(loop_mutex_);
         loop_cv_.wait_for(lock, std::chrono::seconds(5), [this]() { return !running_; });
@@ -111,23 +126,47 @@ void TaskScheduler::scanAndDispatch() {
                         now.time_since_epoch()).count();
                     uint64_t next_ms = CronParser::nextExecution(task.cron_expr, now_ms);
                     if (next_ms != 0) {
-                        db_->updateTaskRuntime(task.id, 1, to_datetime_string(next_ms), task.last_run_at, task.retry_count);
+                        db_->updateTaskRuntime(task.id, TASK_SCHEDULED, to_datetime_string(next_ms), task.last_run_at, task.retry_count);
                     } else {
-                        db_->updateTaskRuntime(task.id, 0, task.next_run_at, task.last_run_at, task.retry_count);
+                        db_->updateTaskRuntime(task.id, TASK_DISABLED, task.next_run_at, task.last_run_at, task.retry_count);
                     }
-                    LOG_INFO("Skipped misfired task " + task.id + " overdue by " +
-                             std::to_string(overdue) + " seconds");
+                    LOG_INFO_EVENT("task_misfire_skipped", {
+                        {"task_id", task.id},
+                        {"node_id", node_id_},
+                        {"overdue_seconds", std::to_string(overdue)},
+                        {"grace_seconds", std::to_string(misfire_grace_seconds)}
+                    });
                     continue;
                 }
             }
         }
 
+        std::chrono::system_clock::time_point due_at;
+        if (parse_datetime(task.next_run_at, due_at)) {
+            auto now = std::chrono::system_clock::now();
+            auto delay_ms = std::chrono::duration_cast<std::chrono::milliseconds>(now - due_at).count();
+            Metrics::instance().observeScheduleDelay(delay_ms > 0 ? static_cast<uint64_t>(delay_ms) : 0);
+        } else {
+            Metrics::instance().observeScheduleDelay(0);
+        }
+
+        std::string execution_id = next_execution_id(task.id, node_id_);
         std::string lock_key = "task:" + task.id;
-        std::string lock_value = node_id_;
+        std::string lock_value = node_id_ + ":" + execution_id;
         constexpr int lock_ttl_sec = 60;
         if (redis_->lock(lock_key, lock_value, lock_ttl_sec, 100)) {
+            if (!db_->claimTaskExecution(task.id, execution_id, node_id_)) {
+                LOG_INFO_EVENT("task_claim_skipped", {
+                    {"task_id", task.id},
+                    {"node_id", node_id_},
+                    {"execution_id", execution_id},
+                    {"reason", "state_changed"}
+                });
+                redis_->unlock(lock_key, lock_value);
+                continue;
+            }
             Metrics::instance().incLockAcquireSuccess();
-            thread_pool_->enqueue([this, task, lock_key, lock_value]() {
+            thread_pool_->enqueue([this, task, lock_key, lock_value, execution_id]() {
                 constexpr int lock_ttl_sec = 60;
                 lock_renewer_->add(lock_key, lock_value, lock_ttl_sec);
 
@@ -148,8 +187,17 @@ void TaskScheduler::scanAndDispatch() {
                 } else {
                     Metrics::instance().incTaskFailure();
                 }
+                LOG_INFO_EVENT("task_execution_finished", {
+                    {"task_id", task.id},
+                    {"node_id", node_id_},
+                    {"execution_id", execution_id},
+                    {"success", outcome.success ? "true" : "false"},
+                    {"duration_ms", std::to_string(duration_ms)},
+                    {"error", outcome.error}
+                });
 
                 TaskHistory history;
+                history.execution_id = execution_id;
                 history.task_id = task.id;
                 history.exec_node = node_id_;
                 history.success = outcome.success;
@@ -161,7 +209,7 @@ void TaskScheduler::scanAndDispatch() {
 
                 uint64_t end_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
                     end.time_since_epoch()).count();
-                int next_status = 1;
+                int next_status = TASK_SCHEDULED;
                 int next_retry_count = 0;
                 std::string next_run_at = history.end_time;
 
@@ -170,29 +218,50 @@ void TaskScheduler::scanAndDispatch() {
                     if (next_ms != 0) {
                         next_run_at = to_datetime_string(next_ms);
                     } else {
-                        next_status = 0;
+                        next_status = TASK_DISABLED;
                     }
                 } else {
                     next_retry_count = task.retry_count + 1;
                     if (next_retry_count >= task.max_retries) {
-                        next_status = 0;
-                        LOG_WARN("Task " + task.id + " disabled after " +
-                                 std::to_string(next_retry_count) + " failed attempts");
+                        next_status = TASK_DISABLED;
+                        LOG_WARN_EVENT("task_disabled_after_retries", {
+                            {"task_id", task.id},
+                            {"node_id", node_id_},
+                            {"execution_id", execution_id},
+                            {"retry_count", std::to_string(next_retry_count)},
+                            {"max_retries", std::to_string(task.max_retries)}
+                        });
                     } else {
                         auto retry_at = end + std::chrono::seconds(retry_delay_seconds(next_retry_count));
                         next_run_at = to_datetime_string(retry_at);
                     }
                 }
 
-                db_->updateTaskRuntime(task.id, next_status, next_run_at, history.end_time, next_retry_count);
+                if (!db_->completeTaskExecution(task.id, execution_id, next_status,
+                                                next_run_at, history.end_time, next_retry_count)) {
+                    LOG_WARN_EVENT("task_complete_ignored", {
+                        {"task_id", task.id},
+                        {"node_id", node_id_},
+                        {"execution_id", execution_id},
+                        {"reason", "state_changed_or_canceled"}
+                    });
+                }
                 lock_renewer_->remove(lock_key);
                 if (!redis_->unlock(lock_key, lock_value)) {
-                    LOG_WARN("Failed to unlock " + lock_key + " as " + lock_value);
+                    LOG_WARN_EVENT("redis_unlock_failed", {
+                        {"task_id", task.id},
+                        {"lock_key", lock_key},
+                        {"owner", lock_value}
+                    });
                 }
             });
         } else {
             Metrics::instance().incLockAcquireFailure();
-            LOG_INFO("Node " + node_id_ + " failed to get lock for task " + task.id);
+            LOG_INFO_EVENT("task_lock_not_acquired", {
+                {"task_id", task.id},
+                {"node_id", node_id_},
+                {"lock_key", lock_key}
+            });
         }
     }
 }
@@ -202,21 +271,12 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
     auto endpoints = redis_->discoverServices(service_name_);
     if (endpoints.empty()) {
         outcome.error = "No RPC service available";
-        LOG_ERROR(outcome.error + " for task " + task.id);
+        LOG_ERROR_EVENT("task_execute_no_endpoint", {
+            {"task_id", task.id},
+            {"service_name", service_name_}
+        });
         return outcome;
     }
-    //std::mt19937不是多线程安全的，要让每个线程有自己的副本
-    thread_local std::mt19937 rng(std::random_device{}());
-    std::uniform_int_distribution<> dist(0, endpoints.size() - 1);
-    std::string endpoint = endpoints[dist(rng)];
-    size_t colon = endpoint.find(':');
-    if (colon == std::string::npos || colon + 1 >= endpoint.size()) {
-        outcome.error = "Invalid RPC endpoint: " + endpoint;
-        return outcome;
-    }
-    std::string host = endpoint.substr(0, colon);
-    int port = std::stoi(endpoint.substr(colon + 1));
-
     // 构造 ExecuteTaskRequest
     corpcron::rpc::ExecuteTaskRequest req;
     req.set_task_id(task.id);
@@ -226,13 +286,14 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
     std::string req_data;
     req.SerializeToString(&req_data);
 
-    RpcClient client(host, port);
     uint32_t response_serial_id = 0;
     std::string resp_data;
     int task_timeout_ms = Config::instance().getInt("scheduler.task_timeout_ms", 5000);
     if (task_timeout_ms <= 0) task_timeout_ms = 5000;
-    if (client.call(corpcron::rpc::kExecuteTaskRequestSerialId, req_data, response_serial_id, resp_data,
-                    task_timeout_ms)) {
+    std::string endpoint;
+    std::string pool_error;
+    if (rpc_client_pool_->call(endpoints, corpcron::rpc::kExecuteTaskRequestSerialId, req_data,
+                               response_serial_id, resp_data, task_timeout_ms, &endpoint, &pool_error)) {
         if (response_serial_id == corpcron::rpc::kRpcErrorSerialId) {
             corpcron::rpc::RpcError error;
             if (error.ParseFromString(resp_data)) {
@@ -240,23 +301,41 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task)
             } else {
                 outcome.error = "RPC error response parse failed";
             }
-            LOG_ERROR(outcome.error);
+            LOG_ERROR_EVENT("task_execute_rpc_error", {
+                {"task_id", task.id},
+                {"endpoint", endpoint},
+                {"error", outcome.error}
+            });
             return outcome;
         }
         corpcron::rpc::ExecuteTaskResponse resp;
         if (resp.ParseFromString(resp_data)) {
-            LOG_INFO("Remote execution result: " + resp.result());
+            LOG_INFO_EVENT("task_execute_rpc_response", {
+                {"task_id", task.id},
+                {"endpoint", endpoint},
+                {"success", resp.success() ? "true" : "false"},
+                {"error", resp.error()}
+            });
             outcome.success = resp.success();
             outcome.result = resp.result();
             outcome.error = resp.error();
         } else {
             outcome.error = "Failed to parse ExecuteTaskResponse";
-            LOG_ERROR(outcome.error);
+            LOG_ERROR_EVENT("task_execute_parse_failed", {
+                {"task_id", task.id},
+                {"endpoint", endpoint},
+                {"error", outcome.error}
+            });
         }
     } else {
-        outcome.error = "RPC call to " + endpoint + " failed or timed out after " +
-                        std::to_string(task_timeout_ms) + " ms";
-        LOG_ERROR(outcome.error);
+        outcome.error = "RPC call failed or timed out after " + std::to_string(task_timeout_ms) +
+                        " ms: " + pool_error;
+        LOG_ERROR_EVENT("task_execute_rpc_timeout", {
+            {"task_id", task.id},
+            {"endpoint", endpoint.empty() ? "-" : endpoint},
+            {"timeout_ms", std::to_string(task_timeout_ms)},
+            {"error", outcome.error}
+        });
     }
     return outcome;
 }

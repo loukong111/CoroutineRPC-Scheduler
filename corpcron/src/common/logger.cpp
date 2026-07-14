@@ -22,6 +22,36 @@ const char* Logger::levelToString(LogLevel level) {
     }
 }
 
+std::string Logger::quoteValue(const std::string& value) {
+    std::string out;
+    out.reserve(value.size() + 2);
+    out.push_back('"');
+    for (char ch : value) {
+        switch (ch) {
+            case '\\':
+                out += "\\\\";
+                break;
+            case '"':
+                out += "\\\"";
+                break;
+            case '\n':
+                out += "\\n";
+                break;
+            case '\r':
+                out += "\\r";
+                break;
+            case '\t':
+                out += "\\t";
+                break;
+            default:
+                out.push_back(ch);
+                break;
+        }
+    }
+    out.push_back('"');
+    return out;
+}
+
 void Logger::log(LogLevel level, const std::string& msg) {
     if (level < current_level_) return;
     std::lock_guard<std::mutex> lock(mutex_);
@@ -35,9 +65,23 @@ void Logger::log(LogLevel level, const std::string& msg) {
     std::cout << ss.str() << std::endl;
 }
 
+void Logger::log(LogLevel level, const std::string& event, LogFields fields) {
+    if (level < current_level_) return;
+    std::stringstream msg;
+    msg << "event=" << quoteValue(event);
+    for (const auto& [key, value] : fields) {
+        msg << ' ' << key << '=' << quoteValue(value);
+    }
+    log(level, msg.str());
+}
+
 void Logger::debug(const std::string& msg) { log(DEBUG, msg); }
+void Logger::debug(const std::string& event, LogFields fields) { log(DEBUG, event, fields); }
 void Logger::info(const std::string& msg)  { log(INFO, msg); }
+void Logger::info(const std::string& event, LogFields fields)  { log(INFO, event, fields); }
 void Logger::warn(const std::string& msg)  { log(WARN, msg); }
+void Logger::warn(const std::string& event, LogFields fields)  { log(WARN, event, fields); }
 void Logger::error(const std::string& msg) { log(ERROR, msg); }
+void Logger::error(const std::string& event, LogFields fields) { log(ERROR, event, fields); }
 
 }

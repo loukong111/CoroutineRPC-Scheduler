@@ -24,13 +24,17 @@ set(CORPCRON_CORE_SOURCES
     src/common/logger.cpp
     src/common/config.cpp
     src/common/thread_pool.cpp
+    src/common/storage_error.cpp
+    src/metrics/alert_rules.cpp
     src/metrics/metrics.cpp
+    src/metrics/metrics_exporter.cpp
     src/net/epoll_loop.cpp
     src/net/tcp_server.cpp
     src/redis/redis_client.cpp
     src/mysql/mysql_client.cpp
     src/rpc/handler_registry.cpp
     src/rpc/rpc_dispatcher.cpp
+    src/rpc/rpc_client_pool.cpp
     src/scheduler/cron_parser.cpp
     src/scheduler/task_scheduler.cpp
     generated/rpc.pb.cc
@@ -93,11 +97,36 @@ target_link_libraries(corpcron_rpc_client_test corpcron_core)
 add_test(NAME rpc_client_test COMMAND corpcron_rpc_client_test)
 set_tests_properties(rpc_client_test PROPERTIES SKIP_RETURN_CODE 77)
 
+add_executable(corpcron_rpc_client_pool_test
+    tests/rpc_client_pool_test.cpp
+)
+target_link_libraries(corpcron_rpc_client_pool_test corpcron_core)
+add_test(NAME rpc_client_pool_test COMMAND corpcron_rpc_client_pool_test)
+set_tests_properties(rpc_client_pool_test PROPERTIES SKIP_RETURN_CODE 77)
+
 add_executable(corpcron_rpc_dispatcher_test
     tests/rpc_dispatcher_test.cpp
 )
 target_link_libraries(corpcron_rpc_dispatcher_test corpcron_core)
 add_test(NAME rpc_dispatcher_test COMMAND corpcron_rpc_dispatcher_test)
+
+add_executable(corpcron_metrics_test
+    tests/metrics_test.cpp
+)
+target_link_libraries(corpcron_metrics_test corpcron_core)
+add_test(NAME metrics_test COMMAND corpcron_metrics_test)
+
+add_executable(corpcron_alert_rules_test
+    tests/alert_rules_test.cpp
+)
+target_link_libraries(corpcron_alert_rules_test corpcron_core)
+add_test(NAME alert_rules_test COMMAND corpcron_alert_rules_test)
+
+add_executable(corpcron_storage_error_test
+    tests/storage_error_test.cpp
+)
+target_link_libraries(corpcron_storage_error_test corpcron_core)
+add_test(NAME storage_error_test COMMAND corpcron_storage_error_test)
 
 add_executable(corpcron_integration_test
     tests/integration_test.cpp

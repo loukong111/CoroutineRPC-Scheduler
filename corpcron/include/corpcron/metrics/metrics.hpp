@@ -1,7 +1,10 @@
 #pragma once
 
 #include <atomic>
+#include <array>
 #include <cstdint>
+#include <mutex>
+#include <string>
 
 namespace corpcron {
 
@@ -19,6 +22,13 @@ struct MetricsSnapshot {
     uint64_t lock_acquire_success_total = 0;
     uint64_t lock_acquire_failure_total = 0;
     uint64_t max_task_duration_ms = 0;
+    uint64_t task_duration_p95_ms = 0;
+    uint64_t task_duration_p99_ms = 0;
+    uint64_t task_duration_samples_total = 0;
+    uint64_t schedule_delay_max_ms = 0;
+    uint64_t schedule_delay_p95_ms = 0;
+    uint64_t schedule_delay_p99_ms = 0;
+    uint64_t schedule_delay_samples_total = 0;
 };
 
 class Metrics {
@@ -39,11 +49,16 @@ public:
     void incLockAcquireSuccess();
     void incLockAcquireFailure();
     void observeTaskDuration(uint64_t duration_ms);
+    void observeScheduleDelay(uint64_t delay_ms);
 
     MetricsSnapshot snapshot() const;
+    std::string renderPrometheus() const;
+
+    static std::string renderPrometheus(const MetricsSnapshot& snapshot);
 
 private:
     Metrics() = default;
+    static constexpr size_t kSampleWindowSize = 1024;
 
     std::atomic<uint64_t> rpc_requests_total_{0};
     std::atomic<uint64_t> rpc_success_total_{0};
@@ -58,6 +73,13 @@ private:
     std::atomic<uint64_t> lock_acquire_success_total_{0};
     std::atomic<uint64_t> lock_acquire_failure_total_{0};
     std::atomic<uint64_t> max_task_duration_ms_{0};
+    std::atomic<uint64_t> schedule_delay_max_ms_{0};
+
+    mutable std::mutex samples_mutex_;
+    std::array<uint64_t, kSampleWindowSize> task_duration_samples_{};
+    std::array<uint64_t, kSampleWindowSize> schedule_delay_samples_{};
+    uint64_t task_duration_samples_total_ = 0;
+    uint64_t schedule_delay_samples_total_ = 0;
 };
 
 } // namespace corpcron

@@ -15,6 +15,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
+#include <algorithm>
 #include "corpcron/rpc/protocol.hpp"
 #include "rpc.pb.h"
 
@@ -56,7 +57,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         "QMainWindow, QWidget { background: #f6f8fb; color: #1f2937; font-size: 13px; }"
         "QGroupBox { background: #ffffff; border: 1px solid #d9e1ec; border-radius: 8px; margin-top: 12px; padding: 12px; }"
         "QGroupBox::title { subcontrol-origin: margin; left: 12px; padding: 0 6px; color: #4b5563; font-weight: 600; }"
-        "QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; selection-background-color: #2563eb; }"
+        "QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QComboBox { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; selection-background-color: #2563eb; }"
         "QPushButton { background: #eef2f7; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; color: #1f2937; }"
         "QPushButton:hover { background: #e2e8f0; }"
         "QPushButton:disabled { color: #94a3b8; background: #f1f5f9; }"
@@ -178,17 +179,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     auto *tasksLayout = new QVBoxLayout(tasksTab);
     auto *tasksToolbar = new QHBoxLayout;
     enabledOnlyCheck = new QCheckBox("只看启用任务");
+    taskStatusCombo = new QComboBox;
+    taskStatusCombo->addItem("全部状态", -1);
+    taskStatusCombo->addItem("停用", 0);
+    taskStatusCombo->addItem("待调度", 1);
+    taskStatusCombo->addItem("执行中", 2);
+    taskKeywordEdit = new QLineEdit;
+    taskKeywordEdit->setPlaceholderText("搜索 ID / Handler / Cron / Params");
+    taskPageSizeSpin = new QSpinBox;
+    taskPageSizeSpin->setRange(10, 500);
+    taskPageSizeSpin->setSingleStep(10);
+    taskPageSizeSpin->setValue(50);
     autoRefreshCheck = new QCheckBox("自动刷新");
     refreshTasksBtn = new QPushButton("刷新任务");
     setButtonRole(refreshTasksBtn, "quiet");
     tasksToolbar->addWidget(enabledOnlyCheck);
+    tasksToolbar->addWidget(new QLabel("状态"));
+    tasksToolbar->addWidget(taskStatusCombo);
+    tasksToolbar->addWidget(new QLabel("关键字"));
+    tasksToolbar->addWidget(taskKeywordEdit, 1);
+    tasksToolbar->addWidget(new QLabel("每页"));
+    tasksToolbar->addWidget(taskPageSizeSpin);
     tasksToolbar->addWidget(autoRefreshCheck);
-    tasksToolbar->addStretch(1);
     tasksToolbar->addWidget(refreshTasksBtn);
     tasksLayout->addLayout(tasksToolbar);
     tasksTable = new QTableWidget;
-    tasksTable->setColumnCount(9);
-    tasksTable->setHorizontalHeaderLabels({"ID", "Handler", "Status", "Cron", "Next Run", "Last Run", "Retry", "Max", "Params"});
+    tasksTable->setColumnCount(12);
+    tasksTable->setHorizontalHeaderLabels({"ID", "Handler", "Status", "Cron", "Next Run", "Last Run",
+                                           "Retry", "Max", "Execution ID", "Running Node", "Started", "Params"});
     tasksTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     tasksTable->setSelectionMode(QAbstractItemView::SingleSelection);
     tasksTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -196,6 +214,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     tasksTable->horizontalHeader()->setStretchLastSection(true);
     tasksTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     tasksLayout->addWidget(tasksTable);
+    auto *tasksPageLayout = new QHBoxLayout;
+    prevTasksPageBtn = new QPushButton("上一页");
+    nextTasksPageBtn = new QPushButton("下一页");
+    tasksPageLabel = new QLabel("第 0-0 条 / 共 0 条");
+    setButtonRole(prevTasksPageBtn, "quiet");
+    setButtonRole(nextTasksPageBtn, "quiet");
+    tasksPageLayout->addStretch(1);
+    tasksPageLayout->addWidget(prevTasksPageBtn);
+    tasksPageLayout->addWidget(tasksPageLabel);
+    tasksPageLayout->addWidget(nextTasksPageBtn);
+    tasksLayout->addLayout(tasksPageLayout);
 
     auto *editBox = new QGroupBox("任务详情 / 操作");
     auto *editLayout = new QFormLayout(editBox);
@@ -237,25 +266,54 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     historyTaskIdEdit = new QLineEdit;
     historyTaskIdEdit->setPlaceholderText("task_id 为空时查看最近历史");
     historyLimitSpin = new QSpinBox;
-    historyLimitSpin->setRange(1, 500);
+    historyLimitSpin->setRange(10, 500);
+    historyLimitSpin->setSingleStep(10);
     historyLimitSpin->setValue(50);
+    historySuccessCombo = new QComboBox;
+    historySuccessCombo->addItem("全部结果", -1);
+    historySuccessCombo->addItem("成功", 1);
+    historySuccessCombo->addItem("失败", 0);
+    historyKeywordEdit = new QLineEdit;
+    historyKeywordEdit->setPlaceholderText("搜索 execution_id / 节点 / 结果 / 错误");
     refreshHistoryBtn = new QPushButton("刷新历史");
     setButtonRole(refreshHistoryBtn, "quiet");
     historyToolbar->addWidget(new QLabel("Task ID"));
     historyToolbar->addWidget(historyTaskIdEdit, 1);
-    historyToolbar->addWidget(new QLabel("Limit"));
+    historyToolbar->addWidget(new QLabel("结果"));
+    historyToolbar->addWidget(historySuccessCombo);
+    historyToolbar->addWidget(new QLabel("关键字"));
+    historyToolbar->addWidget(historyKeywordEdit, 1);
+    historyToolbar->addWidget(new QLabel("每页"));
     historyToolbar->addWidget(historyLimitSpin);
     historyToolbar->addWidget(refreshHistoryBtn);
     historyLayout->addLayout(historyToolbar);
     historyTable = new QTableWidget;
-    historyTable->setColumnCount(7);
-    historyTable->setHorizontalHeaderLabels({"Task ID", "Node", "Success", "Result", "Error", "Start", "End"});
+    historyTable->setColumnCount(8);
+    historyTable->setHorizontalHeaderLabels({"Execution ID", "Task ID", "Node", "Success", "Result", "Error", "Start", "End"});
     historyTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     historyTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     historyTable->setAlternatingRowColors(true);
     historyTable->horizontalHeader()->setStretchLastSection(true);
     historyTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     historyLayout->addWidget(historyTable);
+    auto *historyPageLayout = new QHBoxLayout;
+    prevHistoryPageBtn = new QPushButton("上一页");
+    nextHistoryPageBtn = new QPushButton("下一页");
+    historyPageLabel = new QLabel("第 0-0 条 / 共 0 条");
+    setButtonRole(prevHistoryPageBtn, "quiet");
+    setButtonRole(nextHistoryPageBtn, "quiet");
+    historyPageLayout->addStretch(1);
+    historyPageLayout->addWidget(prevHistoryPageBtn);
+    historyPageLayout->addWidget(historyPageLabel);
+    historyPageLayout->addWidget(nextHistoryPageBtn);
+    historyLayout->addLayout(historyPageLayout);
+    auto *historyDetailBox = new QGroupBox("执行详情");
+    auto *historyDetailLayout = new QVBoxLayout(historyDetailBox);
+    historyDetailView = new QPlainTextEdit;
+    historyDetailView->setReadOnly(true);
+    historyDetailView->setMinimumHeight(130);
+    historyDetailLayout->addWidget(historyDetailView);
+    historyLayout->addWidget(historyDetailBox);
     tabs->addTab(historyTab, "执行历史");
 
     auto *servicesTab = new QWidget;
@@ -398,7 +456,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(deleteTaskBtn, &QPushButton::clicked, this, &MainWindow::onDeleteSelectedTask);
     connect(runNowBtn, &QPushButton::clicked, this, &MainWindow::onRunSelectedTaskNow);
     connect(refreshTasksBtn, &QPushButton::clicked, this, &MainWindow::onRefreshTasks);
+    connect(enabledOnlyCheck, &QCheckBox::toggled, this, &MainWindow::onTaskFilterChanged);
+    connect(taskStatusCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::onTaskFilterChanged);
+    connect(taskKeywordEdit, &QLineEdit::returnPressed, this, &MainWindow::onTaskFilterChanged);
+    connect(taskPageSizeSpin, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onTaskFilterChanged);
+    connect(prevTasksPageBtn, &QPushButton::clicked, this, &MainWindow::onPrevTasksPage);
+    connect(nextTasksPageBtn, &QPushButton::clicked, this, &MainWindow::onNextTasksPage);
     connect(refreshHistoryBtn, &QPushButton::clicked, this, &MainWindow::onRefreshHistory);
+    connect(historyTaskIdEdit, &QLineEdit::returnPressed, this, &MainWindow::onHistoryFilterChanged);
+    connect(historySuccessCombo, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::onHistoryFilterChanged);
+    connect(historyKeywordEdit, &QLineEdit::returnPressed, this, &MainWindow::onHistoryFilterChanged);
+    connect(historyLimitSpin, qOverload<int>(&QSpinBox::valueChanged), this, &MainWindow::onHistoryFilterChanged);
+    connect(prevHistoryPageBtn, &QPushButton::clicked, this, &MainWindow::onPrevHistoryPage);
+    connect(nextHistoryPageBtn, &QPushButton::clicked, this, &MainWindow::onNextHistoryPage);
     connect(refreshServicesBtn, &QPushButton::clicked, this, &MainWindow::onRefreshServices);
     connect(refreshMetricsBtn, &QPushButton::clicked, this, &MainWindow::onRefreshMetrics);
     connect(startDepsBtn, &QPushButton::clicked, this, &MainWindow::onStartDependencies);
@@ -421,6 +491,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(unknownRpcBtn, &QPushButton::clicked, this, &MainWindow::onUnknownRpcTest);
     connect(badFrameBtn, &QPushButton::clicked, this, &MainWindow::onBadFrameTest);
     connect(tasksTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::onTaskSelectionChanged);
+    connect(historyTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::onHistorySelectionChanged);
     connect(autoRefreshCheck, &QCheckBox::toggled, this, &MainWindow::onAutoRefreshChanged);
     connect(clearLogBtn, &QPushButton::clicked, logView, &QPlainTextEdit::clear);
 
@@ -576,7 +647,7 @@ void MainWindow::onUpdateTask() {
     if (!tasksTable->selectedItems().isEmpty()) {
         int row = tasksTable->selectedItems().first()->row();
         if (auto* status_item = tasksTable->item(row, 2)) {
-            status = status_item->text() == "启用" ? 1 : 0;
+            status = status_item->text() == "停用" ? 0 : 1;
         }
     }
     task->set_status(status);
@@ -656,23 +727,79 @@ void MainWindow::onRunSelectedTaskNow() {
 void MainWindow::onRefreshTasks() {
     corpcron::rpc::ListTasksRequest req;
     req.set_auth_token(authToken());
-    req.set_limit(200);
+    tasksLimit_ = taskPageSizeSpin->value();
+    req.set_limit(tasksLimit_);
+    req.set_offset(tasksPageOffset_);
     req.set_enabled_only(enabledOnlyCheck->isChecked());
+    const int status_filter = taskStatusCombo->currentData().toInt();
+    if (status_filter >= 0) {
+        req.set_has_status_filter(true);
+        req.set_status_filter(status_filter);
+    }
+    req.set_keyword(taskKeywordEdit->text().trimmed().toStdString());
 
     std::string payload;
     req.SerializeToString(&payload);
     sendFrame(corpcron::rpc::kListTasksRequestSerialId, payload, "ListTasks");
 }
 
+void MainWindow::onTaskFilterChanged() {
+    tasksPageOffset_ = 0;
+    if (socket->state() == QAbstractSocket::ConnectedState) onRefreshTasks();
+    updateTaskPaginationUi();
+}
+
+void MainWindow::onPrevTasksPage() {
+    tasksLimit_ = taskPageSizeSpin->value();
+    tasksPageOffset_ = std::max(0, tasksPageOffset_ - tasksLimit_);
+    onRefreshTasks();
+}
+
+void MainWindow::onNextTasksPage() {
+    tasksLimit_ = taskPageSizeSpin->value();
+    if (tasksPageOffset_ + tasksLimit_ < tasksTotal_) {
+        tasksPageOffset_ += tasksLimit_;
+        onRefreshTasks();
+    }
+}
+
 void MainWindow::onRefreshHistory() {
     corpcron::rpc::ListHistoryRequest req;
     req.set_auth_token(authToken());
     req.set_task_id(historyTaskIdEdit->text().trimmed().toStdString());
-    req.set_limit(historyLimitSpin->value());
+    historyLimit_ = historyLimitSpin->value();
+    req.set_limit(historyLimit_);
+    req.set_offset(historyPageOffset_);
+    const int success_filter = historySuccessCombo->currentData().toInt();
+    if (success_filter >= 0) {
+        req.set_has_success_filter(true);
+        req.set_success_filter(success_filter);
+    }
+    req.set_keyword(historyKeywordEdit->text().trimmed().toStdString());
 
     std::string payload;
     req.SerializeToString(&payload);
     sendFrame(corpcron::rpc::kListHistoryRequestSerialId, payload, "ListHistory");
+}
+
+void MainWindow::onHistoryFilterChanged() {
+    historyPageOffset_ = 0;
+    if (socket->state() == QAbstractSocket::ConnectedState) onRefreshHistory();
+    updateHistoryPaginationUi();
+}
+
+void MainWindow::onPrevHistoryPage() {
+    historyLimit_ = historyLimitSpin->value();
+    historyPageOffset_ = std::max(0, historyPageOffset_ - historyLimit_);
+    onRefreshHistory();
+}
+
+void MainWindow::onNextHistoryPage() {
+    historyLimit_ = historyLimitSpin->value();
+    if (historyPageOffset_ + historyLimit_ < historyTotal_) {
+        historyPageOffset_ += historyLimit_;
+        onRefreshHistory();
+    }
 }
 
 void MainWindow::onRefreshServices() {
@@ -764,7 +891,7 @@ void MainWindow::onShowBenchmarkResult() {
 }
 
 void MainWindow::onShowDeployDoc() {
-    runTool("bash", {"-lc", "printf '%s\\n' '== deploy.md ==' && cat docs/deploy.md && printf '%s\\n' '\\n== systemd/corpcron.service ==' && cat systemd/corpcron.service"},
+    runTool("bash", {"-lc", "printf '%s\\n' '== deploy.md ==' && cat docs/guide/deploy.md && printf '%s\\n' '\\n== systemd/corpcron.service ==' && cat systemd/corpcron.service"},
             "show deploy doc");
 }
 
@@ -827,8 +954,29 @@ void MainWindow::onTaskSelectionChanged() {
     if (auto* cron = tasksTable->item(row, 3)) editCronEdit->setText(cron->text());
     if (auto* handler = tasksTable->item(row, 1)) editHandlerEdit->setText(handler->text());
     if (auto* max_retries = tasksTable->item(row, 7)) editMaxRetriesSpin->setValue(max_retries->text().toInt());
-    if (auto* params = tasksTable->item(row, 8)) editParamsEdit->setPlainText(params->text());
+    if (auto* params = tasksTable->item(row, 11)) editParamsEdit->setPlainText(params->text());
     editTaskIdEdit->setText(id_item->text());
+}
+
+void MainWindow::onHistorySelectionChanged() {
+    auto items = historyTable->selectedItems();
+    if (items.isEmpty() || !historyDetailView) return;
+    const int row = items.first()->row();
+    auto textAt = [this, row](int col) {
+        auto* item = historyTable->item(row, col);
+        return item ? item->text() : QString();
+    };
+
+    QString detail;
+    detail += "Execution ID: " + textAt(0) + "\n";
+    detail += "Task ID: " + textAt(1) + "\n";
+    detail += "Node: " + textAt(2) + "\n";
+    detail += "Success: " + textAt(3) + "\n";
+    detail += "Start: " + textAt(6) + "\n";
+    detail += "End: " + textAt(7) + "\n\n";
+    detail += "Result:\n" + textAt(4) + "\n\n";
+    detail += "Error:\n" + textAt(5);
+    historyDetailView->setPlainText(detail);
 }
 
 void MainWindow::onAutoRefreshChanged(bool checked) {
@@ -993,7 +1141,11 @@ void MainWindow::updateUiState() {
     deleteTaskBtn->setEnabled(connected);
     runNowBtn->setEnabled(connected);
     refreshTasksBtn->setEnabled(connected);
+    prevTasksPageBtn->setEnabled(connected && tasksPageOffset_ > 0);
+    nextTasksPageBtn->setEnabled(connected && tasksPageOffset_ + tasksLimit_ < tasksTotal_);
     refreshHistoryBtn->setEnabled(connected);
+    prevHistoryPageBtn->setEnabled(connected && historyPageOffset_ > 0);
+    nextHistoryPageBtn->setEnabled(connected && historyPageOffset_ + historyLimit_ < historyTotal_);
     refreshServicesBtn->setEnabled(connected);
     refreshMetricsBtn->setEnabled(connected);
     authFailureBtn->setEnabled(connected);
@@ -1084,7 +1236,9 @@ void MainWindow::handleFrame(uint32_t serialId, const std::string& payload) {
         if (resp.ParseFromString(payload)) {
             if (resp.success()) {
                 populateTasks(resp);
-                appendLog(QString("任务列表已刷新，共 %1 条").arg(resp.tasks_size()));
+                appendLog(QString("任务列表已刷新，本页 %1 条 / 共 %2 条")
+                              .arg(resp.tasks_size())
+                              .arg(resp.total()));
             } else {
                 appendLog("任务列表刷新失败: " + QString::fromStdString(resp.error()));
             }
@@ -1099,7 +1253,9 @@ void MainWindow::handleFrame(uint32_t serialId, const std::string& payload) {
         if (resp.ParseFromString(payload)) {
             if (resp.success()) {
                 populateHistory(resp);
-                appendLog(QString("执行历史已刷新，共 %1 条").arg(resp.history_size()));
+                appendLog(QString("执行历史已刷新，本页 %1 条 / 共 %2 条")
+                              .arg(resp.history_size())
+                              .arg(resp.total()));
             } else {
                 appendLog("执行历史刷新失败: " + QString::fromStdString(resp.error()));
             }
@@ -1204,10 +1360,16 @@ void MainWindow::handleFrame(uint32_t serialId, const std::string& payload) {
 
 void MainWindow::populateTasks(const corpcron::rpc::ListTasksResponse& response) {
     tasksTable->setRowCount(response.tasks_size());
-    if (overviewTaskCountValue) overviewTaskCountValue->setText(QString::number(response.tasks_size()));
+    tasksTotal_ = response.total();
+    tasksPageOffset_ = response.offset();
+    tasksLimit_ = response.limit() > 0 ? response.limit() : taskPageSizeSpin->value();
+    if (overviewTaskCountValue) overviewTaskCountValue->setText(QString::number(tasksTotal_));
     for (int row = 0; row < response.tasks_size(); ++row) {
         const auto& task = response.tasks(row);
-        QString status = task.status() == 1 ? "启用" : "取消";
+        QString status = "未知";
+        if (task.status() == 0) status = "停用";
+        if (task.status() == 1) status = "待调度";
+        if (task.status() == 2) status = "执行中";
         QStringList values{
             QString::fromStdString(task.id()),
             QString::fromStdString(task.handler()),
@@ -1217,20 +1379,30 @@ void MainWindow::populateTasks(const corpcron::rpc::ListTasksResponse& response)
             QString::fromStdString(task.last_run_at()),
             QString::number(task.retry_count()),
             QString::number(task.max_retries()),
+            QString::fromStdString(task.current_execution_id()),
+            QString::fromStdString(task.running_node()),
+            QString::fromStdString(task.started_at()),
             QString::fromStdString(task.params())
         };
         for (int col = 0; col < values.size(); ++col) {
-            tasksTable->setItem(row, col, new QTableWidgetItem(values[col]));
+            auto *cell = new QTableWidgetItem(values[col]);
+            cell->setToolTip(values[col]);
+            tasksTable->setItem(row, col, cell);
         }
     }
+    updateTaskPaginationUi();
 }
 
 void MainWindow::populateHistory(const corpcron::rpc::ListHistoryResponse& response) {
     historyTable->setRowCount(response.history_size());
-    if (overviewHistoryCountValue) overviewHistoryCountValue->setText(QString::number(response.history_size()));
+    historyTotal_ = response.total();
+    historyPageOffset_ = response.offset();
+    historyLimit_ = response.limit() > 0 ? response.limit() : historyLimitSpin->value();
+    if (overviewHistoryCountValue) overviewHistoryCountValue->setText(QString::number(historyTotal_));
     for (int row = 0; row < response.history_size(); ++row) {
         const auto& item = response.history(row);
         QStringList values{
+            QString::fromStdString(item.execution_id()),
             QString::fromStdString(item.task_id()),
             QString::fromStdString(item.exec_node()),
             item.success() ? "成功" : "失败",
@@ -1240,9 +1412,15 @@ void MainWindow::populateHistory(const corpcron::rpc::ListHistoryResponse& respo
             QString::fromStdString(item.end_time())
         };
         for (int col = 0; col < values.size(); ++col) {
-            historyTable->setItem(row, col, new QTableWidgetItem(values[col]));
+            auto *cell = new QTableWidgetItem(values[col]);
+            cell->setToolTip(values[col]);
+            historyTable->setItem(row, col, cell);
         }
     }
+    if (historyDetailView && response.history_size() == 0) {
+        historyDetailView->clear();
+    }
+    updateHistoryPaginationUi();
 }
 
 void MainWindow::populateServices(const corpcron::rpc::ListServicesResponse& response) {
@@ -1277,11 +1455,50 @@ void MainWindow::populateMetrics(const corpcron::rpc::GetMetricsResponse& respon
         {"task_failure_total", response.task_failure_total()},
         {"lock_acquire_success_total", response.lock_acquire_success_total()},
         {"lock_acquire_failure_total", response.lock_acquire_failure_total()},
-        {"max_task_duration_ms", response.max_task_duration_ms()}
+        {"max_task_duration_ms", response.max_task_duration_ms()},
+        {"task_duration_p95_ms", response.task_duration_p95_ms()},
+        {"task_duration_p99_ms", response.task_duration_p99_ms()},
+        {"task_duration_samples_total", response.task_duration_samples_total()},
+        {"schedule_delay_max_ms", response.schedule_delay_max_ms()},
+        {"schedule_delay_p95_ms", response.schedule_delay_p95_ms()},
+        {"schedule_delay_p99_ms", response.schedule_delay_p99_ms()},
+        {"schedule_delay_samples_total", response.schedule_delay_samples_total()}
     };
     metricsTable->setRowCount(rows.size());
     for (int row = 0; row < rows.size(); ++row) {
         metricsTable->setItem(row, 0, new QTableWidgetItem(rows[row].name));
         metricsTable->setItem(row, 1, new QTableWidgetItem(QString::number(rows[row].value)));
+    }
+}
+
+void MainWindow::updateTaskPaginationUi() {
+    const int start = tasksTotal_ == 0 ? 0 : tasksPageOffset_ + 1;
+    const int end = std::min(tasksTotal_, tasksPageOffset_ + tasksLimit_);
+    if (tasksPageLabel) {
+        tasksPageLabel->setText(QString("第 %1-%2 条 / 共 %3 条")
+                                    .arg(start)
+                                    .arg(end)
+                                    .arg(tasksTotal_));
+    }
+    const bool connected = socket && socket->state() == QAbstractSocket::ConnectedState;
+    if (prevTasksPageBtn) prevTasksPageBtn->setEnabled(connected && tasksPageOffset_ > 0);
+    if (nextTasksPageBtn) {
+        nextTasksPageBtn->setEnabled(connected && tasksPageOffset_ + tasksLimit_ < tasksTotal_);
+    }
+}
+
+void MainWindow::updateHistoryPaginationUi() {
+    const int start = historyTotal_ == 0 ? 0 : historyPageOffset_ + 1;
+    const int end = std::min(historyTotal_, historyPageOffset_ + historyLimit_);
+    if (historyPageLabel) {
+        historyPageLabel->setText(QString("第 %1-%2 条 / 共 %3 条")
+                                      .arg(start)
+                                      .arg(end)
+                                      .arg(historyTotal_));
+    }
+    const bool connected = socket && socket->state() == QAbstractSocket::ConnectedState;
+    if (prevHistoryPageBtn) prevHistoryPageBtn->setEnabled(connected && historyPageOffset_ > 0);
+    if (nextHistoryPageBtn) {
+        nextHistoryPageBtn->setEnabled(connected && historyPageOffset_ + historyLimit_ < historyTotal_);
     }
 }

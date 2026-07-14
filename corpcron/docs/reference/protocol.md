@@ -22,7 +22,27 @@ Corpcron RPC 基于 TCP，自定义了一个简单的二进制帧格式：
 | 6 | `ExecuteTaskResponse` |
 | 7 | `CancelTaskRequest` |
 | 8 | `CancelTaskResponse` |
+| 9 | `ListTasksRequest` |
+| 10 | `ListTasksResponse` |
+| 11 | `ListHistoryRequest` |
+| 12 | `ListHistoryResponse` |
+| 13 | `ListServicesRequest` |
+| 14 | `ListServicesResponse` |
+| 15 | `UpdateTaskRequest` |
+| 16 | `UpdateTaskResponse` |
+| 17 | `EnableTaskRequest` |
+| 18 | `EnableTaskResponse` |
+| 19 | `DeleteTaskRequest` |
+| 20 | `DeleteTaskResponse` |
+| 21 | `RunTaskNowRequest` |
+| 22 | `RunTaskNowResponse` |
+| 23 | `GetMetricsRequest` |
+| 24 | `GetMetricsResponse` |
 | 100 | `RpcError` |
+
+`ListTasksResponse.TaskInfo` 会返回任务状态、下一次执行时间、重试计数，以及运行中的 `current_execution_id`、`running_node` 和 `started_at`。`ListHistoryResponse.TaskHistoryInfo` 会返回 `execution_id`，用于定位一次具体执行并避免重复历史记录。
+
+`GetMetricsResponse` 会返回 RPC、连接、任务、锁、任务执行耗时和调度延迟指标，其中执行耗时和调度延迟包含 max、p95、p99 与样本总数。
 
 ## 错误响应
 

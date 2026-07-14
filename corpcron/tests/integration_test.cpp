@@ -40,9 +40,15 @@ int main() {
         return 77;
     }
 
+    corpcron::RedisClientOptions redis_options;
+    redis_options.pool_size = 2;
+    redis_options.connect_timeout_ms = 1000;
+    redis_options.command_timeout_ms = 1000;
     corpcron::RedisClient redis(getenv_or("CORPCRON_REDIS_HOST", "127.0.0.1"),
-                                getenv_int_or("CORPCRON_REDIS_PORT", 6380));
+                                getenv_int_or("CORPCRON_REDIS_PORT", 6380),
+                                redis_options);
     assert(redis.connect());
+    assert(redis.lastError().ok());
 
     std::string service_name = "itest-" + unique_id("");
     std::string endpoint1 = "127.0.0.1:18081";
@@ -91,12 +97,19 @@ int main() {
     assert(std::find(endpoints.begin(), endpoints.end(), endpoint1) == endpoints.end());
     assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) == endpoints.end());
 
+    corpcron::MySQLClientOptions mysql_options;
+    mysql_options.pool_size = 2;
+    mysql_options.connect_timeout_sec = 3;
+    mysql_options.read_timeout_sec = 5;
+    mysql_options.write_timeout_sec = 5;
     corpcron::MySQLClient db(getenv_or("CORPCRON_MYSQL_HOST", "127.0.0.1"),
                              getenv_int_or("CORPCRON_MYSQL_PORT", 3307),
                              getenv_or("CORPCRON_MYSQL_USER", "corpcron"),
                              getenv_or("CORPCRON_MYSQL_PASSWORD", "corpcron_dev_password"),
-                             getenv_or("CORPCRON_MYSQL_DATABASE", "corpcron"));
+                             getenv_or("CORPCRON_MYSQL_DATABASE", "corpcron"),
+                             mysql_options);
     assert(db.connect());
+    assert(db.lastError().ok());
 
     corpcron::TaskMeta task;
     task.id = unique_id("itest-task-");
@@ -125,6 +138,43 @@ int main() {
     });
     assert(due_found != due_tasks.end());
 
+    corpcron::TaskHistory latest;
+    std::string execution_id = task.id + "-execution-1";
+    assert(db.claimTaskExecution(task.id, execution_id, "integration-node"));
+    assert(!db.claimTaskExecution(task.id, task.id + "-execution-dup", "integration-node"));
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.status == corpcron::TASK_RUNNING);
+    assert(loaded.current_execution_id == execution_id);
+    assert(loaded.running_node == "integration-node");
+    assert(!loaded.started_at.empty());
+
+    corpcron::TaskHistory running_history;
+    running_history.execution_id = execution_id;
+    running_history.task_id = task.id;
+    running_history.exec_node = "integration-node";
+    running_history.success = true;
+    running_history.result = "idempotent-ok";
+    running_history.start_time = "2026-01-01 00:00:00";
+    running_history.end_time = "2026-01-01 00:00:01";
+    int before_history_count = db.historyCount(task.id);
+    assert(db.addHistory(running_history));
+    running_history.result = "idempotent-ok-updated";
+    assert(db.addHistory(running_history));
+    assert(db.historyCount(task.id) == before_history_count + 1);
+    assert(db.getLatestHistory(task.id, latest));
+    assert(latest.execution_id == execution_id);
+    assert(latest.result == "idempotent-ok-updated");
+
+    assert(db.completeTaskExecution(task.id, execution_id, corpcron::TASK_DISABLED,
+                                    "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(!db.completeTaskExecution(task.id, execution_id, corpcron::TASK_DISABLED,
+                                     "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.status == corpcron::TASK_DISABLED);
+    assert(loaded.current_execution_id.empty());
+    assert(loaded.running_node.empty());
+    assert(loaded.started_at.empty());
+
     assert(db.updateTaskRuntime(task.id, 0, "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
     assert(db.getTask(task.id, loaded));
     assert(loaded.status == 0);
@@ -141,7 +191,6 @@ int main() {
     history.end_time = "2026-01-01 00:00:01";
     assert(db.addHistory(history));
     assert(db.historyCount(task.id) > 0);
-    corpcron::TaskHistory latest;
     assert(db.getLatestHistory(task.id, latest));
     assert(latest.task_id == task.id);
     assert(latest.exec_node == "integration-node");

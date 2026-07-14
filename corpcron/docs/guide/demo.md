@@ -1,6 +1,6 @@
 # 演示流程
 
-这份文档用于从零演示项目功能，适合面试前自测或答辩时按步骤操作。
+这份文档用于从零演示项目功能，适合自测、答辩或给别人快速介绍项目时按步骤操作。
 
 ## 1. 启动依赖
 
@@ -89,7 +89,7 @@ Token: 留空，除非配置了 rpc.auth_token
 - 集成/E2E：等价于 `./scripts/check.sh --compose`
 - 构建镜像：等价于 `docker build -t corpcron:local .`
 - 查看压测结果：显示 `docs/assets/benchmark/latest.txt`
-- 查看部署文档：显示 `docs/deploy.md` 与 `systemd/corpcron.service`
+- 查看部署文档：显示 `docs/guide/deploy.md` 与 `systemd/corpcron.service`
 - 短连接/长连接压测：等价于 `./scripts/benchmark.sh ... short/reuse`
 - 协议异常演示：鉴权失败、未知方法、坏包断连
 
@@ -117,10 +117,18 @@ Params: demo
 
 在“任务列表”页选择任务后，可演示：
 
+- 按状态、关键字分页筛选任务
 - 保存修改
 - 禁用 / 启用
 - 立即执行
 - 删除
+
+### 执行历史
+
+在“执行历史”页可演示：
+
+- 按任务 ID、执行结果和关键字分页筛选历史
+- 点击历史记录查看完整 `execution_id`、执行节点、结果、错误和开始/结束时间
 
 ### 服务发现
 
@@ -156,7 +164,7 @@ docker exec -it corpcron-mysql mysql -ucorpcron -pcorpcron_dev_password corpcron
 查看任务：
 
 ```sql
-SELECT id, handler, status, next_run_at, last_run_at, retry_count
+SELECT id, handler, status, current_execution_id, running_node, next_run_at, last_run_at, retry_count
 FROM tasks
 ORDER BY created_at DESC
 LIMIT 10;
@@ -165,7 +173,7 @@ LIMIT 10;
 查看执行历史：
 
 ```sql
-SELECT task_id, exec_node, success, result, error, start_time, end_time
+SELECT execution_id, task_id, exec_node, success, result, error, start_time, end_time
 FROM task_history
 ORDER BY id DESC
 LIMIT 10;

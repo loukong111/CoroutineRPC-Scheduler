@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QTableWidget>
 #include <QTimer>
 #include <QProcess>
@@ -33,7 +34,13 @@ private slots:
     void onDeleteSelectedTask();
     void onRunSelectedTaskNow();
     void onRefreshTasks();
+    void onTaskFilterChanged();
+    void onPrevTasksPage();
+    void onNextTasksPage();
     void onRefreshHistory();
+    void onHistoryFilterChanged();
+    void onPrevHistoryPage();
+    void onNextHistoryPage();
     void onRefreshServices();
     void onRefreshMetrics();
     void onStartDependencies();
@@ -56,6 +63,7 @@ private slots:
     void onUnknownRpcTest();
     void onBadFrameTest();
     void onTaskSelectionChanged();
+    void onHistorySelectionChanged();
     void onAutoRefreshChanged(bool checked);
     void onAutoRefreshTick();
     void onReadyRead();
@@ -91,6 +99,12 @@ private:
 
     QTableWidget *tasksTable;
     QCheckBox *enabledOnlyCheck;
+    QComboBox *taskStatusCombo;
+    QLineEdit *taskKeywordEdit;
+    QSpinBox *taskPageSizeSpin;
+    QPushButton *prevTasksPageBtn;
+    QPushButton *nextTasksPageBtn;
+    QLabel *tasksPageLabel;
     QPushButton *refreshTasksBtn;
     QCheckBox *autoRefreshCheck;
 
@@ -110,8 +124,14 @@ private:
 
     QLineEdit *historyTaskIdEdit;
     QSpinBox *historyLimitSpin;
+    QComboBox *historySuccessCombo;
+    QLineEdit *historyKeywordEdit;
+    QPushButton *prevHistoryPageBtn;
+    QPushButton *nextHistoryPageBtn;
+    QLabel *historyPageLabel;
     QPushButton *refreshHistoryBtn;
     QTableWidget *historyTable;
+    QPlainTextEdit *historyDetailView;
 
     QLineEdit *serviceNameEdit;
     QPushButton *refreshServicesBtn;
@@ -152,6 +172,12 @@ private:
     QProcess *server2Process;
     QByteArray recvBuffer;
     QTimer *autoRefreshTimer;
+    int tasksPageOffset_ = 0;
+    int tasksTotal_ = 0;
+    int tasksLimit_ = 50;
+    int historyPageOffset_ = 0;
+    int historyTotal_ = 0;
+    int historyLimit_ = 50;
 
     bool sendFrame(uint32_t serialId, const std::string& payload, const QString& action);
     std::string authToken() const;
@@ -167,6 +193,8 @@ private:
     void populateHistory(const corpcron::rpc::ListHistoryResponse& response);
     void populateServices(const corpcron::rpc::ListServicesResponse& response);
     void populateMetrics(const corpcron::rpc::GetMetricsResponse& response);
+    void updateTaskPaginationUi();
+    void updateHistoryPaginationUi();
 };
 
 #endif

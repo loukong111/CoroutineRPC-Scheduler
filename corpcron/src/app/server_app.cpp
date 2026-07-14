@@ -33,6 +33,7 @@ int ServerApp::run() {
     if (!initMySQL()) return 1;
 
     startScheduler();
+    if (!startMetricsExporter()) return 1;
     if (!registerService()) return 1;
     startHeartbeat();
     startSignalThread();
@@ -58,6 +59,7 @@ void ServerApp::stop() {
     stop_cv_.notify_all();
 
     if (scheduler_) scheduler_->stop();
+    if (metrics_exporter_) metrics_exporter_->stop();
     if (server_) server_->stop();
 }
 
@@ -72,6 +74,31 @@ bool ServerApp::loadConfig() {
     std::string advertise_host = Config::instance().get("server.advertise_host", "127.0.0.1");
     max_connections_ = static_cast<size_t>(Config::instance().getInt("server.max_connections", 1024));
     auth_token_ = Config::instance().get("rpc.auth_token", "");
+    metrics_enabled_ = Config::instance().getInt("metrics.enabled", 1) == 1;
+    metrics_host_ = Config::instance().get("metrics.host", "127.0.0.1");
+    metrics_port_ = Config::instance().getInt("metrics.port", 9091);
+
+    auto getAlertUint = [](const std::string& key, uint64_t default_value) {
+        const int value = Config::instance().getInt(key, static_cast<int>(default_value));
+        return value < 0 ? default_value : static_cast<uint64_t>(value);
+    };
+    alert_config_.min_rpc_requests =
+        getAlertUint("alerts.min_rpc_requests", alert_config_.min_rpc_requests);
+    alert_config_.rpc_error_rate_percent =
+        getAlertUint("alerts.rpc_error_rate_percent", alert_config_.rpc_error_rate_percent);
+    alert_config_.min_task_executions =
+        getAlertUint("alerts.min_task_executions", alert_config_.min_task_executions);
+    alert_config_.task_failure_rate_percent =
+        getAlertUint("alerts.task_failure_rate_percent", alert_config_.task_failure_rate_percent);
+    alert_config_.min_lock_attempts =
+        getAlertUint("alerts.min_lock_attempts", alert_config_.min_lock_attempts);
+    alert_config_.lock_failure_rate_percent =
+        getAlertUint("alerts.lock_failure_rate_percent", alert_config_.lock_failure_rate_percent);
+    alert_config_.schedule_delay_p99_ms =
+        getAlertUint("alerts.schedule_delay_p99_ms", alert_config_.schedule_delay_p99_ms);
+    alert_config_.task_duration_p99_ms =
+        getAlertUint("alerts.task_duration_p99_ms", alert_config_.task_duration_p99_ms);
+
     endpoint_ = advertise_host + ":" + std::to_string(port_);
     node_id_ = Config::instance().get("server.node_id", "");
     if (node_id_.empty()) node_id_ = endpoint_;
@@ -102,9 +129,17 @@ bool ServerApp::setupSignalHandling() {
 bool ServerApp::initRedis() {
     std::string redis_host = Config::instance().get("redis.host", "127.0.0.1");
     int redis_port = Config::instance().getInt("redis.port", 6380);
-    redis_ = std::make_shared<RedisClient>(redis_host, redis_port);
+    RedisClientOptions options;
+    int redis_pool_size = Config::instance().getInt("redis.pool_size", 4);
+    if (redis_pool_size <= 0) redis_pool_size = 1;
+    options.pool_size = static_cast<size_t>(redis_pool_size);
+    options.connect_timeout_ms = Config::instance().getInt("redis.connect_timeout_ms", 1000);
+    options.command_timeout_ms = Config::instance().getInt("redis.command_timeout_ms", 1000);
+    redis_ = std::make_shared<RedisClient>(redis_host, redis_port, options);
     if (!redis_->connect()) {
-        LOG_ERROR("Failed to connect to Redis");
+        auto error = redis_->lastError();
+        LOG_ERROR("Failed to connect to Redis kind=" +
+                  std::string(storageErrorKindName(error.kind)) + " message=" + error.message);
         return false;
     }
     return true;
@@ -116,9 +151,20 @@ bool ServerApp::initMySQL() {
     std::string mysql_user = Config::instance().get("mysql.user", "root");
     std::string mysql_pass = Config::instance().get("mysql.password", "");
     std::string mysql_db = Config::instance().get("mysql.database", "corpcron");
-    db_ = std::make_shared<MySQLClient>(mysql_host, mysql_port, mysql_user, mysql_pass, mysql_db);
+    MySQLClientOptions options;
+    int mysql_pool_size = Config::instance().getInt("mysql.pool_size", 4);
+    if (mysql_pool_size <= 0) mysql_pool_size = 1;
+    options.pool_size = static_cast<size_t>(mysql_pool_size);
+    options.connect_timeout_sec = Config::instance().getInt("mysql.connect_timeout_sec", 3);
+    options.read_timeout_sec = Config::instance().getInt("mysql.read_timeout_sec", 5);
+    options.write_timeout_sec = Config::instance().getInt("mysql.write_timeout_sec", 5);
+    options.reconnect = Config::instance().getInt("mysql.reconnect", 1) == 1;
+    db_ = std::make_shared<MySQLClient>(mysql_host, mysql_port, mysql_user, mysql_pass, mysql_db,
+                                        options);
     if (!db_->connect()) {
-        LOG_ERROR("Failed to connect to MySQL");
+        auto error = db_->lastError();
+        LOG_ERROR("Failed to connect to MySQL kind=" +
+                  std::string(storageErrorKindName(error.kind)) + " message=" + error.message);
         return false;
     }
     return true;
@@ -133,6 +179,13 @@ void ServerApp::registerHandlers() {
 void ServerApp::startScheduler() {
     scheduler_ = std::make_unique<TaskScheduler>(db_, redis_, node_id_);
     scheduler_->start();
+}
+
+bool ServerApp::startMetricsExporter() {
+    if (!metrics_enabled_) return true;
+    metrics_exporter_ =
+        std::make_unique<MetricsExporter>(metrics_host_, metrics_port_, alert_config_);
+    return metrics_exporter_->start();
 }
 
 bool ServerApp::registerService() {

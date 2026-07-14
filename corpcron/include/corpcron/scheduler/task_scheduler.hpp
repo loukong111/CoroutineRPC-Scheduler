@@ -2,6 +2,7 @@
 #include "corpcron/mysql/mysql_client.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/common/thread_pool.hpp"
+#include "corpcron/rpc/rpc_client_pool.hpp"
 #include <atomic>
 #include <condition_variable>
 #include <thread>
@@ -71,6 +72,7 @@ private:
     std::unique_ptr<std::thread> thread_;
     std::unique_ptr<DynamicThreadPool> thread_pool_;
     std::unique_ptr<LockRenewer> lock_renewer_;
+    std::unique_ptr<RpcClientPool> rpc_client_pool_;
 };
 
 } // namespace corpcron

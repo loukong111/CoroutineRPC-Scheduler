@@ -1,0 +1,22 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: local-demo
+  group_by:
+    - alertname
+    - severity
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 30m
+
+receivers:
+  - name: local-demo
+
+# Production deployments can replace this with a real notification channel.
+#
+# receivers:
+#   - name: webhook
+#     webhook_configs:
+#       - url: http://host.docker.internal:5001/alertmanager
+#         send_resolved: true

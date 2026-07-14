@@ -161,6 +161,9 @@ PROTOBUF_CONSTEXPR TaskInfo::TaskInfo(
   , /*decltype(_impl_.handler_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.next_run_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.last_run_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.current_execution_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.running_node_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.started_at_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.status_)*/0
   , /*decltype(_impl_.retry_count_)*/0
   , /*decltype(_impl_.max_retries_)*/0
@@ -177,8 +180,12 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORIT
 PROTOBUF_CONSTEXPR ListTasksRequest::ListTasksRequest(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.keyword_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.limit_)*/0
+  , /*decltype(_impl_.offset_)*/0
+  , /*decltype(_impl_.status_filter_)*/0
   , /*decltype(_impl_.enabled_only_)*/false
+  , /*decltype(_impl_.has_status_filter_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ListTasksRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ListTasksRequestDefaultTypeInternal()
@@ -194,6 +201,9 @@ PROTOBUF_CONSTEXPR ListTasksResponse::ListTasksResponse(
     /*decltype(_impl_.tasks_)*/{}
   , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_.total_)*/0
+  , /*decltype(_impl_.offset_)*/0
+  , /*decltype(_impl_.limit_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ListTasksResponseDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ListTasksResponseDefaultTypeInternal()
@@ -206,7 +216,8 @@ struct ListTasksResponseDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 ListTasksResponseDefaultTypeInternal _ListTasksResponse_default_instance_;
 PROTOBUF_CONSTEXPR TaskHistoryInfo::TaskHistoryInfo(
     ::_pbi::ConstantInitialized): _impl_{
-    /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+    /*decltype(_impl_.execution_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.exec_node_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.result_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -227,7 +238,11 @@ PROTOBUF_CONSTEXPR ListHistoryRequest::ListHistoryRequest(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.task_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.keyword_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.limit_)*/0
+  , /*decltype(_impl_.offset_)*/0
+  , /*decltype(_impl_.success_filter_)*/0
+  , /*decltype(_impl_.has_success_filter_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ListHistoryRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ListHistoryRequestDefaultTypeInternal()
@@ -243,6 +258,9 @@ PROTOBUF_CONSTEXPR ListHistoryResponse::ListHistoryResponse(
     /*decltype(_impl_.history_)*/{}
   , /*decltype(_impl_.error_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.success_)*/false
+  , /*decltype(_impl_.total_)*/0
+  , /*decltype(_impl_.offset_)*/0
+  , /*decltype(_impl_.limit_)*/0
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ListHistoryResponseDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ListHistoryResponseDefaultTypeInternal()
@@ -425,6 +443,13 @@ PROTOBUF_CONSTEXPR GetMetricsResponse::GetMetricsResponse(
   , /*decltype(_impl_.lock_acquire_success_total_)*/uint64_t{0u}
   , /*decltype(_impl_.lock_acquire_failure_total_)*/uint64_t{0u}
   , /*decltype(_impl_.max_task_duration_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.task_duration_p95_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.task_duration_p99_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.task_duration_samples_total_)*/uint64_t{0u}
+  , /*decltype(_impl_.schedule_delay_max_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.schedule_delay_p95_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.schedule_delay_p99_ms_)*/uint64_t{0u}
+  , /*decltype(_impl_.schedule_delay_samples_total_)*/uint64_t{0u}
   , /*decltype(_impl_.success_)*/false
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct GetMetricsResponseDefaultTypeInternal {
@@ -535,6 +560,9 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.last_run_at_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.retry_count_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.max_retries_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.current_execution_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.running_node_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskInfo, _impl_.started_at_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -544,6 +572,10 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.auth_token_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.limit_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.enabled_only_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.offset_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.status_filter_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.keyword_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksRequest, _impl_.has_status_filter_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -553,12 +585,16 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.error_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.tasks_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.total_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.offset_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListTasksResponse, _impl_.limit_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.execution_id_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.task_id_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.exec_node_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::TaskHistoryInfo, _impl_.success_),
@@ -575,6 +611,10 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.auth_token_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.task_id_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.limit_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.offset_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.success_filter_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.keyword_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryRequest, _impl_.has_success_filter_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -584,6 +624,9 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.success_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.error_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.history_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.total_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.offset_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListHistoryResponse, _impl_.limit_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ListServicesRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -695,6 +738,13 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.lock_acquire_success_total_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.lock_acquire_failure_total_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.max_task_duration_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.task_duration_p95_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.task_duration_p99_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.task_duration_samples_total_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.schedule_delay_max_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.schedule_delay_p95_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.schedule_delay_p99_ms_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::GetMetricsResponse, _impl_.schedule_delay_samples_total_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, -1, sizeof(::corpcron::rpc::RpcError)},
@@ -707,23 +757,23 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 61, -1, -1, sizeof(::corpcron::rpc::CancelTaskRequest)},
   { 69, -1, -1, sizeof(::corpcron::rpc::CancelTaskResponse)},
   { 77, -1, -1, sizeof(::corpcron::rpc::TaskInfo)},
-  { 92, -1, -1, sizeof(::corpcron::rpc::ListTasksRequest)},
-  { 101, -1, -1, sizeof(::corpcron::rpc::ListTasksResponse)},
-  { 110, -1, -1, sizeof(::corpcron::rpc::TaskHistoryInfo)},
-  { 123, -1, -1, sizeof(::corpcron::rpc::ListHistoryRequest)},
-  { 132, -1, -1, sizeof(::corpcron::rpc::ListHistoryResponse)},
-  { 141, -1, -1, sizeof(::corpcron::rpc::ListServicesRequest)},
-  { 149, -1, -1, sizeof(::corpcron::rpc::ListServicesResponse)},
-  { 158, -1, -1, sizeof(::corpcron::rpc::UpdateTaskRequest)},
-  { 166, -1, -1, sizeof(::corpcron::rpc::UpdateTaskResponse)},
-  { 174, -1, -1, sizeof(::corpcron::rpc::EnableTaskRequest)},
-  { 183, -1, -1, sizeof(::corpcron::rpc::EnableTaskResponse)},
-  { 191, -1, -1, sizeof(::corpcron::rpc::DeleteTaskRequest)},
-  { 199, -1, -1, sizeof(::corpcron::rpc::DeleteTaskResponse)},
-  { 207, -1, -1, sizeof(::corpcron::rpc::RunTaskNowRequest)},
-  { 215, -1, -1, sizeof(::corpcron::rpc::RunTaskNowResponse)},
-  { 224, -1, -1, sizeof(::corpcron::rpc::GetMetricsRequest)},
-  { 231, -1, -1, sizeof(::corpcron::rpc::GetMetricsResponse)},
+  { 95, -1, -1, sizeof(::corpcron::rpc::ListTasksRequest)},
+  { 108, -1, -1, sizeof(::corpcron::rpc::ListTasksResponse)},
+  { 120, -1, -1, sizeof(::corpcron::rpc::TaskHistoryInfo)},
+  { 134, -1, -1, sizeof(::corpcron::rpc::ListHistoryRequest)},
+  { 147, -1, -1, sizeof(::corpcron::rpc::ListHistoryResponse)},
+  { 159, -1, -1, sizeof(::corpcron::rpc::ListServicesRequest)},
+  { 167, -1, -1, sizeof(::corpcron::rpc::ListServicesResponse)},
+  { 176, -1, -1, sizeof(::corpcron::rpc::UpdateTaskRequest)},
+  { 184, -1, -1, sizeof(::corpcron::rpc::UpdateTaskResponse)},
+  { 192, -1, -1, sizeof(::corpcron::rpc::EnableTaskRequest)},
+  { 201, -1, -1, sizeof(::corpcron::rpc::EnableTaskResponse)},
+  { 209, -1, -1, sizeof(::corpcron::rpc::DeleteTaskRequest)},
+  { 217, -1, -1, sizeof(::corpcron::rpc::DeleteTaskResponse)},
+  { 225, -1, -1, sizeof(::corpcron::rpc::RunTaskNowRequest)},
+  { 233, -1, -1, sizeof(::corpcron::rpc::RunTaskNowResponse)},
+  { 242, -1, -1, sizeof(::corpcron::rpc::GetMetricsRequest)},
+  { 249, -1, -1, sizeof(::corpcron::rpc::GetMetricsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -772,59 +822,74 @@ const char descriptor_table_protodef_rpc_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "sult\030\002 \001(\t\022\r\n\005error\030\003 \001(\t\"8\n\021CancelTaskR"
   "equest\022\017\n\007task_id\030\001 \001(\t\022\022\n\nauth_token\030\002 "
   "\001(\t\"4\n\022CancelTaskResponse\022\017\n\007success\030\001 \001"
-  "(\010\022\r\n\005error\030\002 \001(\t\"\256\001\n\010TaskInfo\022\n\n\002id\030\001 \001"
+  "(\010\022\r\n\005error\030\002 \001(\t\"\366\001\n\010TaskInfo\022\n\n\002id\030\001 \001"
   "(\t\022\021\n\tcron_expr\030\002 \001(\t\022\016\n\006params\030\003 \001(\t\022\017\n"
   "\007handler\030\004 \001(\t\022\016\n\006status\030\005 \001(\005\022\023\n\013next_r"
   "un_at\030\006 \001(\t\022\023\n\013last_run_at\030\007 \001(\t\022\023\n\013retr"
-  "y_count\030\010 \001(\005\022\023\n\013max_retries\030\t \001(\005\"K\n\020Li"
-  "stTasksRequest\022\022\n\nauth_token\030\001 \001(\t\022\r\n\005li"
-  "mit\030\002 \001(\005\022\024\n\014enabled_only\030\003 \001(\010\"Z\n\021ListT"
-  "asksResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002"
-  " \001(\t\022%\n\005tasks\030\003 \003(\0132\026.corpcron.rpc.TaskI"
-  "nfo\"\213\001\n\017TaskHistoryInfo\022\017\n\007task_id\030\001 \001(\t"
-  "\022\021\n\texec_node\030\002 \001(\t\022\017\n\007success\030\003 \001(\010\022\016\n\006"
-  "result\030\004 \001(\t\022\r\n\005error\030\005 \001(\t\022\022\n\nstart_tim"
-  "e\030\006 \001(\t\022\020\n\010end_time\030\007 \001(\t\"H\n\022ListHistory"
-  "Request\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007task_id\030\002"
-  " \001(\t\022\r\n\005limit\030\003 \001(\005\"e\n\023ListHistoryRespon"
-  "se\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022.\n\007hi"
-  "story\030\003 \003(\0132\035.corpcron.rpc.TaskHistoryIn"
-  "fo\"\?\n\023ListServicesRequest\022\022\n\nauth_token\030"
-  "\001 \001(\t\022\024\n\014service_name\030\002 \001(\t\"I\n\024ListServi"
-  "cesResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 "
-  "\001(\t\022\021\n\tendpoints\030\003 \003(\t\"M\n\021UpdateTaskRequ"
-  "est\022\022\n\nauth_token\030\001 \001(\t\022$\n\004task\030\002 \001(\0132\026."
-  "corpcron.rpc.TaskInfo\"4\n\022UpdateTaskRespo"
-  "nse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"I\n\021E"
-  "nableTaskRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007"
-  "task_id\030\002 \001(\t\022\017\n\007enabled\030\003 \001(\010\"4\n\022Enable"
-  "TaskResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002"
-  " \001(\t\"8\n\021DeleteTaskRequest\022\022\n\nauth_token\030"
-  "\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\"4\n\022DeleteTaskResp"
-  "onse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"8\n\021"
-  "RunTaskNowRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n"
-  "\007task_id\030\002 \001(\t\"D\n\022RunTaskNowResponse\022\017\n\007"
-  "success\030\001 \001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005error\030\003"
-  " \001(\t\"\'\n\021GetMetricsRequest\022\022\n\nauth_token\030"
-  "\001 \001(\t\"\247\003\n\022GetMetricsResponse\022\017\n\007success\030"
-  "\001 \001(\010\022\r\n\005error\030\002 \001(\t\022\032\n\022rpc_requests_tot"
-  "al\030\003 \001(\004\022\031\n\021rpc_success_total\030\004 \001(\004\022\027\n\017r"
-  "pc_error_total\030\005 \001(\004\022\032\n\022active_connectio"
-  "ns\030\006 \001(\004\022\034\n\024rejected_connections\030\007 \001(\004\022\030"
-  "\n\020malformed_frames\030\010 \001(\004\022\026\n\016bytes_in_tot"
-  "al\030\t \001(\004\022\027\n\017bytes_out_total\030\n \001(\004\022\032\n\022tas"
-  "k_success_total\030\013 \001(\004\022\032\n\022task_failure_to"
-  "tal\030\014 \001(\004\022\"\n\032lock_acquire_success_total\030"
-  "\r \001(\004\022\"\n\032lock_acquire_failure_total\030\016 \001("
-  "\004\022\034\n\024max_task_duration_ms\030\017 \001(\004*\232\001\n\tErro"
-  "rCode\022\006\n\002OK\020\000\022\017\n\013BAD_REQUEST\020\001\022\022\n\016UNKNOW"
-  "N_METHOD\020\002\022\025\n\021PAYLOAD_TOO_LARGE\020\003\022\022\n\016INT"
-  "ERNAL_ERROR\020\004\022\014\n\010DB_ERROR\020\005\022\025\n\021HANDLER_N"
-  "OT_FOUND\020\006\022\020\n\014UNAUTHORIZED\020\007b\006proto3"
+  "y_count\030\010 \001(\005\022\023\n\013max_retries\030\t \001(\005\022\034\n\024cu"
+  "rrent_execution_id\030\n \001(\t\022\024\n\014running_node"
+  "\030\013 \001(\t\022\022\n\nstarted_at\030\014 \001(\t\"\236\001\n\020ListTasks"
+  "Request\022\022\n\nauth_token\030\001 \001(\t\022\r\n\005limit\030\002 \001"
+  "(\005\022\024\n\014enabled_only\030\003 \001(\010\022\016\n\006offset\030\004 \001(\005"
+  "\022\025\n\rstatus_filter\030\005 \001(\005\022\017\n\007keyword\030\006 \001(\t"
+  "\022\031\n\021has_status_filter\030\007 \001(\010\"\210\001\n\021ListTask"
+  "sResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001("
+  "\t\022%\n\005tasks\030\003 \003(\0132\026.corpcron.rpc.TaskInfo"
+  "\022\r\n\005total\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005\022\r\n\005limit"
+  "\030\006 \001(\005\"\241\001\n\017TaskHistoryInfo\022\024\n\014execution_"
+  "id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\021\n\texec_node\030\003"
+  " \001(\t\022\017\n\007success\030\004 \001(\010\022\016\n\006result\030\005 \001(\t\022\r\n"
+  "\005error\030\006 \001(\t\022\022\n\nstart_time\030\007 \001(\t\022\020\n\010end_"
+  "time\030\010 \001(\t\"\235\001\n\022ListHistoryRequest\022\022\n\naut"
+  "h_token\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\r\n\005limit\030"
+  "\003 \001(\005\022\016\n\006offset\030\004 \001(\005\022\026\n\016success_filter\030"
+  "\005 \001(\005\022\017\n\007keyword\030\006 \001(\t\022\032\n\022has_success_fi"
+  "lter\030\007 \001(\010\"\223\001\n\023ListHistoryResponse\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022.\n\007history\030\003 "
+  "\003(\0132\035.corpcron.rpc.TaskHistoryInfo\022\r\n\005to"
+  "tal\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005\022\r\n\005limit\030\006 \001(\005"
+  "\"\?\n\023ListServicesRequest\022\022\n\nauth_token\030\001 "
+  "\001(\t\022\024\n\014service_name\030\002 \001(\t\"I\n\024ListService"
+  "sResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001("
+  "\t\022\021\n\tendpoints\030\003 \003(\t\"M\n\021UpdateTaskReques"
+  "t\022\022\n\nauth_token\030\001 \001(\t\022$\n\004task\030\002 \001(\0132\026.co"
+  "rpcron.rpc.TaskInfo\"4\n\022UpdateTaskRespons"
+  "e\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"I\n\021Ena"
+  "bleTaskRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007ta"
+  "sk_id\030\002 \001(\t\022\017\n\007enabled\030\003 \001(\010\"4\n\022EnableTa"
+  "skResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001"
+  "(\t\"8\n\021DeleteTaskRequest\022\022\n\nauth_token\030\001 "
+  "\001(\t\022\017\n\007task_id\030\002 \001(\t\"4\n\022DeleteTaskRespon"
+  "se\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"8\n\021Ru"
+  "nTaskNowRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007t"
+  "ask_id\030\002 \001(\t\"D\n\022RunTaskNowResponse\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005error\030\003 \001"
+  "(\t\"\'\n\021GetMetricsRequest\022\022\n\nauth_token\030\001 "
+  "\001(\t\"\213\005\n\022GetMetricsResponse\022\017\n\007success\030\001 "
+  "\001(\010\022\r\n\005error\030\002 \001(\t\022\032\n\022rpc_requests_total"
+  "\030\003 \001(\004\022\031\n\021rpc_success_total\030\004 \001(\004\022\027\n\017rpc"
+  "_error_total\030\005 \001(\004\022\032\n\022active_connections"
+  "\030\006 \001(\004\022\034\n\024rejected_connections\030\007 \001(\004\022\030\n\020"
+  "malformed_frames\030\010 \001(\004\022\026\n\016bytes_in_total"
+  "\030\t \001(\004\022\027\n\017bytes_out_total\030\n \001(\004\022\032\n\022task_"
+  "success_total\030\013 \001(\004\022\032\n\022task_failure_tota"
+  "l\030\014 \001(\004\022\"\n\032lock_acquire_success_total\030\r "
+  "\001(\004\022\"\n\032lock_acquire_failure_total\030\016 \001(\004\022"
+  "\034\n\024max_task_duration_ms\030\017 \001(\004\022\034\n\024task_du"
+  "ration_p95_ms\030\020 \001(\004\022\034\n\024task_duration_p99"
+  "_ms\030\021 \001(\004\022#\n\033task_duration_samples_total"
+  "\030\022 \001(\004\022\035\n\025schedule_delay_max_ms\030\023 \001(\004\022\035\n"
+  "\025schedule_delay_p95_ms\030\024 \001(\004\022\035\n\025schedule"
+  "_delay_p99_ms\030\025 \001(\004\022$\n\034schedule_delay_sa"
+  "mples_total\030\026 \001(\004*\232\001\n\tErrorCode\022\006\n\002OK\020\000\022"
+  "\017\n\013BAD_REQUEST\020\001\022\022\n\016UNKNOWN_METHOD\020\002\022\025\n\021"
+  "PAYLOAD_TOO_LARGE\020\003\022\022\n\016INTERNAL_ERROR\020\004\022"
+  "\014\n\010DB_ERROR\020\005\022\025\n\021HANDLER_NOT_FOUND\020\006\022\020\n\014"
+  "UNAUTHORIZED\020\007b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_rpc_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_rpc_2eproto = {
-    false, false, 2556, descriptor_table_protodef_rpc_2eproto,
+    false, false, 3142, descriptor_table_protodef_rpc_2eproto,
     "rpc.proto",
     &descriptor_table_rpc_2eproto_once, nullptr, 0, 27,
     schemas, file_default_instances, TableStruct_rpc_2eproto::offsets,
@@ -3320,6 +3385,9 @@ TaskInfo::TaskInfo(const TaskInfo& from)
     , decltype(_impl_.handler_){}
     , decltype(_impl_.next_run_at_){}
     , decltype(_impl_.last_run_at_){}
+    , decltype(_impl_.current_execution_id_){}
+    , decltype(_impl_.running_node_){}
+    , decltype(_impl_.started_at_){}
     , decltype(_impl_.status_){}
     , decltype(_impl_.retry_count_){}
     , decltype(_impl_.max_retries_){}
@@ -3374,6 +3442,30 @@ TaskInfo::TaskInfo(const TaskInfo& from)
     _this->_impl_.last_run_at_.Set(from._internal_last_run_at(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.current_execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.current_execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_current_execution_id().empty()) {
+    _this->_impl_.current_execution_id_.Set(from._internal_current_execution_id(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.running_node_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.running_node_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_running_node().empty()) {
+    _this->_impl_.running_node_.Set(from._internal_running_node(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.started_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.started_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_started_at().empty()) {
+    _this->_impl_.started_at_.Set(from._internal_started_at(), 
+      _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.status_, &from._impl_.status_,
     static_cast<size_t>(reinterpret_cast<char*>(&_impl_.max_retries_) -
     reinterpret_cast<char*>(&_impl_.status_)) + sizeof(_impl_.max_retries_));
@@ -3391,6 +3483,9 @@ inline void TaskInfo::SharedCtor(
     , decltype(_impl_.handler_){}
     , decltype(_impl_.next_run_at_){}
     , decltype(_impl_.last_run_at_){}
+    , decltype(_impl_.current_execution_id_){}
+    , decltype(_impl_.running_node_){}
+    , decltype(_impl_.started_at_){}
     , decltype(_impl_.status_){0}
     , decltype(_impl_.retry_count_){0}
     , decltype(_impl_.max_retries_){0}
@@ -3420,6 +3515,18 @@ inline void TaskInfo::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.last_run_at_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.current_execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.current_execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.running_node_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.running_node_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.started_at_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.started_at_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 TaskInfo::~TaskInfo() {
@@ -3439,6 +3546,9 @@ inline void TaskInfo::SharedDtor() {
   _impl_.handler_.Destroy();
   _impl_.next_run_at_.Destroy();
   _impl_.last_run_at_.Destroy();
+  _impl_.current_execution_id_.Destroy();
+  _impl_.running_node_.Destroy();
+  _impl_.started_at_.Destroy();
 }
 
 void TaskInfo::SetCachedSize(int size) const {
@@ -3457,6 +3567,9 @@ void TaskInfo::Clear() {
   _impl_.handler_.ClearToEmpty();
   _impl_.next_run_at_.ClearToEmpty();
   _impl_.last_run_at_.ClearToEmpty();
+  _impl_.current_execution_id_.ClearToEmpty();
+  _impl_.running_node_.ClearToEmpty();
+  _impl_.started_at_.ClearToEmpty();
   ::memset(&_impl_.status_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&_impl_.max_retries_) -
       reinterpret_cast<char*>(&_impl_.status_)) + sizeof(_impl_.max_retries_));
@@ -3550,6 +3663,36 @@ const char* TaskInfo::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx)
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 72)) {
           _impl_.max_retries_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
           CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string current_execution_id = 10;
+      case 10:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 82)) {
+          auto str = _internal_mutable_current_execution_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.current_execution_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string running_node = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 90)) {
+          auto str = _internal_mutable_running_node();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.running_node"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string started_at = 12;
+      case 12:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 98)) {
+          auto str = _internal_mutable_started_at();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskInfo.started_at"));
         } else
           goto handle_unusual;
         continue;
@@ -3660,6 +3803,36 @@ uint8_t* TaskInfo::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(9, this->_internal_max_retries(), target);
   }
 
+  // string current_execution_id = 10;
+  if (!this->_internal_current_execution_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_current_execution_id().data(), static_cast<int>(this->_internal_current_execution_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.current_execution_id");
+    target = stream->WriteStringMaybeAliased(
+        10, this->_internal_current_execution_id(), target);
+  }
+
+  // string running_node = 11;
+  if (!this->_internal_running_node().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_running_node().data(), static_cast<int>(this->_internal_running_node().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.running_node");
+    target = stream->WriteStringMaybeAliased(
+        11, this->_internal_running_node(), target);
+  }
+
+  // string started_at = 12;
+  if (!this->_internal_started_at().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_started_at().data(), static_cast<int>(this->_internal_started_at().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskInfo.started_at");
+    target = stream->WriteStringMaybeAliased(
+        12, this->_internal_started_at(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -3718,6 +3891,27 @@ size_t TaskInfo::ByteSizeLong() const {
         this->_internal_last_run_at());
   }
 
+  // string current_execution_id = 10;
+  if (!this->_internal_current_execution_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_current_execution_id());
+  }
+
+  // string running_node = 11;
+  if (!this->_internal_running_node().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_running_node());
+  }
+
+  // string started_at = 12;
+  if (!this->_internal_started_at().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_started_at());
+  }
+
   // int32 status = 5;
   if (this->_internal_status() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_status());
@@ -3768,6 +3962,15 @@ void TaskInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTO
   }
   if (!from._internal_last_run_at().empty()) {
     _this->_internal_set_last_run_at(from._internal_last_run_at());
+  }
+  if (!from._internal_current_execution_id().empty()) {
+    _this->_internal_set_current_execution_id(from._internal_current_execution_id());
+  }
+  if (!from._internal_running_node().empty()) {
+    _this->_internal_set_running_node(from._internal_running_node());
+  }
+  if (!from._internal_started_at().empty()) {
+    _this->_internal_set_started_at(from._internal_started_at());
   }
   if (from._internal_status() != 0) {
     _this->_internal_set_status(from._internal_status());
@@ -3821,6 +4024,18 @@ void TaskInfo::InternalSwap(TaskInfo* other) {
       &_impl_.last_run_at_, lhs_arena,
       &other->_impl_.last_run_at_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.current_execution_id_, lhs_arena,
+      &other->_impl_.current_execution_id_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.running_node_, lhs_arena,
+      &other->_impl_.running_node_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.started_at_, lhs_arena,
+      &other->_impl_.started_at_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
       PROTOBUF_FIELD_OFFSET(TaskInfo, _impl_.max_retries_)
       + sizeof(TaskInfo::_impl_.max_retries_)
@@ -3852,8 +4067,12 @@ ListTasksRequest::ListTasksRequest(const ListTasksRequest& from)
   ListTasksRequest* const _this = this; (void)_this;
   new (&_impl_) Impl_{
       decltype(_impl_.auth_token_){}
+    , decltype(_impl_.keyword_){}
     , decltype(_impl_.limit_){}
+    , decltype(_impl_.offset_){}
+    , decltype(_impl_.status_filter_){}
     , decltype(_impl_.enabled_only_){}
+    , decltype(_impl_.has_status_filter_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -3865,9 +4084,17 @@ ListTasksRequest::ListTasksRequest(const ListTasksRequest& from)
     _this->_impl_.auth_token_.Set(from._internal_auth_token(), 
       _this->GetArenaForAllocation());
   }
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_keyword().empty()) {
+    _this->_impl_.keyword_.Set(from._internal_keyword(), 
+      _this->GetArenaForAllocation());
+  }
   ::memcpy(&_impl_.limit_, &from._impl_.limit_,
-    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.enabled_only_) -
-    reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.enabled_only_));
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.has_status_filter_) -
+    reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.has_status_filter_));
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListTasksRequest)
 }
 
@@ -3877,13 +4104,21 @@ inline void ListTasksRequest::SharedCtor(
   (void)is_message_owned;
   new (&_impl_) Impl_{
       decltype(_impl_.auth_token_){}
+    , decltype(_impl_.keyword_){}
     , decltype(_impl_.limit_){0}
+    , decltype(_impl_.offset_){0}
+    , decltype(_impl_.status_filter_){0}
     , decltype(_impl_.enabled_only_){false}
+    , decltype(_impl_.has_status_filter_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.auth_token_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.auth_token_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -3899,6 +4134,7 @@ ListTasksRequest::~ListTasksRequest() {
 inline void ListTasksRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.auth_token_.Destroy();
+  _impl_.keyword_.Destroy();
 }
 
 void ListTasksRequest::SetCachedSize(int size) const {
@@ -3912,9 +4148,10 @@ void ListTasksRequest::Clear() {
   (void) cached_has_bits;
 
   _impl_.auth_token_.ClearToEmpty();
+  _impl_.keyword_.ClearToEmpty();
   ::memset(&_impl_.limit_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&_impl_.enabled_only_) -
-      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.enabled_only_));
+      reinterpret_cast<char*>(&_impl_.has_status_filter_) -
+      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.has_status_filter_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -3946,6 +4183,40 @@ const char* ListTasksRequest::_InternalParse(const char* ptr, ::_pbi::ParseConte
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.enabled_only_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 offset = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 status_filter = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.status_filter_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string keyword = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_keyword();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListTasksRequest.keyword"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool has_status_filter = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.has_status_filter_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -4001,6 +4272,34 @@ uint8_t* ListTasksRequest::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_enabled_only(), target);
   }
 
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_offset(), target);
+  }
+
+  // int32 status_filter = 5;
+  if (this->_internal_status_filter() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_status_filter(), target);
+  }
+
+  // string keyword = 6;
+  if (!this->_internal_keyword().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_keyword().data(), static_cast<int>(this->_internal_keyword().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListTasksRequest.keyword");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_keyword(), target);
+  }
+
+  // bool has_status_filter = 7;
+  if (this->_internal_has_status_filter() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(7, this->_internal_has_status_filter(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4024,13 +4323,35 @@ size_t ListTasksRequest::ByteSizeLong() const {
         this->_internal_auth_token());
   }
 
+  // string keyword = 6;
+  if (!this->_internal_keyword().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_keyword());
+  }
+
   // int32 limit = 2;
   if (this->_internal_limit() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
   }
 
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_offset());
+  }
+
+  // int32 status_filter = 5;
+  if (this->_internal_status_filter() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_status_filter());
+  }
+
   // bool enabled_only = 3;
   if (this->_internal_enabled_only() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // bool has_status_filter = 7;
+  if (this->_internal_has_status_filter() != 0) {
     total_size += 1 + 1;
   }
 
@@ -4055,11 +4376,23 @@ void ListTasksRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const
   if (!from._internal_auth_token().empty()) {
     _this->_internal_set_auth_token(from._internal_auth_token());
   }
+  if (!from._internal_keyword().empty()) {
+    _this->_internal_set_keyword(from._internal_keyword());
+  }
   if (from._internal_limit() != 0) {
     _this->_internal_set_limit(from._internal_limit());
   }
+  if (from._internal_offset() != 0) {
+    _this->_internal_set_offset(from._internal_offset());
+  }
+  if (from._internal_status_filter() != 0) {
+    _this->_internal_set_status_filter(from._internal_status_filter());
+  }
   if (from._internal_enabled_only() != 0) {
     _this->_internal_set_enabled_only(from._internal_enabled_only());
+  }
+  if (from._internal_has_status_filter() != 0) {
+    _this->_internal_set_has_status_filter(from._internal_has_status_filter());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -4084,9 +4417,13 @@ void ListTasksRequest::InternalSwap(ListTasksRequest* other) {
       &_impl_.auth_token_, lhs_arena,
       &other->_impl_.auth_token_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.keyword_, lhs_arena,
+      &other->_impl_.keyword_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(ListTasksRequest, _impl_.enabled_only_)
-      + sizeof(ListTasksRequest::_impl_.enabled_only_)
+      PROTOBUF_FIELD_OFFSET(ListTasksRequest, _impl_.has_status_filter_)
+      + sizeof(ListTasksRequest::_impl_.has_status_filter_)
       - PROTOBUF_FIELD_OFFSET(ListTasksRequest, _impl_.limit_)>(
           reinterpret_cast<char*>(&_impl_.limit_),
           reinterpret_cast<char*>(&other->_impl_.limit_));
@@ -4117,6 +4454,9 @@ ListTasksResponse::ListTasksResponse(const ListTasksResponse& from)
       decltype(_impl_.tasks_){from._impl_.tasks_}
     , decltype(_impl_.error_){}
     , decltype(_impl_.success_){}
+    , decltype(_impl_.total_){}
+    , decltype(_impl_.offset_){}
+    , decltype(_impl_.limit_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -4128,7 +4468,9 @@ ListTasksResponse::ListTasksResponse(const ListTasksResponse& from)
     _this->_impl_.error_.Set(from._internal_error(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.success_ = from._impl_.success_;
+  ::memcpy(&_impl_.success_, &from._impl_.success_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.limit_) -
+    reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.limit_));
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListTasksResponse)
 }
 
@@ -4140,6 +4482,9 @@ inline void ListTasksResponse::SharedCtor(
       decltype(_impl_.tasks_){arena}
     , decltype(_impl_.error_){}
     , decltype(_impl_.success_){false}
+    , decltype(_impl_.total_){0}
+    , decltype(_impl_.offset_){0}
+    , decltype(_impl_.limit_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.error_.InitDefault();
@@ -4175,7 +4520,9 @@ void ListTasksResponse::Clear() {
 
   _impl_.tasks_.Clear();
   _impl_.error_.ClearToEmpty();
-  _impl_.success_ = false;
+  ::memset(&_impl_.success_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.limit_) -
+      reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.limit_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4213,6 +4560,30 @@ const char* ListTasksResponse::_InternalParse(const char* ptr, ::_pbi::ParseCont
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 total = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.total_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 offset = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 limit = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -4269,6 +4640,24 @@ uint8_t* ListTasksResponse::_InternalSerialize(
         InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
   }
 
+  // int32 total = 4;
+  if (this->_internal_total() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_total(), target);
+  }
+
+  // int32 offset = 5;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_offset(), target);
+  }
+
+  // int32 limit = 6;
+  if (this->_internal_limit() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_limit(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -4304,6 +4693,21 @@ size_t ListTasksResponse::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // int32 total = 4;
+  if (this->_internal_total() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_total());
+  }
+
+  // int32 offset = 5;
+  if (this->_internal_offset() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_offset());
+  }
+
+  // int32 limit = 6;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -4329,6 +4733,15 @@ void ListTasksResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, cons
   if (from._internal_success() != 0) {
     _this->_internal_set_success(from._internal_success());
   }
+  if (from._internal_total() != 0) {
+    _this->_internal_set_total(from._internal_total());
+  }
+  if (from._internal_offset() != 0) {
+    _this->_internal_set_offset(from._internal_offset());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -4353,7 +4766,12 @@ void ListTasksResponse::InternalSwap(ListTasksResponse* other) {
       &_impl_.error_, lhs_arena,
       &other->_impl_.error_, rhs_arena
   );
-  swap(_impl_.success_, other->_impl_.success_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ListTasksResponse, _impl_.limit_)
+      + sizeof(ListTasksResponse::_impl_.limit_)
+      - PROTOBUF_FIELD_OFFSET(ListTasksResponse, _impl_.success_)>(
+          reinterpret_cast<char*>(&_impl_.success_),
+          reinterpret_cast<char*>(&other->_impl_.success_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ListTasksResponse::GetMetadata() const {
@@ -4378,7 +4796,8 @@ TaskHistoryInfo::TaskHistoryInfo(const TaskHistoryInfo& from)
   : ::PROTOBUF_NAMESPACE_ID::Message() {
   TaskHistoryInfo* const _this = this; (void)_this;
   new (&_impl_) Impl_{
-      decltype(_impl_.task_id_){}
+      decltype(_impl_.execution_id_){}
+    , decltype(_impl_.task_id_){}
     , decltype(_impl_.exec_node_){}
     , decltype(_impl_.result_){}
     , decltype(_impl_.error_){}
@@ -4388,6 +4807,14 @@ TaskHistoryInfo::TaskHistoryInfo(const TaskHistoryInfo& from)
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_execution_id().empty()) {
+    _this->_impl_.execution_id_.Set(from._internal_execution_id(), 
+      _this->GetArenaForAllocation());
+  }
   _impl_.task_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.task_id_.Set("", GetArenaForAllocation());
@@ -4445,7 +4872,8 @@ inline void TaskHistoryInfo::SharedCtor(
   (void)arena;
   (void)is_message_owned;
   new (&_impl_) Impl_{
-      decltype(_impl_.task_id_){}
+      decltype(_impl_.execution_id_){}
+    , decltype(_impl_.task_id_){}
     , decltype(_impl_.exec_node_){}
     , decltype(_impl_.result_){}
     , decltype(_impl_.error_){}
@@ -4454,6 +4882,10 @@ inline void TaskHistoryInfo::SharedCtor(
     , decltype(_impl_.success_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
+  _impl_.execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   _impl_.task_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.task_id_.Set("", GetArenaForAllocation());
@@ -4491,6 +4923,7 @@ TaskHistoryInfo::~TaskHistoryInfo() {
 
 inline void TaskHistoryInfo::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.execution_id_.Destroy();
   _impl_.task_id_.Destroy();
   _impl_.exec_node_.Destroy();
   _impl_.result_.Destroy();
@@ -4509,6 +4942,7 @@ void TaskHistoryInfo::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  _impl_.execution_id_.ClearToEmpty();
   _impl_.task_id_.ClearToEmpty();
   _impl_.exec_node_.ClearToEmpty();
   _impl_.result_.ClearToEmpty();
@@ -4525,9 +4959,19 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
     uint32_t tag;
     ptr = ::_pbi::ReadTag(ptr, &tag);
     switch (tag >> 3) {
-      // string task_id = 1;
+      // string execution_id = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_execution_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.TaskHistoryInfo.execution_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string task_id = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
           auto str = _internal_mutable_task_id();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4535,9 +4979,9 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // string exec_node = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+      // string exec_node = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 26)) {
           auto str = _internal_mutable_exec_node();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4545,17 +4989,17 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // bool success = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
+      // bool success = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
           _impl_.success_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
-      // string result = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 34)) {
+      // string result = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
           auto str = _internal_mutable_result();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4563,9 +5007,9 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // string error = 5;
-      case 5:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+      // string error = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
           auto str = _internal_mutable_error();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4573,9 +5017,9 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // string start_time = 6;
-      case 6:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+      // string start_time = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
           auto str = _internal_mutable_start_time();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4583,9 +5027,9 @@ const char* TaskHistoryInfo::_InternalParse(const char* ptr, ::_pbi::ParseContex
         } else
           goto handle_unusual;
         continue;
-      // string end_time = 7;
-      case 7:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 58)) {
+      // string end_time = 8;
+      case 8:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 66)) {
           auto str = _internal_mutable_end_time();
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
@@ -4622,70 +5066,80 @@ uint8_t* TaskHistoryInfo::_InternalSerialize(
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // string task_id = 1;
+  // string execution_id = 1;
+  if (!this->_internal_execution_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_execution_id().data(), static_cast<int>(this->_internal_execution_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.TaskHistoryInfo.execution_id");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_execution_id(), target);
+  }
+
+  // string task_id = 2;
   if (!this->_internal_task_id().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_task_id().data(), static_cast<int>(this->_internal_task_id().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.task_id");
     target = stream->WriteStringMaybeAliased(
-        1, this->_internal_task_id(), target);
+        2, this->_internal_task_id(), target);
   }
 
-  // string exec_node = 2;
+  // string exec_node = 3;
   if (!this->_internal_exec_node().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_exec_node().data(), static_cast<int>(this->_internal_exec_node().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.exec_node");
     target = stream->WriteStringMaybeAliased(
-        2, this->_internal_exec_node(), target);
+        3, this->_internal_exec_node(), target);
   }
 
-  // bool success = 3;
+  // bool success = 4;
   if (this->_internal_success() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::_pbi::WireFormatLite::WriteBoolToArray(3, this->_internal_success(), target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(4, this->_internal_success(), target);
   }
 
-  // string result = 4;
+  // string result = 5;
   if (!this->_internal_result().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_result().data(), static_cast<int>(this->_internal_result().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.result");
     target = stream->WriteStringMaybeAliased(
-        4, this->_internal_result(), target);
+        5, this->_internal_result(), target);
   }
 
-  // string error = 5;
+  // string error = 6;
   if (!this->_internal_error().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_error().data(), static_cast<int>(this->_internal_error().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.error");
     target = stream->WriteStringMaybeAliased(
-        5, this->_internal_error(), target);
+        6, this->_internal_error(), target);
   }
 
-  // string start_time = 6;
+  // string start_time = 7;
   if (!this->_internal_start_time().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_start_time().data(), static_cast<int>(this->_internal_start_time().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.start_time");
     target = stream->WriteStringMaybeAliased(
-        6, this->_internal_start_time(), target);
+        7, this->_internal_start_time(), target);
   }
 
-  // string end_time = 7;
+  // string end_time = 8;
   if (!this->_internal_end_time().empty()) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
       this->_internal_end_time().data(), static_cast<int>(this->_internal_end_time().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
       "corpcron.rpc.TaskHistoryInfo.end_time");
     target = stream->WriteStringMaybeAliased(
-        7, this->_internal_end_time(), target);
+        8, this->_internal_end_time(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -4704,49 +5158,56 @@ size_t TaskHistoryInfo::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // string task_id = 1;
+  // string execution_id = 1;
+  if (!this->_internal_execution_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_execution_id());
+  }
+
+  // string task_id = 2;
   if (!this->_internal_task_id().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_task_id());
   }
 
-  // string exec_node = 2;
+  // string exec_node = 3;
   if (!this->_internal_exec_node().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_exec_node());
   }
 
-  // string result = 4;
+  // string result = 5;
   if (!this->_internal_result().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_result());
   }
 
-  // string error = 5;
+  // string error = 6;
   if (!this->_internal_error().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_error());
   }
 
-  // string start_time = 6;
+  // string start_time = 7;
   if (!this->_internal_start_time().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_start_time());
   }
 
-  // string end_time = 7;
+  // string end_time = 8;
   if (!this->_internal_end_time().empty()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_end_time());
   }
 
-  // bool success = 3;
+  // bool success = 4;
   if (this->_internal_success() != 0) {
     total_size += 1 + 1;
   }
@@ -4769,6 +5230,9 @@ void TaskHistoryInfo::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const 
   uint32_t cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (!from._internal_execution_id().empty()) {
+    _this->_internal_set_execution_id(from._internal_execution_id());
+  }
   if (!from._internal_task_id().empty()) {
     _this->_internal_set_task_id(from._internal_task_id());
   }
@@ -4809,6 +5273,10 @@ void TaskHistoryInfo::InternalSwap(TaskHistoryInfo* other) {
   auto* lhs_arena = GetArenaForAllocation();
   auto* rhs_arena = other->GetArenaForAllocation();
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.execution_id_, lhs_arena,
+      &other->_impl_.execution_id_, rhs_arena
+  );
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
       &_impl_.task_id_, lhs_arena,
       &other->_impl_.task_id_, rhs_arena
@@ -4860,7 +5328,11 @@ ListHistoryRequest::ListHistoryRequest(const ListHistoryRequest& from)
   new (&_impl_) Impl_{
       decltype(_impl_.auth_token_){}
     , decltype(_impl_.task_id_){}
+    , decltype(_impl_.keyword_){}
     , decltype(_impl_.limit_){}
+    , decltype(_impl_.offset_){}
+    , decltype(_impl_.success_filter_){}
+    , decltype(_impl_.has_success_filter_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -4880,7 +5352,17 @@ ListHistoryRequest::ListHistoryRequest(const ListHistoryRequest& from)
     _this->_impl_.task_id_.Set(from._internal_task_id(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.limit_ = from._impl_.limit_;
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_keyword().empty()) {
+    _this->_impl_.keyword_.Set(from._internal_keyword(), 
+      _this->GetArenaForAllocation());
+  }
+  ::memcpy(&_impl_.limit_, &from._impl_.limit_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.has_success_filter_) -
+    reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.has_success_filter_));
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListHistoryRequest)
 }
 
@@ -4891,7 +5373,11 @@ inline void ListHistoryRequest::SharedCtor(
   new (&_impl_) Impl_{
       decltype(_impl_.auth_token_){}
     , decltype(_impl_.task_id_){}
+    , decltype(_impl_.keyword_){}
     , decltype(_impl_.limit_){0}
+    , decltype(_impl_.offset_){0}
+    , decltype(_impl_.success_filter_){0}
+    , decltype(_impl_.has_success_filter_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.auth_token_.InitDefault();
@@ -4901,6 +5387,10 @@ inline void ListHistoryRequest::SharedCtor(
   _impl_.task_id_.InitDefault();
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.task_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.keyword_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.keyword_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
@@ -4917,6 +5407,7 @@ inline void ListHistoryRequest::SharedDtor() {
   GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
   _impl_.auth_token_.Destroy();
   _impl_.task_id_.Destroy();
+  _impl_.keyword_.Destroy();
 }
 
 void ListHistoryRequest::SetCachedSize(int size) const {
@@ -4931,7 +5422,10 @@ void ListHistoryRequest::Clear() {
 
   _impl_.auth_token_.ClearToEmpty();
   _impl_.task_id_.ClearToEmpty();
-  _impl_.limit_ = 0;
+  _impl_.keyword_.ClearToEmpty();
+  ::memset(&_impl_.limit_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.has_success_filter_) -
+      reinterpret_cast<char*>(&_impl_.limit_)) + sizeof(_impl_.has_success_filter_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -4965,6 +5459,40 @@ const char* ListHistoryRequest::_InternalParse(const char* ptr, ::_pbi::ParseCon
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 24)) {
           _impl_.limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 offset = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 success_filter = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.success_filter_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // string keyword = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 50)) {
+          auto str = _internal_mutable_keyword();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ListHistoryRequest.keyword"));
+        } else
+          goto handle_unusual;
+        continue;
+      // bool has_success_filter = 7;
+      case 7:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 56)) {
+          _impl_.has_success_filter_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
           CHK_(ptr);
         } else
           goto handle_unusual;
@@ -5024,6 +5552,34 @@ uint8_t* ListHistoryRequest::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteInt32ToArray(3, this->_internal_limit(), target);
   }
 
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_offset(), target);
+  }
+
+  // int32 success_filter = 5;
+  if (this->_internal_success_filter() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_success_filter(), target);
+  }
+
+  // string keyword = 6;
+  if (!this->_internal_keyword().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_keyword().data(), static_cast<int>(this->_internal_keyword().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ListHistoryRequest.keyword");
+    target = stream->WriteStringMaybeAliased(
+        6, this->_internal_keyword(), target);
+  }
+
+  // bool has_success_filter = 7;
+  if (this->_internal_has_success_filter() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteBoolToArray(7, this->_internal_has_success_filter(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -5054,9 +5610,31 @@ size_t ListHistoryRequest::ByteSizeLong() const {
         this->_internal_task_id());
   }
 
+  // string keyword = 6;
+  if (!this->_internal_keyword().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_keyword());
+  }
+
   // int32 limit = 3;
   if (this->_internal_limit() != 0) {
     total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
+  }
+
+  // int32 offset = 4;
+  if (this->_internal_offset() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_offset());
+  }
+
+  // int32 success_filter = 5;
+  if (this->_internal_success_filter() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_success_filter());
+  }
+
+  // bool has_success_filter = 7;
+  if (this->_internal_has_success_filter() != 0) {
+    total_size += 1 + 1;
   }
 
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
@@ -5083,8 +5661,20 @@ void ListHistoryRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   if (!from._internal_task_id().empty()) {
     _this->_internal_set_task_id(from._internal_task_id());
   }
+  if (!from._internal_keyword().empty()) {
+    _this->_internal_set_keyword(from._internal_keyword());
+  }
   if (from._internal_limit() != 0) {
     _this->_internal_set_limit(from._internal_limit());
+  }
+  if (from._internal_offset() != 0) {
+    _this->_internal_set_offset(from._internal_offset());
+  }
+  if (from._internal_success_filter() != 0) {
+    _this->_internal_set_success_filter(from._internal_success_filter());
+  }
+  if (from._internal_has_success_filter() != 0) {
+    _this->_internal_set_has_success_filter(from._internal_has_success_filter());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -5113,7 +5703,16 @@ void ListHistoryRequest::InternalSwap(ListHistoryRequest* other) {
       &_impl_.task_id_, lhs_arena,
       &other->_impl_.task_id_, rhs_arena
   );
-  swap(_impl_.limit_, other->_impl_.limit_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.keyword_, lhs_arena,
+      &other->_impl_.keyword_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ListHistoryRequest, _impl_.has_success_filter_)
+      + sizeof(ListHistoryRequest::_impl_.has_success_filter_)
+      - PROTOBUF_FIELD_OFFSET(ListHistoryRequest, _impl_.limit_)>(
+          reinterpret_cast<char*>(&_impl_.limit_),
+          reinterpret_cast<char*>(&other->_impl_.limit_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ListHistoryRequest::GetMetadata() const {
@@ -5141,6 +5740,9 @@ ListHistoryResponse::ListHistoryResponse(const ListHistoryResponse& from)
       decltype(_impl_.history_){from._impl_.history_}
     , decltype(_impl_.error_){}
     , decltype(_impl_.success_){}
+    , decltype(_impl_.total_){}
+    , decltype(_impl_.offset_){}
+    , decltype(_impl_.limit_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -5152,7 +5754,9 @@ ListHistoryResponse::ListHistoryResponse(const ListHistoryResponse& from)
     _this->_impl_.error_.Set(from._internal_error(), 
       _this->GetArenaForAllocation());
   }
-  _this->_impl_.success_ = from._impl_.success_;
+  ::memcpy(&_impl_.success_, &from._impl_.success_,
+    static_cast<size_t>(reinterpret_cast<char*>(&_impl_.limit_) -
+    reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.limit_));
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ListHistoryResponse)
 }
 
@@ -5164,6 +5768,9 @@ inline void ListHistoryResponse::SharedCtor(
       decltype(_impl_.history_){arena}
     , decltype(_impl_.error_){}
     , decltype(_impl_.success_){false}
+    , decltype(_impl_.total_){0}
+    , decltype(_impl_.offset_){0}
+    , decltype(_impl_.limit_){0}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.error_.InitDefault();
@@ -5199,7 +5806,9 @@ void ListHistoryResponse::Clear() {
 
   _impl_.history_.Clear();
   _impl_.error_.ClearToEmpty();
-  _impl_.success_ = false;
+  ::memset(&_impl_.success_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&_impl_.limit_) -
+      reinterpret_cast<char*>(&_impl_.success_)) + sizeof(_impl_.limit_));
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -5237,6 +5846,30 @@ const char* ListHistoryResponse::_InternalParse(const char* ptr, ::_pbi::ParseCo
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 total = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 32)) {
+          _impl_.total_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 offset = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 40)) {
+          _impl_.offset_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // int32 limit = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.limit_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint32(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -5293,6 +5926,24 @@ uint8_t* ListHistoryResponse::_InternalSerialize(
         InternalWriteMessage(3, repfield, repfield.GetCachedSize(), target, stream);
   }
 
+  // int32 total = 4;
+  if (this->_internal_total() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(4, this->_internal_total(), target);
+  }
+
+  // int32 offset = 5;
+  if (this->_internal_offset() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(5, this->_internal_offset(), target);
+  }
+
+  // int32 limit = 6;
+  if (this->_internal_limit() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteInt32ToArray(6, this->_internal_limit(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -5328,6 +5979,21 @@ size_t ListHistoryResponse::ByteSizeLong() const {
     total_size += 1 + 1;
   }
 
+  // int32 total = 4;
+  if (this->_internal_total() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_total());
+  }
+
+  // int32 offset = 5;
+  if (this->_internal_offset() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_offset());
+  }
+
+  // int32 limit = 6;
+  if (this->_internal_limit() != 0) {
+    total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(this->_internal_limit());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -5353,6 +6019,15 @@ void ListHistoryResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, co
   if (from._internal_success() != 0) {
     _this->_internal_set_success(from._internal_success());
   }
+  if (from._internal_total() != 0) {
+    _this->_internal_set_total(from._internal_total());
+  }
+  if (from._internal_offset() != 0) {
+    _this->_internal_set_offset(from._internal_offset());
+  }
+  if (from._internal_limit() != 0) {
+    _this->_internal_set_limit(from._internal_limit());
+  }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
 
@@ -5377,7 +6052,12 @@ void ListHistoryResponse::InternalSwap(ListHistoryResponse* other) {
       &_impl_.error_, lhs_arena,
       &other->_impl_.error_, rhs_arena
   );
-  swap(_impl_.success_, other->_impl_.success_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(ListHistoryResponse, _impl_.limit_)
+      + sizeof(ListHistoryResponse::_impl_.limit_)
+      - PROTOBUF_FIELD_OFFSET(ListHistoryResponse, _impl_.success_)>(
+          reinterpret_cast<char*>(&_impl_.success_),
+          reinterpret_cast<char*>(&other->_impl_.success_));
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ListHistoryResponse::GetMetadata() const {
@@ -8142,6 +8822,13 @@ GetMetricsResponse::GetMetricsResponse(const GetMetricsResponse& from)
     , decltype(_impl_.lock_acquire_success_total_){}
     , decltype(_impl_.lock_acquire_failure_total_){}
     , decltype(_impl_.max_task_duration_ms_){}
+    , decltype(_impl_.task_duration_p95_ms_){}
+    , decltype(_impl_.task_duration_p99_ms_){}
+    , decltype(_impl_.task_duration_samples_total_){}
+    , decltype(_impl_.schedule_delay_max_ms_){}
+    , decltype(_impl_.schedule_delay_p95_ms_){}
+    , decltype(_impl_.schedule_delay_p99_ms_){}
+    , decltype(_impl_.schedule_delay_samples_total_){}
     , decltype(_impl_.success_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
@@ -8179,6 +8866,13 @@ inline void GetMetricsResponse::SharedCtor(
     , decltype(_impl_.lock_acquire_success_total_){uint64_t{0u}}
     , decltype(_impl_.lock_acquire_failure_total_){uint64_t{0u}}
     , decltype(_impl_.max_task_duration_ms_){uint64_t{0u}}
+    , decltype(_impl_.task_duration_p95_ms_){uint64_t{0u}}
+    , decltype(_impl_.task_duration_p99_ms_){uint64_t{0u}}
+    , decltype(_impl_.task_duration_samples_total_){uint64_t{0u}}
+    , decltype(_impl_.schedule_delay_max_ms_){uint64_t{0u}}
+    , decltype(_impl_.schedule_delay_p95_ms_){uint64_t{0u}}
+    , decltype(_impl_.schedule_delay_p99_ms_){uint64_t{0u}}
+    , decltype(_impl_.schedule_delay_samples_total_){uint64_t{0u}}
     , decltype(_impl_.success_){false}
     , /*decltype(_impl_._cached_size_)*/{}
   };
@@ -8347,6 +9041,62 @@ const char* GetMetricsResponse::_InternalParse(const char* ptr, ::_pbi::ParseCon
         } else
           goto handle_unusual;
         continue;
+      // uint64 task_duration_p95_ms = 16;
+      case 16:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 128)) {
+          _impl_.task_duration_p95_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 task_duration_p99_ms = 17;
+      case 17:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 136)) {
+          _impl_.task_duration_p99_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 task_duration_samples_total = 18;
+      case 18:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 144)) {
+          _impl_.task_duration_samples_total_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 schedule_delay_max_ms = 19;
+      case 19:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 152)) {
+          _impl_.schedule_delay_max_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 schedule_delay_p95_ms = 20;
+      case 20:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 160)) {
+          _impl_.schedule_delay_p95_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 schedule_delay_p99_ms = 21;
+      case 21:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 168)) {
+          _impl_.schedule_delay_p99_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 schedule_delay_samples_total = 22;
+      case 22:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 176)) {
+          _impl_.schedule_delay_samples_total_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else
+          goto handle_unusual;
+        continue;
       default:
         goto handle_unusual;
     }  // switch
@@ -8470,6 +9220,48 @@ uint8_t* GetMetricsResponse::_InternalSerialize(
     target = ::_pbi::WireFormatLite::WriteUInt64ToArray(15, this->_internal_max_task_duration_ms(), target);
   }
 
+  // uint64 task_duration_p95_ms = 16;
+  if (this->_internal_task_duration_p95_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(16, this->_internal_task_duration_p95_ms(), target);
+  }
+
+  // uint64 task_duration_p99_ms = 17;
+  if (this->_internal_task_duration_p99_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(17, this->_internal_task_duration_p99_ms(), target);
+  }
+
+  // uint64 task_duration_samples_total = 18;
+  if (this->_internal_task_duration_samples_total() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(18, this->_internal_task_duration_samples_total(), target);
+  }
+
+  // uint64 schedule_delay_max_ms = 19;
+  if (this->_internal_schedule_delay_max_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(19, this->_internal_schedule_delay_max_ms(), target);
+  }
+
+  // uint64 schedule_delay_p95_ms = 20;
+  if (this->_internal_schedule_delay_p95_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(20, this->_internal_schedule_delay_p95_ms(), target);
+  }
+
+  // uint64 schedule_delay_p99_ms = 21;
+  if (this->_internal_schedule_delay_p99_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(21, this->_internal_schedule_delay_p99_ms(), target);
+  }
+
+  // uint64 schedule_delay_samples_total = 22;
+  if (this->_internal_schedule_delay_samples_total() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(22, this->_internal_schedule_delay_samples_total(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -8558,6 +9350,55 @@ size_t GetMetricsResponse::ByteSizeLong() const {
     total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_max_task_duration_ms());
   }
 
+  // uint64 task_duration_p95_ms = 16;
+  if (this->_internal_task_duration_p95_ms() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_task_duration_p95_ms());
+  }
+
+  // uint64 task_duration_p99_ms = 17;
+  if (this->_internal_task_duration_p99_ms() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_task_duration_p99_ms());
+  }
+
+  // uint64 task_duration_samples_total = 18;
+  if (this->_internal_task_duration_samples_total() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_task_duration_samples_total());
+  }
+
+  // uint64 schedule_delay_max_ms = 19;
+  if (this->_internal_schedule_delay_max_ms() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_schedule_delay_max_ms());
+  }
+
+  // uint64 schedule_delay_p95_ms = 20;
+  if (this->_internal_schedule_delay_p95_ms() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_schedule_delay_p95_ms());
+  }
+
+  // uint64 schedule_delay_p99_ms = 21;
+  if (this->_internal_schedule_delay_p99_ms() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_schedule_delay_p99_ms());
+  }
+
+  // uint64 schedule_delay_samples_total = 22;
+  if (this->_internal_schedule_delay_samples_total() != 0) {
+    total_size += 2 +
+      ::_pbi::WireFormatLite::UInt64Size(
+        this->_internal_schedule_delay_samples_total());
+  }
+
   // bool success = 1;
   if (this->_internal_success() != 0) {
     total_size += 1 + 1;
@@ -8622,6 +9463,27 @@ void GetMetricsResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   }
   if (from._internal_max_task_duration_ms() != 0) {
     _this->_internal_set_max_task_duration_ms(from._internal_max_task_duration_ms());
+  }
+  if (from._internal_task_duration_p95_ms() != 0) {
+    _this->_internal_set_task_duration_p95_ms(from._internal_task_duration_p95_ms());
+  }
+  if (from._internal_task_duration_p99_ms() != 0) {
+    _this->_internal_set_task_duration_p99_ms(from._internal_task_duration_p99_ms());
+  }
+  if (from._internal_task_duration_samples_total() != 0) {
+    _this->_internal_set_task_duration_samples_total(from._internal_task_duration_samples_total());
+  }
+  if (from._internal_schedule_delay_max_ms() != 0) {
+    _this->_internal_set_schedule_delay_max_ms(from._internal_schedule_delay_max_ms());
+  }
+  if (from._internal_schedule_delay_p95_ms() != 0) {
+    _this->_internal_set_schedule_delay_p95_ms(from._internal_schedule_delay_p95_ms());
+  }
+  if (from._internal_schedule_delay_p99_ms() != 0) {
+    _this->_internal_set_schedule_delay_p99_ms(from._internal_schedule_delay_p99_ms());
+  }
+  if (from._internal_schedule_delay_samples_total() != 0) {
+    _this->_internal_set_schedule_delay_samples_total(from._internal_schedule_delay_samples_total());
   }
   if (from._internal_success() != 0) {
     _this->_internal_set_success(from._internal_success());

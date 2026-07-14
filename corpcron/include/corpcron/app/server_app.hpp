@@ -1,6 +1,7 @@
 #pragma once
 
 #include "corpcron/mysql/mysql_client.hpp"
+#include "corpcron/metrics/metrics_exporter.hpp"
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/rpc/rpc_dispatcher.hpp"
@@ -30,6 +31,7 @@ private:
     bool initMySQL();
     void registerHandlers();
     void startScheduler();
+    bool startMetricsExporter();
     bool registerService();
     void startHeartbeat();
     void startSignalThread();
@@ -44,11 +46,16 @@ private:
     std::string bind_host_;
     std::string auth_token_;
     int port_ = 8080;
+    bool metrics_enabled_ = true;
+    std::string metrics_host_ = "127.0.0.1";
+    int metrics_port_ = 9091;
+    AlertRuleConfig alert_config_;
     size_t max_connections_ = 1024;
 
     std::shared_ptr<RedisClient> redis_;
     std::shared_ptr<MySQLClient> db_;
     std::unique_ptr<TaskScheduler> scheduler_;
+    std::unique_ptr<MetricsExporter> metrics_exporter_;
     std::shared_ptr<RpcDispatcher> dispatcher_;
     std::unique_ptr<TcpServer> server_;
 

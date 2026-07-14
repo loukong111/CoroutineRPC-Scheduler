@@ -33,7 +33,8 @@ std::string nextRequestId() {
 
 Task clientHandler(int fd, EpollLoop* loop,
                    std::shared_ptr<RpcDispatcher> dispatcher,
-                   std::atomic<size_t>* active_connections) {
+                   std::atomic<size_t>* active_connections,
+                   std::string remote) {
     std::string read_buffer;
     bool closed = false;
     while (true) {
@@ -41,8 +42,11 @@ Task clientHandler(int fd, EpollLoop* loop,
         char chunk[4096];
         ssize_t n = read(fd, chunk, sizeof(chunk));
         if (n <= 0) {
-            if (n == 0) LOG_INFO("Client closed");
-            else if (errno != EAGAIN) LOG_ERROR(errnoMessage("read"));
+            if (n == 0) {
+                LOG_INFO_EVENT("client_closed", {{"remote", remote}});
+            } else if (errno != EAGAIN) {
+                LOG_ERROR_EVENT("socket_read_failed", {{"remote", remote}, {"error", errnoMessage("read")}});
+            }
             break;
         }
         Metrics::instance().addBytesIn(static_cast<uint64_t>(n));
@@ -56,7 +60,10 @@ Task clientHandler(int fd, EpollLoop* loop,
             if (status == rpc::DecodeStatus::Incomplete)
                 break;
             if (status == rpc::DecodeStatus::Malformed || status == rpc::DecodeStatus::TooLarge) {
-                LOG_WARN("Invalid RPC frame, closing connection");
+                LOG_WARN_EVENT("invalid_rpc_frame", {
+                    {"remote", remote},
+                    {"decode_status", status == rpc::DecodeStatus::TooLarge ? "too_large" : "malformed"}
+                });
                 Metrics::instance().incMalformedFrame();
                 closed = true;
                 break;
@@ -65,15 +72,24 @@ Task clientHandler(int fd, EpollLoop* loop,
 
             std::string request_id = nextRequestId();
             Metrics::instance().incRpcRequest();
-            LOG_INFO("RPC request_id=" + request_id + " serial_id=" + std::to_string(serial_id));
+            LOG_INFO_EVENT("rpc_request", {
+                {"request_id", request_id},
+                {"remote", remote},
+                {"serial_id", std::to_string(serial_id)},
+                {"payload_bytes", std::to_string(payload.size())}
+            });
             RpcResponse rpc_response = dispatcher->dispatch(serial_id, payload);
             if (rpc_response.serial_id == corpcron::rpc::kRpcErrorSerialId) {
                 Metrics::instance().incRpcError();
             } else {
                 Metrics::instance().incRpcSuccess();
             }
-            LOG_INFO("RPC request_id=" + request_id + " response_serial_id=" +
-                     std::to_string(rpc_response.serial_id));
+            LOG_INFO_EVENT("rpc_response", {
+                {"request_id", request_id},
+                {"remote", remote},
+                {"response_serial_id", std::to_string(rpc_response.serial_id)},
+                {"payload_bytes", std::to_string(rpc_response.payload.size())}
+            });
 
             std::string response;
             if (!rpc::tryEncode(rpc_response.serial_id, rpc_response.payload, response)) {
@@ -96,7 +112,7 @@ Task clientHandler(int fd, EpollLoop* loop,
                     continue;
                 }
                 if (w < 0 && errno == EINTR) continue;
-                LOG_ERROR(errnoMessage("send"));
+                LOG_ERROR_EVENT("socket_send_failed", {{"remote", remote}, {"error", errnoMessage("send")}});
                 closed = true;
                 break;
             }
@@ -141,7 +157,7 @@ bool TcpServer::start() {
         return false;
     }
     loop_->addFd(listen_fd_, EPOLLIN, [this](int, uint32_t) { handleAccept(); });
-    LOG_INFO("TcpServer listening on " + addr_ + ":" + std::to_string(port_));
+    LOG_INFO_EVENT("tcp_server_listening", {{"bind", addr_}, {"port", std::to_string(port_)}});
     loop_->run();
     return true;
 }
@@ -163,15 +179,20 @@ void TcpServer::handleAccept() {
         char ip[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
         if (active_connections_.load() >= max_connections_) {
-            LOG_WARN("Rejecting connection from " + std::string(ip) + ": connection limit reached");
+            LOG_WARN_EVENT("connection_rejected", {
+                {"remote", std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port))},
+                {"reason", "connection_limit"},
+                {"max_connections", std::to_string(max_connections_)}
+            });
             Metrics::instance().incRejectedConnection();
             close(client_fd);
             continue;
         }
         ++active_connections_;
         Metrics::instance().incActiveConnection();
-        LOG_INFO("New connection from " + std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port)));
-        Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_, &active_connections_));
+        std::string remote = std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port));
+        LOG_INFO_EVENT("connection_accepted", {{"remote", remote}});
+        Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_, &active_connections_, remote));
     }
 }
 

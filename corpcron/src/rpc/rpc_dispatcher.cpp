@@ -134,7 +134,7 @@ RpcResponse RpcDispatcher::handleSubmitTask(const std::string& payload) const {
     task.cron_expr = req.cron_expr();
     task.params = req.params();
     task.handler = req.handler();
-    task.status = 1;
+    task.status = TASK_SCHEDULED;
 
     uint64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
@@ -219,14 +219,27 @@ RpcResponse RpcDispatcher::handleListTasks(const std::string& payload) const {
         return make_error_response(corpcron::rpc::DB_ERROR, "DB client is not available");
     }
 
-    auto tasks = req.enabled_only() ? db_->getEnabledTasks() : db_->getAllTasks();
     int limit = req.limit() > 0 ? req.limit() : 100;
+    if (limit > 500) limit = 500;
+
+    TaskQuery query;
+    query.limit = static_cast<size_t>(limit);
+    query.offset = req.offset() > 0 ? static_cast<size_t>(req.offset()) : 0;
+    query.keyword = req.keyword();
+    query.status_filter = -1;
+    if (req.has_status_filter()) {
+        query.status_filter = req.status_filter();
+    } else if (req.enabled_only()) {
+        query.status_filter = TASK_SCHEDULED;
+    }
+    auto page = db_->listTasks(query);
 
     corpcron::rpc::ListTasksResponse resp;
     resp.set_success(true);
-    int count = 0;
-    for (const auto& task : tasks) {
-        if (count++ >= limit) break;
+    resp.set_total(static_cast<int>(page.total));
+    resp.set_offset(static_cast<int>(query.offset));
+    resp.set_limit(limit);
+    for (const auto& task : page.items) {
         auto* item = resp.add_tasks();
         item->set_id(task.id);
         item->set_cron_expr(task.cron_expr);
@@ -237,6 +250,9 @@ RpcResponse RpcDispatcher::handleListTasks(const std::string& payload) const {
         item->set_last_run_at(task.last_run_at);
         item->set_retry_count(task.retry_count);
         item->set_max_retries(task.max_retries);
+        item->set_current_execution_id(task.current_execution_id);
+        item->set_running_node(task.running_node);
+        item->set_started_at(task.started_at);
     }
     return make_response(rpc::kListTasksResponseSerialId, resp);
 }
@@ -254,12 +270,24 @@ RpcResponse RpcDispatcher::handleListHistory(const std::string& payload) const {
     }
 
     int limit = req.limit() > 0 ? req.limit() : 100;
-    auto history = db_->getHistory(req.task_id(), static_cast<size_t>(limit));
+    if (limit > 500) limit = 500;
+
+    HistoryQuery query;
+    query.task_id = req.task_id();
+    query.limit = static_cast<size_t>(limit);
+    query.offset = req.offset() > 0 ? static_cast<size_t>(req.offset()) : 0;
+    query.success_filter = req.has_success_filter() ? req.success_filter() : -1;
+    query.keyword = req.keyword();
+    auto page = db_->listHistory(query);
 
     corpcron::rpc::ListHistoryResponse resp;
     resp.set_success(true);
-    for (const auto& item : history) {
+    resp.set_total(static_cast<int>(page.total));
+    resp.set_offset(static_cast<int>(query.offset));
+    resp.set_limit(limit);
+    for (const auto& item : page.items) {
         auto* out = resp.add_history();
+        out->set_execution_id(item.execution_id);
         out->set_task_id(item.task_id);
         out->set_exec_node(item.exec_node);
         out->set_success(item.success);
@@ -330,7 +358,7 @@ RpcResponse RpcDispatcher::handleUpdateTask(const std::string& payload) const {
     if (task.cron_expr.empty() || task.handler.empty()) {
         return make_error_response(corpcron::rpc::BAD_REQUEST, "Cron and handler are required");
     }
-    if (task.status == 1) {
+    if (task.status == TASK_SCHEDULED) {
         uint64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::system_clock::now().time_since_epoch()).count();
         uint64_t next_ms = CronParser::nextExecution(task.cron_expr, now_ms);
@@ -384,7 +412,7 @@ RpcResponse RpcDispatcher::handleEnableTask(const std::string& payload) const {
         resp.set_error("Invalid cron expression");
         return make_response(rpc::kEnableTaskResponseSerialId, resp);
     }
-    resp.set_success(db_->updateTaskRuntime(task.id, 1, to_datetime_string(next_ms), task.last_run_at, task.retry_count));
+    resp.set_success(db_->updateTaskRuntime(task.id, TASK_SCHEDULED, to_datetime_string(next_ms), task.last_run_at, task.retry_count));
     if (!resp.success()) resp.set_error("DB update failed");
     return make_response(rpc::kEnableTaskResponseSerialId, resp);
 }
@@ -445,6 +473,7 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
     auto end = std::chrono::system_clock::now();
 
     TaskHistory history;
+    history.execution_id = "manual:" + task.id + ":" + generate_uuid();
     history.task_id = task.id;
     history.exec_node = node_id_.empty() ? "manual-rpc" : node_id_;
     history.success = error.empty();
@@ -488,6 +517,13 @@ RpcResponse RpcDispatcher::handleGetMetrics(const std::string& payload) const {
     resp.set_lock_acquire_success_total(snapshot.lock_acquire_success_total);
     resp.set_lock_acquire_failure_total(snapshot.lock_acquire_failure_total);
     resp.set_max_task_duration_ms(snapshot.max_task_duration_ms);
+    resp.set_task_duration_p95_ms(snapshot.task_duration_p95_ms);
+    resp.set_task_duration_p99_ms(snapshot.task_duration_p99_ms);
+    resp.set_task_duration_samples_total(snapshot.task_duration_samples_total);
+    resp.set_schedule_delay_max_ms(snapshot.schedule_delay_max_ms);
+    resp.set_schedule_delay_p95_ms(snapshot.schedule_delay_p95_ms);
+    resp.set_schedule_delay_p99_ms(snapshot.schedule_delay_p99_ms);
+    resp.set_schedule_delay_samples_total(snapshot.schedule_delay_samples_total);
     return make_response(rpc::kGetMetricsResponseSerialId, resp);
 }
 

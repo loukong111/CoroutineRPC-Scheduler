@@ -1903,6 +1903,9 @@ class TaskInfo final :
     kHandlerFieldNumber = 4,
     kNextRunAtFieldNumber = 6,
     kLastRunAtFieldNumber = 7,
+    kCurrentExecutionIdFieldNumber = 10,
+    kRunningNodeFieldNumber = 11,
+    kStartedAtFieldNumber = 12,
     kStatusFieldNumber = 5,
     kRetryCountFieldNumber = 8,
     kMaxRetriesFieldNumber = 9,
@@ -1991,6 +1994,48 @@ class TaskInfo final :
   std::string* _internal_mutable_last_run_at();
   public:
 
+  // string current_execution_id = 10;
+  void clear_current_execution_id();
+  const std::string& current_execution_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_current_execution_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_current_execution_id();
+  PROTOBUF_NODISCARD std::string* release_current_execution_id();
+  void set_allocated_current_execution_id(std::string* current_execution_id);
+  private:
+  const std::string& _internal_current_execution_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_current_execution_id(const std::string& value);
+  std::string* _internal_mutable_current_execution_id();
+  public:
+
+  // string running_node = 11;
+  void clear_running_node();
+  const std::string& running_node() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_running_node(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_running_node();
+  PROTOBUF_NODISCARD std::string* release_running_node();
+  void set_allocated_running_node(std::string* running_node);
+  private:
+  const std::string& _internal_running_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_running_node(const std::string& value);
+  std::string* _internal_mutable_running_node();
+  public:
+
+  // string started_at = 12;
+  void clear_started_at();
+  const std::string& started_at() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_started_at(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_started_at();
+  PROTOBUF_NODISCARD std::string* release_started_at();
+  void set_allocated_started_at(std::string* started_at);
+  private:
+  const std::string& _internal_started_at() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_started_at(const std::string& value);
+  std::string* _internal_mutable_started_at();
+  public:
+
   // int32 status = 5;
   void clear_status();
   int32_t status() const;
@@ -2032,6 +2077,9 @@ class TaskInfo final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr handler_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr next_run_at_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr last_run_at_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr current_execution_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr running_node_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr started_at_;
     int32_t status_;
     int32_t retry_count_;
     int32_t max_retries_;
@@ -2164,8 +2212,12 @@ class ListTasksRequest final :
 
   enum : int {
     kAuthTokenFieldNumber = 1,
+    kKeywordFieldNumber = 6,
     kLimitFieldNumber = 2,
+    kOffsetFieldNumber = 4,
+    kStatusFilterFieldNumber = 5,
     kEnabledOnlyFieldNumber = 3,
+    kHasStatusFilterFieldNumber = 7,
   };
   // string auth_token = 1;
   void clear_auth_token();
@@ -2181,6 +2233,20 @@ class ListTasksRequest final :
   std::string* _internal_mutable_auth_token();
   public:
 
+  // string keyword = 6;
+  void clear_keyword();
+  const std::string& keyword() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_keyword(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_keyword();
+  PROTOBUF_NODISCARD std::string* release_keyword();
+  void set_allocated_keyword(std::string* keyword);
+  private:
+  const std::string& _internal_keyword() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_keyword(const std::string& value);
+  std::string* _internal_mutable_keyword();
+  public:
+
   // int32 limit = 2;
   void clear_limit();
   int32_t limit() const;
@@ -2188,6 +2254,24 @@ class ListTasksRequest final :
   private:
   int32_t _internal_limit() const;
   void _internal_set_limit(int32_t value);
+  public:
+
+  // int32 offset = 4;
+  void clear_offset();
+  int32_t offset() const;
+  void set_offset(int32_t value);
+  private:
+  int32_t _internal_offset() const;
+  void _internal_set_offset(int32_t value);
+  public:
+
+  // int32 status_filter = 5;
+  void clear_status_filter();
+  int32_t status_filter() const;
+  void set_status_filter(int32_t value);
+  private:
+  int32_t _internal_status_filter() const;
+  void _internal_set_status_filter(int32_t value);
   public:
 
   // bool enabled_only = 3;
@@ -2199,6 +2283,15 @@ class ListTasksRequest final :
   void _internal_set_enabled_only(bool value);
   public:
 
+  // bool has_status_filter = 7;
+  void clear_has_status_filter();
+  bool has_status_filter() const;
+  void set_has_status_filter(bool value);
+  private:
+  bool _internal_has_status_filter() const;
+  void _internal_set_has_status_filter(bool value);
+  public:
+
   // @@protoc_insertion_point(class_scope:corpcron.rpc.ListTasksRequest)
  private:
   class _Internal;
@@ -2208,8 +2301,12 @@ class ListTasksRequest final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr keyword_;
     int32_t limit_;
+    int32_t offset_;
+    int32_t status_filter_;
     bool enabled_only_;
+    bool has_status_filter_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2341,6 +2438,9 @@ class ListTasksResponse final :
     kTasksFieldNumber = 3,
     kErrorFieldNumber = 2,
     kSuccessFieldNumber = 1,
+    kTotalFieldNumber = 4,
+    kOffsetFieldNumber = 5,
+    kLimitFieldNumber = 6,
   };
   // repeated .corpcron.rpc.TaskInfo tasks = 3;
   int tasks_size() const;
@@ -2383,6 +2483,33 @@ class ListTasksResponse final :
   void _internal_set_success(bool value);
   public:
 
+  // int32 total = 4;
+  void clear_total();
+  int32_t total() const;
+  void set_total(int32_t value);
+  private:
+  int32_t _internal_total() const;
+  void _internal_set_total(int32_t value);
+  public:
+
+  // int32 offset = 5;
+  void clear_offset();
+  int32_t offset() const;
+  void set_offset(int32_t value);
+  private:
+  int32_t _internal_offset() const;
+  void _internal_set_offset(int32_t value);
+  public:
+
+  // int32 limit = 6;
+  void clear_limit();
+  int32_t limit() const;
+  void set_limit(int32_t value);
+  private:
+  int32_t _internal_limit() const;
+  void _internal_set_limit(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:corpcron.rpc.ListTasksResponse)
  private:
   class _Internal;
@@ -2394,6 +2521,9 @@ class ListTasksResponse final :
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskInfo > tasks_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
     bool success_;
+    int32_t total_;
+    int32_t offset_;
+    int32_t limit_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2522,15 +2652,30 @@ class TaskHistoryInfo final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTaskIdFieldNumber = 1,
-    kExecNodeFieldNumber = 2,
-    kResultFieldNumber = 4,
-    kErrorFieldNumber = 5,
-    kStartTimeFieldNumber = 6,
-    kEndTimeFieldNumber = 7,
-    kSuccessFieldNumber = 3,
+    kExecutionIdFieldNumber = 1,
+    kTaskIdFieldNumber = 2,
+    kExecNodeFieldNumber = 3,
+    kResultFieldNumber = 5,
+    kErrorFieldNumber = 6,
+    kStartTimeFieldNumber = 7,
+    kEndTimeFieldNumber = 8,
+    kSuccessFieldNumber = 4,
   };
-  // string task_id = 1;
+  // string execution_id = 1;
+  void clear_execution_id();
+  const std::string& execution_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_execution_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_execution_id();
+  PROTOBUF_NODISCARD std::string* release_execution_id();
+  void set_allocated_execution_id(std::string* execution_id);
+  private:
+  const std::string& _internal_execution_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_execution_id(const std::string& value);
+  std::string* _internal_mutable_execution_id();
+  public:
+
+  // string task_id = 2;
   void clear_task_id();
   const std::string& task_id() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2544,7 +2689,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_task_id();
   public:
 
-  // string exec_node = 2;
+  // string exec_node = 3;
   void clear_exec_node();
   const std::string& exec_node() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2558,7 +2703,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_exec_node();
   public:
 
-  // string result = 4;
+  // string result = 5;
   void clear_result();
   const std::string& result() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2572,7 +2717,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_result();
   public:
 
-  // string error = 5;
+  // string error = 6;
   void clear_error();
   const std::string& error() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2586,7 +2731,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_error();
   public:
 
-  // string start_time = 6;
+  // string start_time = 7;
   void clear_start_time();
   const std::string& start_time() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2600,7 +2745,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_start_time();
   public:
 
-  // string end_time = 7;
+  // string end_time = 8;
   void clear_end_time();
   const std::string& end_time() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -2614,7 +2759,7 @@ class TaskHistoryInfo final :
   std::string* _internal_mutable_end_time();
   public:
 
-  // bool success = 3;
+  // bool success = 4;
   void clear_success();
   bool success() const;
   void set_success(bool value);
@@ -2631,6 +2776,7 @@ class TaskHistoryInfo final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr execution_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr exec_node_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr result_;
@@ -2768,7 +2914,11 @@ class ListHistoryRequest final :
   enum : int {
     kAuthTokenFieldNumber = 1,
     kTaskIdFieldNumber = 2,
+    kKeywordFieldNumber = 6,
     kLimitFieldNumber = 3,
+    kOffsetFieldNumber = 4,
+    kSuccessFilterFieldNumber = 5,
+    kHasSuccessFilterFieldNumber = 7,
   };
   // string auth_token = 1;
   void clear_auth_token();
@@ -2798,6 +2948,20 @@ class ListHistoryRequest final :
   std::string* _internal_mutable_task_id();
   public:
 
+  // string keyword = 6;
+  void clear_keyword();
+  const std::string& keyword() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_keyword(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_keyword();
+  PROTOBUF_NODISCARD std::string* release_keyword();
+  void set_allocated_keyword(std::string* keyword);
+  private:
+  const std::string& _internal_keyword() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_keyword(const std::string& value);
+  std::string* _internal_mutable_keyword();
+  public:
+
   // int32 limit = 3;
   void clear_limit();
   int32_t limit() const;
@@ -2805,6 +2969,33 @@ class ListHistoryRequest final :
   private:
   int32_t _internal_limit() const;
   void _internal_set_limit(int32_t value);
+  public:
+
+  // int32 offset = 4;
+  void clear_offset();
+  int32_t offset() const;
+  void set_offset(int32_t value);
+  private:
+  int32_t _internal_offset() const;
+  void _internal_set_offset(int32_t value);
+  public:
+
+  // int32 success_filter = 5;
+  void clear_success_filter();
+  int32_t success_filter() const;
+  void set_success_filter(int32_t value);
+  private:
+  int32_t _internal_success_filter() const;
+  void _internal_set_success_filter(int32_t value);
+  public:
+
+  // bool has_success_filter = 7;
+  void clear_has_success_filter();
+  bool has_success_filter() const;
+  void set_has_success_filter(bool value);
+  private:
+  bool _internal_has_success_filter() const;
+  void _internal_set_has_success_filter(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:corpcron.rpc.ListHistoryRequest)
@@ -2817,7 +3008,11 @@ class ListHistoryRequest final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_id_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr keyword_;
     int32_t limit_;
+    int32_t offset_;
+    int32_t success_filter_;
+    bool has_success_filter_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -2949,6 +3144,9 @@ class ListHistoryResponse final :
     kHistoryFieldNumber = 3,
     kErrorFieldNumber = 2,
     kSuccessFieldNumber = 1,
+    kTotalFieldNumber = 4,
+    kOffsetFieldNumber = 5,
+    kLimitFieldNumber = 6,
   };
   // repeated .corpcron.rpc.TaskHistoryInfo history = 3;
   int history_size() const;
@@ -2991,6 +3189,33 @@ class ListHistoryResponse final :
   void _internal_set_success(bool value);
   public:
 
+  // int32 total = 4;
+  void clear_total();
+  int32_t total() const;
+  void set_total(int32_t value);
+  private:
+  int32_t _internal_total() const;
+  void _internal_set_total(int32_t value);
+  public:
+
+  // int32 offset = 5;
+  void clear_offset();
+  int32_t offset() const;
+  void set_offset(int32_t value);
+  private:
+  int32_t _internal_offset() const;
+  void _internal_set_offset(int32_t value);
+  public:
+
+  // int32 limit = 6;
+  void clear_limit();
+  int32_t limit() const;
+  void set_limit(int32_t value);
+  private:
+  int32_t _internal_limit() const;
+  void _internal_set_limit(int32_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:corpcron.rpc.ListHistoryResponse)
  private:
   class _Internal;
@@ -3002,6 +3227,9 @@ class ListHistoryResponse final :
     ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHistoryInfo > history_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr error_;
     bool success_;
+    int32_t total_;
+    int32_t offset_;
+    int32_t limit_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -5019,6 +5247,13 @@ class GetMetricsResponse final :
     kLockAcquireSuccessTotalFieldNumber = 13,
     kLockAcquireFailureTotalFieldNumber = 14,
     kMaxTaskDurationMsFieldNumber = 15,
+    kTaskDurationP95MsFieldNumber = 16,
+    kTaskDurationP99MsFieldNumber = 17,
+    kTaskDurationSamplesTotalFieldNumber = 18,
+    kScheduleDelayMaxMsFieldNumber = 19,
+    kScheduleDelayP95MsFieldNumber = 20,
+    kScheduleDelayP99MsFieldNumber = 21,
+    kScheduleDelaySamplesTotalFieldNumber = 22,
     kSuccessFieldNumber = 1,
   };
   // string error = 2;
@@ -5152,6 +5387,69 @@ class GetMetricsResponse final :
   void _internal_set_max_task_duration_ms(uint64_t value);
   public:
 
+  // uint64 task_duration_p95_ms = 16;
+  void clear_task_duration_p95_ms();
+  uint64_t task_duration_p95_ms() const;
+  void set_task_duration_p95_ms(uint64_t value);
+  private:
+  uint64_t _internal_task_duration_p95_ms() const;
+  void _internal_set_task_duration_p95_ms(uint64_t value);
+  public:
+
+  // uint64 task_duration_p99_ms = 17;
+  void clear_task_duration_p99_ms();
+  uint64_t task_duration_p99_ms() const;
+  void set_task_duration_p99_ms(uint64_t value);
+  private:
+  uint64_t _internal_task_duration_p99_ms() const;
+  void _internal_set_task_duration_p99_ms(uint64_t value);
+  public:
+
+  // uint64 task_duration_samples_total = 18;
+  void clear_task_duration_samples_total();
+  uint64_t task_duration_samples_total() const;
+  void set_task_duration_samples_total(uint64_t value);
+  private:
+  uint64_t _internal_task_duration_samples_total() const;
+  void _internal_set_task_duration_samples_total(uint64_t value);
+  public:
+
+  // uint64 schedule_delay_max_ms = 19;
+  void clear_schedule_delay_max_ms();
+  uint64_t schedule_delay_max_ms() const;
+  void set_schedule_delay_max_ms(uint64_t value);
+  private:
+  uint64_t _internal_schedule_delay_max_ms() const;
+  void _internal_set_schedule_delay_max_ms(uint64_t value);
+  public:
+
+  // uint64 schedule_delay_p95_ms = 20;
+  void clear_schedule_delay_p95_ms();
+  uint64_t schedule_delay_p95_ms() const;
+  void set_schedule_delay_p95_ms(uint64_t value);
+  private:
+  uint64_t _internal_schedule_delay_p95_ms() const;
+  void _internal_set_schedule_delay_p95_ms(uint64_t value);
+  public:
+
+  // uint64 schedule_delay_p99_ms = 21;
+  void clear_schedule_delay_p99_ms();
+  uint64_t schedule_delay_p99_ms() const;
+  void set_schedule_delay_p99_ms(uint64_t value);
+  private:
+  uint64_t _internal_schedule_delay_p99_ms() const;
+  void _internal_set_schedule_delay_p99_ms(uint64_t value);
+  public:
+
+  // uint64 schedule_delay_samples_total = 22;
+  void clear_schedule_delay_samples_total();
+  uint64_t schedule_delay_samples_total() const;
+  void set_schedule_delay_samples_total(uint64_t value);
+  private:
+  uint64_t _internal_schedule_delay_samples_total() const;
+  void _internal_set_schedule_delay_samples_total(uint64_t value);
+  public:
+
   // bool success = 1;
   void clear_success();
   bool success() const;
@@ -5183,6 +5481,13 @@ class GetMetricsResponse final :
     uint64_t lock_acquire_success_total_;
     uint64_t lock_acquire_failure_total_;
     uint64_t max_task_duration_ms_;
+    uint64_t task_duration_p95_ms_;
+    uint64_t task_duration_p99_ms_;
+    uint64_t task_duration_samples_total_;
+    uint64_t schedule_delay_max_ms_;
+    uint64_t schedule_delay_p95_ms_;
+    uint64_t schedule_delay_p99_ms_;
+    uint64_t schedule_delay_samples_total_;
     bool success_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
@@ -6626,6 +6931,156 @@ inline void TaskInfo::set_max_retries(int32_t value) {
   // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.max_retries)
 }
 
+// string current_execution_id = 10;
+inline void TaskInfo::clear_current_execution_id() {
+  _impl_.current_execution_id_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::current_execution_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.current_execution_id)
+  return _internal_current_execution_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_current_execution_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.current_execution_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.current_execution_id)
+}
+inline std::string* TaskInfo::mutable_current_execution_id() {
+  std::string* _s = _internal_mutable_current_execution_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.current_execution_id)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_current_execution_id() const {
+  return _impl_.current_execution_id_.Get();
+}
+inline void TaskInfo::_internal_set_current_execution_id(const std::string& value) {
+  
+  _impl_.current_execution_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_current_execution_id() {
+  
+  return _impl_.current_execution_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_current_execution_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.current_execution_id)
+  return _impl_.current_execution_id_.Release();
+}
+inline void TaskInfo::set_allocated_current_execution_id(std::string* current_execution_id) {
+  if (current_execution_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.current_execution_id_.SetAllocated(current_execution_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.current_execution_id_.IsDefault()) {
+    _impl_.current_execution_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.current_execution_id)
+}
+
+// string running_node = 11;
+inline void TaskInfo::clear_running_node() {
+  _impl_.running_node_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::running_node() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.running_node)
+  return _internal_running_node();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_running_node(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.running_node_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.running_node)
+}
+inline std::string* TaskInfo::mutable_running_node() {
+  std::string* _s = _internal_mutable_running_node();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.running_node)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_running_node() const {
+  return _impl_.running_node_.Get();
+}
+inline void TaskInfo::_internal_set_running_node(const std::string& value) {
+  
+  _impl_.running_node_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_running_node() {
+  
+  return _impl_.running_node_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_running_node() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.running_node)
+  return _impl_.running_node_.Release();
+}
+inline void TaskInfo::set_allocated_running_node(std::string* running_node) {
+  if (running_node != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.running_node_.SetAllocated(running_node, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.running_node_.IsDefault()) {
+    _impl_.running_node_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.running_node)
+}
+
+// string started_at = 12;
+inline void TaskInfo::clear_started_at() {
+  _impl_.started_at_.ClearToEmpty();
+}
+inline const std::string& TaskInfo::started_at() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskInfo.started_at)
+  return _internal_started_at();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfo::set_started_at(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.started_at_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskInfo.started_at)
+}
+inline std::string* TaskInfo::mutable_started_at() {
+  std::string* _s = _internal_mutable_started_at();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskInfo.started_at)
+  return _s;
+}
+inline const std::string& TaskInfo::_internal_started_at() const {
+  return _impl_.started_at_.Get();
+}
+inline void TaskInfo::_internal_set_started_at(const std::string& value) {
+  
+  _impl_.started_at_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfo::_internal_mutable_started_at() {
+  
+  return _impl_.started_at_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfo::release_started_at() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskInfo.started_at)
+  return _impl_.started_at_.Release();
+}
+inline void TaskInfo::set_allocated_started_at(std::string* started_at) {
+  if (started_at != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.started_at_.SetAllocated(started_at, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.started_at_.IsDefault()) {
+    _impl_.started_at_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskInfo.started_at)
+}
+
 // -------------------------------------------------------------------
 
 // ListTasksRequest
@@ -6718,6 +7173,116 @@ inline void ListTasksRequest::_internal_set_enabled_only(bool value) {
 inline void ListTasksRequest::set_enabled_only(bool value) {
   _internal_set_enabled_only(value);
   // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.enabled_only)
+}
+
+// int32 offset = 4;
+inline void ListTasksRequest::clear_offset() {
+  _impl_.offset_ = 0;
+}
+inline int32_t ListTasksRequest::_internal_offset() const {
+  return _impl_.offset_;
+}
+inline int32_t ListTasksRequest::offset() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.offset)
+  return _internal_offset();
+}
+inline void ListTasksRequest::_internal_set_offset(int32_t value) {
+  
+  _impl_.offset_ = value;
+}
+inline void ListTasksRequest::set_offset(int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.offset)
+}
+
+// int32 status_filter = 5;
+inline void ListTasksRequest::clear_status_filter() {
+  _impl_.status_filter_ = 0;
+}
+inline int32_t ListTasksRequest::_internal_status_filter() const {
+  return _impl_.status_filter_;
+}
+inline int32_t ListTasksRequest::status_filter() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.status_filter)
+  return _internal_status_filter();
+}
+inline void ListTasksRequest::_internal_set_status_filter(int32_t value) {
+  
+  _impl_.status_filter_ = value;
+}
+inline void ListTasksRequest::set_status_filter(int32_t value) {
+  _internal_set_status_filter(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.status_filter)
+}
+
+// string keyword = 6;
+inline void ListTasksRequest::clear_keyword() {
+  _impl_.keyword_.ClearToEmpty();
+}
+inline const std::string& ListTasksRequest::keyword() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.keyword)
+  return _internal_keyword();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListTasksRequest::set_keyword(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.keyword_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.keyword)
+}
+inline std::string* ListTasksRequest::mutable_keyword() {
+  std::string* _s = _internal_mutable_keyword();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListTasksRequest.keyword)
+  return _s;
+}
+inline const std::string& ListTasksRequest::_internal_keyword() const {
+  return _impl_.keyword_.Get();
+}
+inline void ListTasksRequest::_internal_set_keyword(const std::string& value) {
+  
+  _impl_.keyword_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListTasksRequest::_internal_mutable_keyword() {
+  
+  return _impl_.keyword_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListTasksRequest::release_keyword() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListTasksRequest.keyword)
+  return _impl_.keyword_.Release();
+}
+inline void ListTasksRequest::set_allocated_keyword(std::string* keyword) {
+  if (keyword != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.keyword_.SetAllocated(keyword, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.keyword_.IsDefault()) {
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListTasksRequest.keyword)
+}
+
+// bool has_status_filter = 7;
+inline void ListTasksRequest::clear_has_status_filter() {
+  _impl_.has_status_filter_ = false;
+}
+inline bool ListTasksRequest::_internal_has_status_filter() const {
+  return _impl_.has_status_filter_;
+}
+inline bool ListTasksRequest::has_status_filter() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksRequest.has_status_filter)
+  return _internal_has_status_filter();
+}
+inline void ListTasksRequest::_internal_set_has_status_filter(bool value) {
+  
+  _impl_.has_status_filter_ = value;
+}
+inline void ListTasksRequest::set_has_status_filter(bool value) {
+  _internal_set_has_status_filter(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksRequest.has_status_filter)
 }
 
 // -------------------------------------------------------------------
@@ -6834,11 +7399,121 @@ ListTasksResponse::tasks() const {
   return _impl_.tasks_;
 }
 
+// int32 total = 4;
+inline void ListTasksResponse::clear_total() {
+  _impl_.total_ = 0;
+}
+inline int32_t ListTasksResponse::_internal_total() const {
+  return _impl_.total_;
+}
+inline int32_t ListTasksResponse::total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.total)
+  return _internal_total();
+}
+inline void ListTasksResponse::_internal_set_total(int32_t value) {
+  
+  _impl_.total_ = value;
+}
+inline void ListTasksResponse::set_total(int32_t value) {
+  _internal_set_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksResponse.total)
+}
+
+// int32 offset = 5;
+inline void ListTasksResponse::clear_offset() {
+  _impl_.offset_ = 0;
+}
+inline int32_t ListTasksResponse::_internal_offset() const {
+  return _impl_.offset_;
+}
+inline int32_t ListTasksResponse::offset() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.offset)
+  return _internal_offset();
+}
+inline void ListTasksResponse::_internal_set_offset(int32_t value) {
+  
+  _impl_.offset_ = value;
+}
+inline void ListTasksResponse::set_offset(int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksResponse.offset)
+}
+
+// int32 limit = 6;
+inline void ListTasksResponse::clear_limit() {
+  _impl_.limit_ = 0;
+}
+inline int32_t ListTasksResponse::_internal_limit() const {
+  return _impl_.limit_;
+}
+inline int32_t ListTasksResponse::limit() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListTasksResponse.limit)
+  return _internal_limit();
+}
+inline void ListTasksResponse::_internal_set_limit(int32_t value) {
+  
+  _impl_.limit_ = value;
+}
+inline void ListTasksResponse::set_limit(int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListTasksResponse.limit)
+}
+
 // -------------------------------------------------------------------
 
 // TaskHistoryInfo
 
-// string task_id = 1;
+// string execution_id = 1;
+inline void TaskHistoryInfo::clear_execution_id() {
+  _impl_.execution_id_.ClearToEmpty();
+}
+inline const std::string& TaskHistoryInfo::execution_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.TaskHistoryInfo.execution_id)
+  return _internal_execution_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskHistoryInfo::set_execution_id(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.execution_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.execution_id)
+}
+inline std::string* TaskHistoryInfo::mutable_execution_id() {
+  std::string* _s = _internal_mutable_execution_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.TaskHistoryInfo.execution_id)
+  return _s;
+}
+inline const std::string& TaskHistoryInfo::_internal_execution_id() const {
+  return _impl_.execution_id_.Get();
+}
+inline void TaskHistoryInfo::_internal_set_execution_id(const std::string& value) {
+  
+  _impl_.execution_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::_internal_mutable_execution_id() {
+  
+  return _impl_.execution_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskHistoryInfo::release_execution_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.TaskHistoryInfo.execution_id)
+  return _impl_.execution_id_.Release();
+}
+inline void TaskHistoryInfo::set_allocated_execution_id(std::string* execution_id) {
+  if (execution_id != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.execution_id_.SetAllocated(execution_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.execution_id_.IsDefault()) {
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.execution_id)
+}
+
+// string task_id = 2;
 inline void TaskHistoryInfo::clear_task_id() {
   _impl_.task_id_.ClearToEmpty();
 }
@@ -6888,7 +7563,7 @@ inline void TaskHistoryInfo::set_allocated_task_id(std::string* task_id) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.task_id)
 }
 
-// string exec_node = 2;
+// string exec_node = 3;
 inline void TaskHistoryInfo::clear_exec_node() {
   _impl_.exec_node_.ClearToEmpty();
 }
@@ -6938,7 +7613,7 @@ inline void TaskHistoryInfo::set_allocated_exec_node(std::string* exec_node) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.exec_node)
 }
 
-// bool success = 3;
+// bool success = 4;
 inline void TaskHistoryInfo::clear_success() {
   _impl_.success_ = false;
 }
@@ -6958,7 +7633,7 @@ inline void TaskHistoryInfo::set_success(bool value) {
   // @@protoc_insertion_point(field_set:corpcron.rpc.TaskHistoryInfo.success)
 }
 
-// string result = 4;
+// string result = 5;
 inline void TaskHistoryInfo::clear_result() {
   _impl_.result_.ClearToEmpty();
 }
@@ -7008,7 +7683,7 @@ inline void TaskHistoryInfo::set_allocated_result(std::string* result) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.result)
 }
 
-// string error = 5;
+// string error = 6;
 inline void TaskHistoryInfo::clear_error() {
   _impl_.error_.ClearToEmpty();
 }
@@ -7058,7 +7733,7 @@ inline void TaskHistoryInfo::set_allocated_error(std::string* error) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.error)
 }
 
-// string start_time = 6;
+// string start_time = 7;
 inline void TaskHistoryInfo::clear_start_time() {
   _impl_.start_time_.ClearToEmpty();
 }
@@ -7108,7 +7783,7 @@ inline void TaskHistoryInfo::set_allocated_start_time(std::string* start_time) {
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.TaskHistoryInfo.start_time)
 }
 
-// string end_time = 7;
+// string end_time = 8;
 inline void TaskHistoryInfo::clear_end_time() {
   _impl_.end_time_.ClearToEmpty();
 }
@@ -7282,6 +7957,116 @@ inline void ListHistoryRequest::set_limit(int32_t value) {
   // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.limit)
 }
 
+// int32 offset = 4;
+inline void ListHistoryRequest::clear_offset() {
+  _impl_.offset_ = 0;
+}
+inline int32_t ListHistoryRequest::_internal_offset() const {
+  return _impl_.offset_;
+}
+inline int32_t ListHistoryRequest::offset() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.offset)
+  return _internal_offset();
+}
+inline void ListHistoryRequest::_internal_set_offset(int32_t value) {
+  
+  _impl_.offset_ = value;
+}
+inline void ListHistoryRequest::set_offset(int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.offset)
+}
+
+// int32 success_filter = 5;
+inline void ListHistoryRequest::clear_success_filter() {
+  _impl_.success_filter_ = 0;
+}
+inline int32_t ListHistoryRequest::_internal_success_filter() const {
+  return _impl_.success_filter_;
+}
+inline int32_t ListHistoryRequest::success_filter() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.success_filter)
+  return _internal_success_filter();
+}
+inline void ListHistoryRequest::_internal_set_success_filter(int32_t value) {
+  
+  _impl_.success_filter_ = value;
+}
+inline void ListHistoryRequest::set_success_filter(int32_t value) {
+  _internal_set_success_filter(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.success_filter)
+}
+
+// string keyword = 6;
+inline void ListHistoryRequest::clear_keyword() {
+  _impl_.keyword_.ClearToEmpty();
+}
+inline const std::string& ListHistoryRequest::keyword() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.keyword)
+  return _internal_keyword();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ListHistoryRequest::set_keyword(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.keyword_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.keyword)
+}
+inline std::string* ListHistoryRequest::mutable_keyword() {
+  std::string* _s = _internal_mutable_keyword();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ListHistoryRequest.keyword)
+  return _s;
+}
+inline const std::string& ListHistoryRequest::_internal_keyword() const {
+  return _impl_.keyword_.Get();
+}
+inline void ListHistoryRequest::_internal_set_keyword(const std::string& value) {
+  
+  _impl_.keyword_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::_internal_mutable_keyword() {
+  
+  return _impl_.keyword_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ListHistoryRequest::release_keyword() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ListHistoryRequest.keyword)
+  return _impl_.keyword_.Release();
+}
+inline void ListHistoryRequest::set_allocated_keyword(std::string* keyword) {
+  if (keyword != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.keyword_.SetAllocated(keyword, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.keyword_.IsDefault()) {
+    _impl_.keyword_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ListHistoryRequest.keyword)
+}
+
+// bool has_success_filter = 7;
+inline void ListHistoryRequest::clear_has_success_filter() {
+  _impl_.has_success_filter_ = false;
+}
+inline bool ListHistoryRequest::_internal_has_success_filter() const {
+  return _impl_.has_success_filter_;
+}
+inline bool ListHistoryRequest::has_success_filter() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryRequest.has_success_filter)
+  return _internal_has_success_filter();
+}
+inline void ListHistoryRequest::_internal_set_has_success_filter(bool value) {
+  
+  _impl_.has_success_filter_ = value;
+}
+inline void ListHistoryRequest::set_has_success_filter(bool value) {
+  _internal_set_has_success_filter(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryRequest.has_success_filter)
+}
+
 // -------------------------------------------------------------------
 
 // ListHistoryResponse
@@ -7394,6 +8179,66 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::corpcron::rpc::TaskHis
 ListHistoryResponse::history() const {
   // @@protoc_insertion_point(field_list:corpcron.rpc.ListHistoryResponse.history)
   return _impl_.history_;
+}
+
+// int32 total = 4;
+inline void ListHistoryResponse::clear_total() {
+  _impl_.total_ = 0;
+}
+inline int32_t ListHistoryResponse::_internal_total() const {
+  return _impl_.total_;
+}
+inline int32_t ListHistoryResponse::total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.total)
+  return _internal_total();
+}
+inline void ListHistoryResponse::_internal_set_total(int32_t value) {
+  
+  _impl_.total_ = value;
+}
+inline void ListHistoryResponse::set_total(int32_t value) {
+  _internal_set_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryResponse.total)
+}
+
+// int32 offset = 5;
+inline void ListHistoryResponse::clear_offset() {
+  _impl_.offset_ = 0;
+}
+inline int32_t ListHistoryResponse::_internal_offset() const {
+  return _impl_.offset_;
+}
+inline int32_t ListHistoryResponse::offset() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.offset)
+  return _internal_offset();
+}
+inline void ListHistoryResponse::_internal_set_offset(int32_t value) {
+  
+  _impl_.offset_ = value;
+}
+inline void ListHistoryResponse::set_offset(int32_t value) {
+  _internal_set_offset(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryResponse.offset)
+}
+
+// int32 limit = 6;
+inline void ListHistoryResponse::clear_limit() {
+  _impl_.limit_ = 0;
+}
+inline int32_t ListHistoryResponse::_internal_limit() const {
+  return _impl_.limit_;
+}
+inline int32_t ListHistoryResponse::limit() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ListHistoryResponse.limit)
+  return _internal_limit();
+}
+inline void ListHistoryResponse::_internal_set_limit(int32_t value) {
+  
+  _impl_.limit_ = value;
+}
+inline void ListHistoryResponse::set_limit(int32_t value) {
+  _internal_set_limit(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ListHistoryResponse.limit)
 }
 
 // -------------------------------------------------------------------
@@ -8857,6 +9702,146 @@ inline void GetMetricsResponse::_internal_set_max_task_duration_ms(uint64_t valu
 inline void GetMetricsResponse::set_max_task_duration_ms(uint64_t value) {
   _internal_set_max_task_duration_ms(value);
   // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.max_task_duration_ms)
+}
+
+// uint64 task_duration_p95_ms = 16;
+inline void GetMetricsResponse::clear_task_duration_p95_ms() {
+  _impl_.task_duration_p95_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_task_duration_p95_ms() const {
+  return _impl_.task_duration_p95_ms_;
+}
+inline uint64_t GetMetricsResponse::task_duration_p95_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.task_duration_p95_ms)
+  return _internal_task_duration_p95_ms();
+}
+inline void GetMetricsResponse::_internal_set_task_duration_p95_ms(uint64_t value) {
+  
+  _impl_.task_duration_p95_ms_ = value;
+}
+inline void GetMetricsResponse::set_task_duration_p95_ms(uint64_t value) {
+  _internal_set_task_duration_p95_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.task_duration_p95_ms)
+}
+
+// uint64 task_duration_p99_ms = 17;
+inline void GetMetricsResponse::clear_task_duration_p99_ms() {
+  _impl_.task_duration_p99_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_task_duration_p99_ms() const {
+  return _impl_.task_duration_p99_ms_;
+}
+inline uint64_t GetMetricsResponse::task_duration_p99_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.task_duration_p99_ms)
+  return _internal_task_duration_p99_ms();
+}
+inline void GetMetricsResponse::_internal_set_task_duration_p99_ms(uint64_t value) {
+  
+  _impl_.task_duration_p99_ms_ = value;
+}
+inline void GetMetricsResponse::set_task_duration_p99_ms(uint64_t value) {
+  _internal_set_task_duration_p99_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.task_duration_p99_ms)
+}
+
+// uint64 task_duration_samples_total = 18;
+inline void GetMetricsResponse::clear_task_duration_samples_total() {
+  _impl_.task_duration_samples_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_task_duration_samples_total() const {
+  return _impl_.task_duration_samples_total_;
+}
+inline uint64_t GetMetricsResponse::task_duration_samples_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.task_duration_samples_total)
+  return _internal_task_duration_samples_total();
+}
+inline void GetMetricsResponse::_internal_set_task_duration_samples_total(uint64_t value) {
+  
+  _impl_.task_duration_samples_total_ = value;
+}
+inline void GetMetricsResponse::set_task_duration_samples_total(uint64_t value) {
+  _internal_set_task_duration_samples_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.task_duration_samples_total)
+}
+
+// uint64 schedule_delay_max_ms = 19;
+inline void GetMetricsResponse::clear_schedule_delay_max_ms() {
+  _impl_.schedule_delay_max_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_schedule_delay_max_ms() const {
+  return _impl_.schedule_delay_max_ms_;
+}
+inline uint64_t GetMetricsResponse::schedule_delay_max_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.schedule_delay_max_ms)
+  return _internal_schedule_delay_max_ms();
+}
+inline void GetMetricsResponse::_internal_set_schedule_delay_max_ms(uint64_t value) {
+  
+  _impl_.schedule_delay_max_ms_ = value;
+}
+inline void GetMetricsResponse::set_schedule_delay_max_ms(uint64_t value) {
+  _internal_set_schedule_delay_max_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.schedule_delay_max_ms)
+}
+
+// uint64 schedule_delay_p95_ms = 20;
+inline void GetMetricsResponse::clear_schedule_delay_p95_ms() {
+  _impl_.schedule_delay_p95_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_schedule_delay_p95_ms() const {
+  return _impl_.schedule_delay_p95_ms_;
+}
+inline uint64_t GetMetricsResponse::schedule_delay_p95_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.schedule_delay_p95_ms)
+  return _internal_schedule_delay_p95_ms();
+}
+inline void GetMetricsResponse::_internal_set_schedule_delay_p95_ms(uint64_t value) {
+  
+  _impl_.schedule_delay_p95_ms_ = value;
+}
+inline void GetMetricsResponse::set_schedule_delay_p95_ms(uint64_t value) {
+  _internal_set_schedule_delay_p95_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.schedule_delay_p95_ms)
+}
+
+// uint64 schedule_delay_p99_ms = 21;
+inline void GetMetricsResponse::clear_schedule_delay_p99_ms() {
+  _impl_.schedule_delay_p99_ms_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_schedule_delay_p99_ms() const {
+  return _impl_.schedule_delay_p99_ms_;
+}
+inline uint64_t GetMetricsResponse::schedule_delay_p99_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.schedule_delay_p99_ms)
+  return _internal_schedule_delay_p99_ms();
+}
+inline void GetMetricsResponse::_internal_set_schedule_delay_p99_ms(uint64_t value) {
+  
+  _impl_.schedule_delay_p99_ms_ = value;
+}
+inline void GetMetricsResponse::set_schedule_delay_p99_ms(uint64_t value) {
+  _internal_set_schedule_delay_p99_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.schedule_delay_p99_ms)
+}
+
+// uint64 schedule_delay_samples_total = 22;
+inline void GetMetricsResponse::clear_schedule_delay_samples_total() {
+  _impl_.schedule_delay_samples_total_ = uint64_t{0u};
+}
+inline uint64_t GetMetricsResponse::_internal_schedule_delay_samples_total() const {
+  return _impl_.schedule_delay_samples_total_;
+}
+inline uint64_t GetMetricsResponse::schedule_delay_samples_total() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.GetMetricsResponse.schedule_delay_samples_total)
+  return _internal_schedule_delay_samples_total();
+}
+inline void GetMetricsResponse::_internal_set_schedule_delay_samples_total(uint64_t value) {
+  
+  _impl_.schedule_delay_samples_total_ = value;
+}
+inline void GetMetricsResponse::set_schedule_delay_samples_total(uint64_t value) {
+  _internal_set_schedule_delay_samples_total(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.GetMetricsResponse.schedule_delay_samples_total)
 }
 
 #ifdef __GNUC__

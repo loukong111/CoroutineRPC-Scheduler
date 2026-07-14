@@ -1,0 +1,65 @@
+groups:
+  - name: corpcron.alerts
+    rules:
+      - alert: CorpCronRpcErrorRateHigh
+        expr: (sum(increase(corpcron_rpc_error_total[5m])) / clamp_min(sum(increase(corpcron_rpc_requests_total[5m])), 1) > 0.05) and (sum(increase(corpcron_rpc_requests_total[5m])) >= 100)
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron RPC error rate is high
+          description: RPC error rate has been above 5% for 2 minutes.
+
+      - alert: CorpCronTaskFailureRateHigh
+        expr: (sum(increase(corpcron_task_failure_total[5m])) / clamp_min(sum(increase(corpcron_task_success_total[5m]) + increase(corpcron_task_failure_total[5m])), 1) > 0.2) and (sum(increase(corpcron_task_success_total[5m]) + increase(corpcron_task_failure_total[5m])) >= 10)
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron task failure rate is high
+          description: Task failure rate has been above 20% for 2 minutes.
+
+      - alert: CorpCronLockFailureRateHigh
+        expr: (sum(increase(corpcron_lock_acquire_failure_total[5m])) / clamp_min(sum(increase(corpcron_lock_acquire_success_total[5m]) + increase(corpcron_lock_acquire_failure_total[5m])), 1) > 0.5) and (sum(increase(corpcron_lock_acquire_success_total[5m]) + increase(corpcron_lock_acquire_failure_total[5m])) >= 10)
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron Redis lock failure rate is high
+          description: Redis lock acquisition failure rate has been above 50% for 2 minutes.
+
+      - alert: CorpCronScheduleDelayP99High
+        expr: max(corpcron_schedule_delay_p99_ms) > 5000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron schedule delay p99 is high
+          description: Scheduling delay p99 has been above 5000 ms for 2 minutes.
+
+      - alert: CorpCronTaskDurationP99High
+        expr: max(corpcron_task_duration_p99_ms) > 10000
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron task duration p99 is high
+          description: Task execution duration p99 has been above 10000 ms for 2 minutes.
+
+      - alert: CorpCronMalformedFramesSeen
+        expr: increase(corpcron_malformed_frames_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: CorpCron malformed RPC frames detected
+          description: The server received malformed RPC frames in the last 5 minutes.
+
+      - alert: CorpCronRejectedConnectionsSeen
+        expr: increase(corpcron_rejected_connections_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: info
+        annotations:
+          summary: CorpCron rejected TCP connections
+          description: The connection limit rejected one or more TCP connections in the last 5 minutes.
