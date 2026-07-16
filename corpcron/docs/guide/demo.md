@@ -90,10 +90,14 @@ Token: 留空，除非配置了 rpc.auth_token
 - 构建镜像：等价于 `docker build -t corpcron:local .`
 - 查看压测结果：显示 `docs/assets/benchmark/latest.txt`
 - 查看部署文档：显示 `docs/guide/deploy.md` 与 `systemd/corpcron.service`
+- 启动/停止监控栈：等价于 `docker compose -f deploy/monitoring/docker-compose.monitoring.yml up -d/down`
+- 打开监控页面：打开 Prometheus、Alertmanager 和 Grafana 本地页面
+- Redis 快照：显示 `services:rpc` 成员、服务发现 key 和 TTL
+- MySQL 快照：显示最近任务和执行历史
 - 短连接/长连接压测：等价于 `./scripts/benchmark.sh ... short/reuse`
 - 协议异常演示：鉴权失败、未知方法、坏包断连
 
-如果 Docker 当前需要 sudo 权限，Qt 无法自动输入 sudo 密码。建议提前把当前用户加入 docker 组，或者仍然用终端启动依赖。
+如果 Docker 当前需要 sudo 权限，Qt 无法自动输入 sudo 密码。建议提前把当前用户加入 docker 组；配置好后，完整演示可以基本脱离终端完成。
 
 ## 6. 演示 RPC 和任务链路
 

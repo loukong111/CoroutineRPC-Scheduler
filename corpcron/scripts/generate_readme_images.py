@@ -6,216 +6,293 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "docs" / "assets" / "images"
 OUT.mkdir(parents=True, exist_ok=True)
 
-W, H = 1360, 860
+W, H = 1440, 900
 
 
-def font(size, bold=False):
-    candidates = [
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf",
-    ]
+def font(size, bold=False, mono=False):
+    if mono:
+        candidates = [
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+            "/usr/share/fonts/truetype/liberation2/LiberationMono-Regular.ttf",
+        ]
+    elif bold:
+        candidates = [
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        ]
+    else:
+        candidates = [
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        ]
     for path in candidates:
         if Path(path).exists():
             return ImageFont.truetype(path, size)
     return ImageFont.load_default()
 
 
-F_TITLE = font(28, True)
-F_SUB = font(16)
-F_BODY = font(15)
-F_BODY_BOLD = font(15, True)
+F_TITLE = font(24, True)
+F_SUB = font(15)
+F_BODY = font(14)
+F_BODY_BOLD = font(14, True)
 F_SMALL = font(12)
-F_MONO = font(14)
+F_MONO = font(13, mono=True)
+F_MONO_BIG = font(15, mono=True)
+
+BG = "#1f2329"
+TOP = "#2b3037"
+PANEL = "#252a31"
+PANEL_ALT = "#20242b"
+BORDER = "#3b424d"
+TEXT = "#d8dee9"
+TEXT_MUTED = "#9ca3af"
+TEXT_DIM = "#7b8492"
+BLUE = "#2563eb"
+RED = "#b91c1c"
+GREEN = "#22c55e"
+AMBER = "#f59e0b"
 
 
-def rounded(draw, xy, fill, outline=None, radius=12, width=1):
+def rounded(draw, xy, fill, outline=None, radius=8, width=1):
     draw.rounded_rectangle(xy, radius=radius, fill=fill, outline=outline, width=width)
 
 
-def text(draw, xy, value, fill="#1f2937", fnt=F_BODY):
+def text(draw, xy, value, fill=TEXT, fnt=F_BODY):
     draw.text(xy, value, fill=fill, font=fnt)
 
 
-def base(title, subtitle):
-    img = Image.new("RGB", (W, H), "#f6f8fb")
+def button(draw, x, y, label, kind="normal", w=118):
+    fill = {"primary": BLUE, "danger": RED, "normal": "#343b45"}.get(kind, "#343b45")
+    outline = {"primary": "#1d4ed8", "danger": "#991b1b", "normal": "#4b5563"}.get(kind, "#4b5563")
+    rounded(draw, (x, y, x + w, y + 32), fill, outline=outline, radius=4)
+    text(draw, (x + 14, y + 7), label, "#ffffff" if kind in ("primary", "danger") else "#e5e7eb", F_SMALL)
+
+
+def input_box(draw, x, y, label, value, w=170):
+    text(draw, (x, y + 8), label, "#cbd5e1", F_SMALL)
+    rounded(draw, (x + 48, y, x + 48 + w, y + 32), "#1c2026", outline="#444c58", radius=4)
+    text(draw, (x + 60, y + 7), value, "#d8dee9", F_SMALL)
+
+
+def chrome(active):
+    img = Image.new("RGB", (W, H), BG)
     d = ImageDraw.Draw(img)
-    rounded(d, (28, 28, 250, H - 28), "#111827", radius=18)
-    text(d, (58, 58), "CorpCron", "#ffffff", F_TITLE)
-    text(d, (58, 96), "RPC Scheduler Console", "#9ca3af", F_SMALL)
-    nav = ["Overview", "RPC Ops", "Tasks", "History", "Services", "Metrics", "Demo", "Logs"]
-    y = 150
-    for item in nav:
-        fill = "#2563eb" if item.lower() in title.lower() else "#111827"
-        rounded(d, (48, y, 230, y + 42), fill, radius=8)
-        text(d, (66, y + 12), item, "#ffffff" if fill == "#2563eb" else "#cbd5e1", F_BODY)
-        y += 52
-    text(d, (286, 46), title, "#0f172a", F_TITLE)
-    text(d, (286, 84), subtitle, "#64748b", F_SUB)
-    rounded(d, (286, 118, W - 34, H - 32), "#ffffff", outline="#d9e1ec", radius=16)
+    d.rectangle((0, 0, W, 34), fill=TOP)
+    for i, item in enumerate(["文件", "运行", "可观测性", "工具"]):
+        text(d, (18 + i * 74, 9), item, TEXT, F_SMALL)
+
+    d.rectangle((0, 34, W, 82), fill=TOP)
+    text(d, (20, 49), "CorpCron 管理控制台", "#f3f4f6", font(22, True))
+    input_box(d, 330, 43, "Host", "127.0.0.1", 150)
+    input_box(d, 560, 43, "Port", "8081", 76)
+    input_box(d, 710, 43, "Token", "", 160)
+    button(d, 940, 43, "连接", "primary", 78)
+    button(d, 1028, 43, "断开", "normal", 78)
+    rounded(d, (1328, 47, 1410, 72), "#11324d", radius=12)
+    text(d, (1346, 52), "已连接", "#7dd3fc", F_SMALL)
+
+    nav_x, nav_y, nav_w = 0, 82, 188
+    d.rectangle((nav_x, nav_y, nav_x + nav_w, H - 190), fill="#1c2026")
+    items = ["概览", "RPC", "任务", "执行记录", "服务发现", "Metrics", "运维"]
+    y = 104
+    for item in items:
+        selected = item == active
+        rounded(d, (14, y, 174, y + 38), "#334155" if selected else "#1c2026", radius=4)
+        text(d, (32, y + 10), item, "#ffffff" if selected else "#aeb7c2", F_BODY_BOLD if selected else F_BODY)
+        y += 44
+
+    d.rectangle((0, H - 190, W, H), fill="#1b1f25")
+    d.line((0, H - 190, W, H - 190), fill=BORDER)
+    rounded(d, (14, H - 174, 120, H - 140), "#334155", radius=4)
+    text(d, (38, H - 164), "控制台", "#ffffff", F_SMALL)
+    rounded(d, (126, H - 174, 220, H - 140), PANEL, radius=4)
+    text(d, (158, H - 164), "事件", TEXT_MUTED, F_SMALL)
     return img, d
 
 
-def stat_card(d, x, y, w, h, title, value, hint):
-    rounded(d, (x, y, x + w, y + h), "#ffffff", outline="#d9e1ec", radius=12)
-    text(d, (x + 22, y + 18), title, "#64748b", F_SMALL)
-    text(d, (x + 22, y + 46), value, "#0f172a", font(32, True))
-    text(d, (x + 22, y + h - 28), hint, "#94a3b8", F_SMALL)
+def content_area(draw, title, subtitle):
+    x, y, w, h = 210, 132, W - 232, H - 346
+    text(draw, (x, y - 44), title, "#f9fafb", F_TITLE)
+    text(draw, (x, y - 16), subtitle, TEXT_MUTED, F_SUB)
+    rounded(draw, (x, y, x + w, y + h), PANEL, outline=BORDER, radius=6)
+    return x, y, w, h
 
 
-def table(d, x, y, cols, rows, widths, row_h=42):
-    header_h = 42
-    rounded(d, (x, y, x + sum(widths), y + header_h + row_h * len(rows)), "#ffffff", outline="#d9e1ec", radius=10)
-    d.rectangle((x, y, x + sum(widths), y + header_h), fill="#f1f5f9")
+def console(draw, lines):
+    x, y = 24, H - 128
+    for line, color in lines:
+        text(draw, (x, y), line, color, F_MONO)
+        y += 24
+
+
+def stat_card(draw, x, y, w, h, title, value, hint):
+    rounded(draw, (x, y, x + w, y + h), PANEL, outline=BORDER, radius=6)
+    text(draw, (x + 18, y + 16), title, TEXT_MUTED, F_SMALL)
+    text(draw, (x + 18, y + 43), value, "#f9fafb", font(28, True))
+    text(draw, (x + 18, y + h - 28), hint, TEXT_DIM, F_SMALL)
+
+
+def table(draw, x, y, cols, rows, widths, row_h=40):
+    total_w = sum(widths)
+    header_h = 40
+    rounded(draw, (x, y, x + total_w, y + header_h + row_h * len(rows)), PANEL_ALT, outline=BORDER, radius=5)
+    d = draw
+    d.rectangle((x, y, x + total_w, y + header_h), fill=TOP)
     cx = x
     for col, w in zip(cols, widths):
-        text(d, (cx + 12, y + 13), col, "#475569", F_BODY_BOLD)
+        text(d, (cx + 10, y + 11), col, "#cbd5e1", F_BODY_BOLD)
         cx += w
     for r, row in enumerate(rows):
         ry = y + header_h + r * row_h
         if r % 2:
-            d.rectangle((x, ry, x + sum(widths), ry + row_h), fill="#f8fafc")
+            d.rectangle((x, ry, x + total_w, ry + row_h), fill=PANEL)
         cx = x
         for val, w in zip(row, widths):
-            text(d, (cx + 12, ry + 12), str(val), "#1f2937", F_BODY)
+            text(d, (cx + 10, ry + 11), str(val), TEXT, F_BODY)
             cx += w
 
 
 def overview():
-    img, d = base("Overview", "System health and live runtime metrics")
+    img, d = chrome("概览")
+    x, y, _, _ = content_area(d, "概览", "连接状态、任务数量、服务发现和运行指标总览")
     cards = [
-        ("Connection", "Online", "127.0.0.1:8081"),
-        ("Tasks", "12", "current list"),
-        ("History", "50", "latest query"),
-        ("Services", "2", "Redis discovery"),
-        ("RPC Requests", "8,432", "total"),
-        ("RPC Errors", "3", "total"),
-        ("Active Conn", "4", "current"),
-        ("Task Success", "126", "total"),
+        ("连接状态", "已连接", "RPC 通道"),
+        ("任务数量", "12", "当前列表"),
+        ("历史记录", "50", "最近查询"),
+        ("服务节点", "2", "Redis 服务发现"),
+        ("RPC 请求", "8,432", "累计"),
+        ("RPC 错误", "3", "累计"),
+        ("活跃连接", "4", "当前"),
+        ("任务成功", "126", "累计"),
     ]
-    x0, y0 = 314, 150
     for i, card in enumerate(cards):
-        x = x0 + (i % 4) * 250
-        y = y0 + (i // 4) * 150
-        stat_card(d, x, y, 220, 120, *card)
-    table(d, 314, 480, ["Recent Event", "Status", "Time"], [
-        ("SubmitTask", "success", "20:31:12"),
-        ("ExecuteTask", "success", "20:31:20"),
-        ("GetMetrics", "success", "20:31:24"),
-        ("Lock renew", "success", "20:31:26"),
-    ], [360, 180, 180])
+        stat_card(d, x + 24 + (i % 4) * 285, y + 28 + (i // 4) * 132, 250, 104, *card)
+    table(d, x + 24, y + 326, ["事件", "状态", "时间"], [
+        ("SubmitTask", "成功", "20:31:12"),
+        ("ExecuteTask", "成功", "20:31:20"),
+        ("GetMetrics", "成功", "20:31:24"),
+        ("Lock renew", "成功", "20:31:26"),
+    ], [420, 180, 180])
+    console(d, [
+        ("[20:31:24] 运行指标已刷新", GREEN),
+        ("[20:31:26] 服务发现已刷新，共 2 个节点", "#93c5fd"),
+    ])
     img.save(OUT / "qt-overview.png")
 
 
 def tasks():
-    img, d = base("Tasks", "Task management, editing and manual execution")
-    table(d, 314, 154, ["ID", "Handler", "Status", "Cron", "Next Run", "Retry"], [
-        ("task-a7f1", "Echo", "enabled", "* * * * * ?", "2026-07-08 20:35:00", "0/3"),
-        ("task-b4c2", "Echo", "enabled", "*/5 * * * * ?", "2026-07-08 20:40:00", "1/3"),
-        ("task-c91e", "Echo", "disabled", "0 0 * * * ?", "2026-07-09 00:00:00", "3/3"),
-    ], [170, 130, 120, 190, 260, 90])
-    rounded(d, (314, 380, 1050, 690), "#ffffff", outline="#d9e1ec", radius=12)
-    text(d, (340, 408), "Task Detail / Actions", "#0f172a", F_BODY_BOLD)
-    labels = [("ID", "task-a7f1"), ("Cron", "* * * * * ?"), ("Handler", "Echo"), ("Params", "demo payload"), ("Max Retries", "3")]
-    y = 452
-    for k, v in labels:
-        text(d, (340, y), k, "#64748b", F_SMALL)
-        rounded(d, (450, y - 8, 840, y + 28), "#f8fafc", outline="#cbd5e1", radius=6)
-        text(d, (464, y), v, "#1f2937", F_BODY)
-        y += 46
-    for i, name in enumerate(["Save", "Enable", "Disable", "Run Now", "Delete"]):
-        x = 340 + i * 120
-        fill = "#dc2626" if name == "Delete" else "#2563eb" if name in ("Save", "Run Now") else "#eef2f7"
-        color = "#ffffff" if fill in ("#dc2626", "#2563eb") else "#1f2937"
-        rounded(d, (x, 640, x + 100, 678), fill, outline="#cbd5e1", radius=7)
-        text(d, (x + 20, 651), name, color, F_SMALL)
+    img, d = chrome("任务")
+    x, y, _, _ = content_area(d, "任务", "任务分页筛选、编辑、启停、删除和立即执行")
+    button(d, x + 24, y + 22, "刷新任务", "normal", 96)
+    input_box(d, x + 150, y + 22, "关键字", "Echo", 210)
+    table(d, x + 24, y + 78, ["ID", "Handler", "状态", "Cron", "下次执行", "重试"], [
+        ("task-a7f1", "Echo", "待调度", "* * * * * ?", "2026-07-16 20:35:00", "0/3"),
+        ("task-b4c2", "Echo", "执行中", "*/5 * * * * ?", "2026-07-16 20:40:00", "1/3"),
+        ("task-c91e", "Echo", "停用", "0 0 * * * ?", "2026-07-17 00:00:00", "3/3"),
+    ], [180, 130, 110, 190, 260, 90])
+    rounded(d, (x + 24, y + 300, x + 980, y + 530), PANEL_ALT, outline=BORDER, radius=6)
+    text(d, (x + 48, y + 322), "任务详情 / 操作", "#f9fafb", F_BODY_BOLD)
+    fields = [("ID", "task-a7f1"), ("Cron", "* * * * * ?"), ("Handler", "Echo"), ("Params", "demo payload"), ("最大重试", "3")]
+    fy = y + 360
+    for k, v in fields:
+        text(d, (x + 48, fy + 7), k, TEXT_MUTED, F_SMALL)
+        rounded(d, (x + 150, fy, x + 520, fy + 30), "#1c2026", outline="#444c58", radius=4)
+        text(d, (x + 164, fy + 6), v, TEXT, F_SMALL)
+        fy += 36
+    for i, (name, kind) in enumerate([("保存修改", "primary"), ("启用", "normal"), ("禁用", "normal"), ("立即执行", "primary"), ("删除", "danger")]):
+        button(d, x + 560 + i * 112, y + 468, name, kind, 96)
+    console(d, [
+        ("[20:35:12] 任务列表已刷新，本页 3 条 / 共 12 条", "#93c5fd"),
+        ("[20:35:18] 立即执行成功: Echo: demo payload", GREEN),
+    ])
     img.save(OUT / "qt-task-management.png")
 
 
 def metrics():
-    img, d = base("Metrics", "RPC, scheduler, traffic and lock observability")
+    img, d = chrome("Metrics")
+    x, y, _, _ = content_area(d, "Metrics", "RPC、连接、任务、锁和调度延迟指标")
     groups = [
-        ("RPC", [("requests", "8432"), ("success", "8429"), ("errors", "3")]),
-        ("Connection", [("active", "4"), ("rejected", "0"), ("malformed", "1")]),
-        ("Traffic", [("bytes in", "1.7 MB"), ("bytes out", "2.1 MB")]),
-        ("Scheduler", [("task success", "126"), ("task failure", "2"), ("max duration", "37 ms")]),
-        ("Redis Lock", [("acquire ok", "128"), ("acquire fail", "6")]),
+        ("RPC", [("rpc_requests_total", "8432"), ("rpc_success_total", "8429"), ("rpc_error_total", "3")]),
+        ("连接", [("active_connections", "4"), ("rejected_connections", "0"), ("malformed_frames", "1")]),
+        ("任务", [("task_success_total", "126"), ("task_failure_total", "2"), ("max_task_duration_ms", "37")]),
+        ("Redis Lock", [("lock_acquire_success_total", "128"), ("lock_acquire_failure_total", "6")]),
+        ("调度延迟", [("schedule_delay_p95_ms", "12"), ("schedule_delay_p99_ms", "18")]),
+        ("任务耗时", [("task_duration_p95_ms", "9"), ("task_duration_p99_ms", "14")]),
     ]
-    x, y = 314, 154
     for idx, (name, items) in enumerate(groups):
-        gx = x + (idx % 2) * 380
-        gy = y + (idx // 2) * 185
-        rounded(d, (gx, gy, gx + 340, gy + 150), "#ffffff", outline="#d9e1ec", radius=12)
-        text(d, (gx + 20, gy + 18), name, "#0f172a", F_BODY_BOLD)
+        gx = x + 24 + (idx % 3) * 380
+        gy = y + 28 + (idx // 3) * 194
+        rounded(d, (gx, gy, gx + 340, gy + 152), PANEL_ALT, outline=BORDER, radius=6)
+        text(d, (gx + 18, gy + 18), name, "#f9fafb", F_BODY_BOLD)
         iy = gy + 52
         for key, val in items:
-            text(d, (gx + 22, iy), key, "#64748b", F_SMALL)
-            text(d, (gx + 190, iy - 4), val, "#0f172a", F_BODY_BOLD)
+            text(d, (gx + 20, iy), key, TEXT_MUTED, F_SMALL)
+            text(d, (gx + 245, iy - 2), val, "#f9fafb", F_BODY_BOLD)
             iy += 30
+    console(d, [
+        ("[20:37:08] 运行指标已刷新", GREEN),
+        ("$ curl -sS http://127.0.0.1:9091/alerts", TEXT_MUTED),
+    ])
     img.save(OUT / "qt-metrics.png")
 
 
 def demo_console():
-    img, d = base("Demo", "One-click environment, tests, benchmark and failure demos")
+    img, d = chrome("运维")
+    x, y, _, _ = content_area(d, "运维", "依赖、服务端、监控栈、测试、压测和协议异常演示")
     sections = [
-        ("Environment", ["Start deps", "Stop deps", "Reset deps", "Demo check"]),
-        ("Server", ["Start server", "Stop server", "Start node-2", "Stop node-2"]),
-        ("Quality", ["Build test", "Integration/E2E", "Docker build", "Deploy doc"]),
-        ("Benchmark", ["Short benchmark", "Reuse benchmark", "Latest result"]),
-        ("Protocol errors", ["Auth failure", "Unknown RPC", "Bad frame"]),
+        ("运行环境", [("启动依赖", "primary"), ("停止依赖", "danger"), ("重置依赖", "danger"), ("环境检查", "normal")]),
+        ("服务端", [("启动服务端", "primary"), ("停止服务端", "danger"), ("启动二节点", "primary"), ("停止二节点", "danger")]),
+        ("可观测性", [("启动监控栈", "primary"), ("停止监控栈", "danger"), ("打开 Grafana", "normal"), ("查看 Alerts", "normal")]),
+        ("质量与交付", [("构建测试", "normal"), ("集成/E2E", "normal"), ("构建镜像", "normal"), ("查看部署文档", "normal")]),
+        ("压测", [("短连接压测", "primary"), ("长连接压测", "primary"), ("查看压测结果", "normal")]),
+        ("协议异常", [("鉴权失败", "normal"), ("未知方法", "normal"), ("坏包断连", "danger")]),
     ]
-    x, y = 314, 150
     for si, (title, buttons) in enumerate(sections):
-        sx = x + (si % 2) * 430
-        sy = y + (si // 2) * 180
-        rounded(d, (sx, sy, sx + 390, sy + 145), "#ffffff", outline="#d9e1ec", radius=12)
-        text(d, (sx + 20, sy + 18), title, "#0f172a", F_BODY_BOLD)
-        bx, by = sx + 20, sy + 55
-        for i, b in enumerate(buttons):
-            px = bx + (i % 2) * 175
-            py = by + (i // 2) * 44
-            color = "#dc2626" if "Stop" in b or "Reset" in b or "Bad" in b else "#2563eb" if "Start" in b or "benchmark" in b.lower() else "#eef2f7"
-            txt = "#ffffff" if color in ("#dc2626", "#2563eb") else "#1f2937"
-            rounded(d, (px, py, px + 155, py + 32), color, outline="#cbd5e1", radius=7)
-            text(d, (px + 14, py + 9), b, txt, F_SMALL)
-    rounded(d, (314, 685, 1130, 810), "#0f172a", radius=10)
-    text(d, (336, 708), "$ ./scripts/benchmark.sh 127.0.0.1 8081 16 1000 reuse", "#e5e7eb", F_MONO)
-    text(d, (336, 738), "requests=1000 concurrency=16 mode=reuse success=1000 failure=0 qps=12480 p95_ms=2", "#86efac", F_MONO)
+        sx = x + 24 + (si % 3) * 380
+        sy = y + 28 + (si // 3) * 190
+        rounded(d, (sx, sy, sx + 340, sy + 150), PANEL_ALT, outline=BORDER, radius=6)
+        text(d, (sx + 18, sy + 16), title, "#f9fafb", F_BODY_BOLD)
+        for i, (label, kind) in enumerate(buttons):
+            button(d, sx + 18 + (i % 2) * 158, sy + 52 + (i // 2) * 42, label, kind, 138)
+    console(d, [
+        ("$ ./scripts/benchmark.sh 127.0.0.1 8081 16 1000 reuse", TEXT),
+        ("requests=1000 concurrency=16 mode=reuse success=1000 failure=0 qps=12480 p95_ms=2", GREEN),
+    ])
     img.save(OUT / "qt-demo-console.png")
 
 
 def redis_discovery():
-    img = Image.new("RGB", (W, 520), "#0f172a")
+    img = Image.new("RGB", (W, 560), "#0f172a")
     d = ImageDraw.Draw(img)
-    text(d, (38, 32), "Redis service discovery", "#e5e7eb", F_TITLE)
+    text(d, (42, 36), "Redis 服务发现快照", "#f8fafc", F_TITLE)
+    rounded(d, (38, 92, W - 38, 520), "#111827", outline="#334155", radius=8)
     lines = [
-        "$ docker exec -it corpcron-redis redis-cli",
-        "127.0.0.1:6379> SMEMBERS services:rpc",
-        "1) \"127.0.0.1:8081\"",
-        "2) \"127.0.0.1:8082\"",
-        "127.0.0.1:6379> KEYS services:rpc:*",
-        "1) \"services:rpc:127.0.0.1:8081\"",
-        "2) \"services:rpc:127.0.0.1:8082\"",
-        "127.0.0.1:6379> TTL services:rpc:127.0.0.1:8081",
-        "(integer) 27",
+        "== services:rpc members ==",
+        "127.0.0.1:8081",
+        "127.0.0.1:8082",
+        "",
+        "== services:rpc keys and ttl ==",
+        "services:rpc:127.0.0.1:8081 ttl=27",
+        "services:rpc:127.0.0.1:8082 ttl=24",
     ]
-    y = 96
+    y = 120
     for line in lines:
-        fill = "#86efac" if line.startswith("127.") else "#cbd5e1"
-        text(d, (44, y), line, fill, F_MONO)
-        y += 42
+        color = "#93c5fd" if line.startswith("==") else "#86efac" if line.startswith("127") or "ttl=" in line else "#cbd5e1"
+        text(d, (68, y), line, color, F_MONO_BIG)
+        y += 44
     img.save(OUT / "redis-service-discovery.png")
 
 
 def benchmark_result():
-    img = Image.new("RGB", (W, 620), "#f6f8fb")
+    img = Image.new("RGB", (W, 650), BG)
     d = ImageDraw.Draw(img)
-    text(d, (44, 36), "CorpCron Benchmark Result", "#0f172a", F_TITLE)
-    stat_card(d, 44, 96, 220, 120, "Mode", "reuse", "persistent RPC")
-    stat_card(d, 286, 96, 220, 120, "QPS", "12480", "success only")
-    stat_card(d, 528, 96, 220, 120, "p95", "2 ms", "latency")
-    stat_card(d, 770, 96, 220, 120, "p99", "4 ms", "latency")
-    stat_card(d, 1012, 96, 220, 120, "Failure", "0", "requests")
-    rounded(d, (44, 260, 1260, 560), "#0f172a", radius=12)
+    text(d, (42, 36), "压测结果", "#f8fafc", F_TITLE)
+    stats = [("模式", "reuse", "长连接复用"), ("QPS", "12480", "成功请求"), ("p95", "2 ms", "延迟"), ("p99", "4 ms", "延迟"), ("失败", "0", "请求数")]
+    for i, card in enumerate(stats):
+        stat_card(d, 42 + i * 270, 96, 230, 112, *card)
+    rounded(d, (42, 250, W - 42, 604), "#111827", outline="#334155", radius=8)
     lines = [
         "# CorpCron Benchmark Result",
         "host=127.0.0.1 port=8081 concurrency=16 requests=1000 mode=reuse",
@@ -224,15 +301,14 @@ def benchmark_result():
         "8421  0.3  0.1 18432 102400 00:01:12 build/corpcron_server --config config/server.conf",
         "## client_result",
         "requests=1000 concurrency=16 mode=reuse success=1000 failure=0 elapsed_sec=0.0801 qps=12480 p50_ms=1 p95_ms=2 p99_ms=4",
-        "## server_after",
-        "PID %CPU %MEM   RSS    VSZ ELAPSED CMD",
-        "8421  3.8  0.1 19020 102400 00:01:13 build/corpcron_server --config config/server.conf",
+        "## alerts_after",
+        "status=ok alerts_firing=0",
     ]
-    y = 286
+    y = 278
     for line in lines:
-        fill = "#93c5fd" if line.startswith("#") or line.startswith("##") else "#e5e7eb"
-        text(d, (68, y), line, fill, F_MONO)
-        y += 26
+        color = "#93c5fd" if line.startswith("#") else "#86efac" if "success=1000" in line or "status=ok" in line else "#e5e7eb"
+        text(d, (70, y), line, color, F_MONO)
+        y += 32
     img.save(OUT / "benchmark-result.png")
 
 

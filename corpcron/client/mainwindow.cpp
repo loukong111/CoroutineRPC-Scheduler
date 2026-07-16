@@ -8,13 +8,17 @@
 #include <QHeaderView>
 #include <QAbstractItemView>
 #include <QFrame>
+#include <QMenuBar>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QDesktopServices>
+#include <QSplitter>
 #include <QStringList>
 #include <QVector>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
+#include <QUrl>
 #include <algorithm>
 #include "corpcron/rpc/protocol.hpp"
 #include "rpc.pb.h"
@@ -51,51 +55,83 @@ static QFrame* createStatCard(const QString& title, QLabel*& valueLabel, const Q
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    setWindowTitle("CorpCron Console");
-    resize(1180, 760);
+    setWindowTitle("CorpCron 管理控制台");
+    resize(1320, 820);
+    auto *fileMenu = menuBar()->addMenu("文件");
+    fileMenu->addAction("退出", this, &QWidget::close);
+    auto *runMenu = menuBar()->addMenu("运行");
+    runMenu->addAction("启动依赖", this, &MainWindow::onStartDependencies);
+    runMenu->addAction("启动服务端", this, &MainWindow::onStartServer);
+    runMenu->addAction("运行检查", this, &MainWindow::onRunCheck);
+    auto *observabilityMenu = menuBar()->addMenu("可观测性");
+    observabilityMenu->addAction("打开 Grafana", this, &MainWindow::onOpenGrafana);
+    observabilityMenu->addAction("查看 Alerts", this, &MainWindow::onShowAlerts);
+    auto *toolsMenu = menuBar()->addMenu("工具");
+    toolsMenu->addAction("Redis 快照", this, &MainWindow::onShowRedisSnapshot);
+    toolsMenu->addAction("MySQL 快照", this, &MainWindow::onShowMySQLSnapshot);
     setStyleSheet(
-        "QMainWindow, QWidget { background: #f6f8fb; color: #1f2937; font-size: 13px; }"
-        "QGroupBox { background: #ffffff; border: 1px solid #d9e1ec; border-radius: 8px; margin-top: 12px; padding: 12px; }"
-        "QGroupBox::title { subcontrol-origin: margin; left: 12px; padding: 0 6px; color: #4b5563; font-weight: 600; }"
-        "QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QComboBox { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; selection-background-color: #2563eb; }"
-        "QPushButton { background: #eef2f7; border: 1px solid #cbd5e1; border-radius: 6px; padding: 7px 12px; color: #1f2937; }"
-        "QPushButton:hover { background: #e2e8f0; }"
-        "QPushButton:disabled { color: #94a3b8; background: #f1f5f9; }"
+        "QMainWindow, QWidget { background: #1f2329; color: #d8dee9; font-size: 13px; }"
+        "QFrame[class='topBar'] { background: #2b3037; border-bottom: 1px solid #171a1f; }"
+        "QMenuBar { background: #2b3037; color: #d8dee9; border-bottom: 1px solid #171a1f; }"
+        "QMenuBar::item { padding: 5px 10px; background: transparent; }"
+        "QMenuBar::item:selected { background: #3b424d; }"
+        "QMenu { background: #252a31; color: #d8dee9; border: 1px solid #3b424d; }"
+        "QMenu::item { padding: 6px 24px; }"
+        "QMenu::item:selected { background: #334155; }"
+        "QLabel[class='productTitle'] { color: #f3f4f6; font-size: 15px; font-weight: 700; }"
+        "QGroupBox { background: #252a31; border: 1px solid #3b424d; border-radius: 6px; margin-top: 12px; padding: 12px; }"
+        "QGroupBox::title { subcontrol-origin: margin; left: 10px; padding: 0 5px; color: #aeb7c2; font-weight: 600; }"
+        "QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QComboBox { background: #1c2026; color: #d8dee9; border: 1px solid #444c58; border-radius: 4px; padding: 6px; selection-background-color: #2f81f7; }"
+        "QPushButton { background: #343b45; border: 1px solid #4b5563; border-radius: 4px; padding: 7px 11px; color: #e5e7eb; }"
+        "QPushButton:hover { background: #3f4652; }"
+        "QPushButton:disabled { color: #6b7280; background: #252a31; border-color: #343b45; }"
         "QPushButton[role='primary'] { background: #2563eb; color: white; border-color: #1d4ed8; }"
         "QPushButton[role='primary']:hover { background: #1d4ed8; }"
-        "QPushButton[role='danger'] { background: #dc2626; color: white; border-color: #b91c1c; }"
-        "QPushButton[role='danger']:hover { background: #b91c1c; }"
-        "QPushButton[role='quiet'] { background: #ffffff; }"
-        "QLabel[class='statusPill'] { background: #e0f2fe; color: #075985; border-radius: 10px; padding: 4px 10px; font-weight: 600; }"
-        "QFrame[class='statCard'] { background: #ffffff; border: 1px solid #d9e1ec; border-radius: 8px; }"
-        "QLabel[class='statTitle'] { color: #64748b; font-size: 12px; }"
-        "QLabel[class='statValue'] { color: #0f172a; font-size: 24px; font-weight: 700; }"
-        "QLabel[class='statHint'] { color: #94a3b8; font-size: 12px; }"
-        "QTabWidget::pane { border: 1px solid #d9e1ec; border-radius: 8px; background: #ffffff; }"
-        "QTabBar::tab { padding: 11px 16px; margin: 2px; border-radius: 6px; color: #475569; }"
-        "QTabBar::tab:selected { background: #dbeafe; color: #1d4ed8; font-weight: 600; }"
-        "QHeaderView::section { background: #f1f5f9; border: 0; border-bottom: 1px solid #d9e1ec; padding: 7px; color: #475569; font-weight: 600; }"
-        "QTableWidget { background: #ffffff; alternate-background-color: #f8fafc; gridline-color: #e2e8f0; border: 1px solid #d9e1ec; border-radius: 8px; }"
+        "QPushButton[role='danger'] { background: #b91c1c; color: white; border-color: #991b1b; }"
+        "QPushButton[role='danger']:hover { background: #991b1b; }"
+        "QPushButton[role='quiet'] { background: #252a31; }"
+        "QLabel[class='statusPill'] { background: #11324d; color: #7dd3fc; border-radius: 10px; padding: 4px 10px; font-weight: 600; }"
+        "QFrame[class='statCard'] { background: #252a31; border: 1px solid #3b424d; border-radius: 6px; }"
+        "QLabel[class='statTitle'] { color: #9ca3af; font-size: 12px; }"
+        "QLabel[class='statValue'] { color: #f9fafb; font-size: 24px; font-weight: 700; }"
+        "QLabel[class='statHint'] { color: #7b8492; font-size: 12px; }"
+        "QTabWidget::pane { border: 1px solid #343b45; background: #1f2329; }"
+        "QTabBar::tab { padding: 10px 16px; margin: 1px; color: #aeb7c2; background: #252a31; border-radius: 3px; }"
+        "QTabBar::tab:selected { background: #334155; color: #ffffff; font-weight: 600; }"
+        "QHeaderView::section { background: #2b3037; border: 0; border-bottom: 1px solid #3b424d; padding: 7px; color: #cbd5e1; font-weight: 600; }"
+        "QTableWidget { background: #20242b; color: #d8dee9; alternate-background-color: #252a31; gridline-color: #343b45; border: 1px solid #343b45; border-radius: 4px; }"
+        "QSplitter::handle { background: #343b45; }"
     );
 
     auto *central = new QWidget(this);
     setCentralWidget(central);
     auto *layout = new QVBoxLayout(central);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
 
-    auto *connectionBox = new QGroupBox("连接配置");
+    auto *connectionBox = new QFrame;
+    connectionBox->setProperty("class", "topBar");
     auto *connectionLayout = new QHBoxLayout(connectionBox);
+    connectionLayout->setContentsMargins(14, 8, 14, 8);
+    auto *titleLabel = new QLabel("CorpCron 管理控制台");
+    titleLabel->setProperty("class", "productTitle");
     hostEdit = new QLineEdit("127.0.0.1");
+    hostEdit->setMaximumWidth(170);
     portSpin = new QSpinBox;
     portSpin->setRange(1, 65535);
     portSpin->setValue(8081);
+    portSpin->setMaximumWidth(92);
     tokenEdit = new QLineEdit;
     tokenEdit->setPlaceholderText("Auth Token，可为空");
+    tokenEdit->setMaximumWidth(220);
     connectBtn = new QPushButton("连接");
     disconnectBtn = new QPushButton("断开");
     statusLabel = new QLabel("未连接");
     statusLabel->setProperty("class", "statusPill");
     setButtonRole(connectBtn, "primary");
     setButtonRole(disconnectBtn, "quiet");
+    connectionLayout->addWidget(titleLabel);
+    connectionLayout->addSpacing(18);
     connectionLayout->addWidget(new QLabel("Host"));
     connectionLayout->addWidget(hostEdit);
     connectionLayout->addWidget(new QLabel("Port"));
@@ -104,27 +140,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connectionLayout->addWidget(tokenEdit);
     connectionLayout->addWidget(connectBtn);
     connectionLayout->addWidget(disconnectBtn);
+    connectionLayout->addStretch(1);
     connectionLayout->addWidget(statusLabel);
     layout->addWidget(connectionBox);
+
+    auto *mainSplitter = new QSplitter(Qt::Vertical);
+    mainSplitter->setChildrenCollapsible(false);
+    layout->addWidget(mainSplitter, 1);
 
     auto *tabs = new QTabWidget;
     tabs->setTabPosition(QTabWidget::West);
     tabs->setDocumentMode(true);
-    layout->addWidget(tabs, 1);
+    mainSplitter->addWidget(tabs);
 
     auto *overviewTab = new QWidget;
     auto *overviewLayout = new QVBoxLayout(overviewTab);
     auto *overviewGrid = new QGridLayout;
     overviewGrid->setSpacing(12);
-    overviewGrid->addWidget(createStatCard("连接状态", overviewConnectionValue, "RPC channel"), 0, 0);
-    overviewGrid->addWidget(createStatCard("任务数量", overviewTaskCountValue, "current list"), 0, 1);
-    overviewGrid->addWidget(createStatCard("历史记录", overviewHistoryCountValue, "latest query"), 0, 2);
-    overviewGrid->addWidget(createStatCard("服务节点", overviewServiceCountValue, "Redis discovery"), 0, 3);
-    overviewGrid->addWidget(createStatCard("RPC 请求", overviewRpcRequestsValue, "total"), 1, 0);
-    overviewGrid->addWidget(createStatCard("RPC 错误", overviewRpcErrorsValue, "total"), 1, 1);
-    overviewGrid->addWidget(createStatCard("活跃连接", overviewActiveConnectionsValue, "current"), 1, 2);
-    overviewGrid->addWidget(createStatCard("任务成功", overviewTaskSuccessValue, "total"), 2, 0);
-    overviewGrid->addWidget(createStatCard("任务失败", overviewTaskFailureValue, "total"), 2, 1);
+    overviewGrid->addWidget(createStatCard("连接状态", overviewConnectionValue, "RPC 通道"), 0, 0);
+    overviewGrid->addWidget(createStatCard("任务数量", overviewTaskCountValue, "当前列表"), 0, 1);
+    overviewGrid->addWidget(createStatCard("历史记录", overviewHistoryCountValue, "最近查询"), 0, 2);
+    overviewGrid->addWidget(createStatCard("服务节点", overviewServiceCountValue, "Redis 服务发现"), 0, 3);
+    overviewGrid->addWidget(createStatCard("RPC 请求", overviewRpcRequestsValue, "累计"), 1, 0);
+    overviewGrid->addWidget(createStatCard("RPC 错误", overviewRpcErrorsValue, "累计"), 1, 1);
+    overviewGrid->addWidget(createStatCard("活跃连接", overviewActiveConnectionsValue, "当前"), 1, 2);
+    overviewGrid->addWidget(createStatCard("任务成功", overviewTaskSuccessValue, "累计"), 2, 0);
+    overviewGrid->addWidget(createStatCard("任务失败", overviewTaskFailureValue, "累计"), 2, 1);
     overviewLayout->addLayout(overviewGrid);
     auto *overviewHint = new QLabel("连接服务后，概览会随任务列表、执行历史、服务发现和运行指标刷新。");
     overviewHint->setProperty("class", "statHint");
@@ -173,7 +214,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     cancelLayout->addWidget(cancelBtn);
     operationLayout->addWidget(cancelBox);
     operationLayout->addStretch(1);
-    tabs->addTab(operationTab, "RPC 操作");
+    tabs->addTab(operationTab, "RPC");
 
     auto *tasksTab = new QWidget;
     auto *tasksLayout = new QVBoxLayout(tasksTab);
@@ -205,8 +246,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     tasksLayout->addLayout(tasksToolbar);
     tasksTable = new QTableWidget;
     tasksTable->setColumnCount(12);
-    tasksTable->setHorizontalHeaderLabels({"ID", "Handler", "Status", "Cron", "Next Run", "Last Run",
-                                           "Retry", "Max", "Execution ID", "Running Node", "Started", "Params"});
+    tasksTable->setHorizontalHeaderLabels({"ID", "Handler", "状态", "Cron", "下次执行", "上次执行",
+                                           "重试", "最大重试", "Execution ID", "运行节点", "开始时间", "Params"});
     tasksTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     tasksTable->setSelectionMode(QAbstractItemView::SingleSelection);
     tasksTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -255,10 +296,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     editLayout->addRow("Cron", editCronEdit);
     editLayout->addRow("Handler", editHandlerEdit);
     editLayout->addRow("Params", editParamsEdit);
-    editLayout->addRow("Max Retries", editMaxRetriesSpin);
+    editLayout->addRow("最大重试", editMaxRetriesSpin);
     editLayout->addRow(taskButtons);
     tasksLayout->addWidget(editBox);
-    tabs->addTab(tasksTab, "任务列表");
+    tabs->addTab(tasksTab, "任务");
 
     auto *historyTab = new QWidget;
     auto *historyLayout = new QVBoxLayout(historyTab);
@@ -289,7 +330,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     historyLayout->addLayout(historyToolbar);
     historyTable = new QTableWidget;
     historyTable->setColumnCount(8);
-    historyTable->setHorizontalHeaderLabels({"Execution ID", "Task ID", "Node", "Success", "Result", "Error", "Start", "End"});
+    historyTable->setHorizontalHeaderLabels({"Execution ID", "Task ID", "节点", "结果", "返回结果", "错误", "开始时间", "结束时间"});
     historyTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     historyTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     historyTable->setAlternatingRowColors(true);
@@ -314,7 +355,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     historyDetailView->setMinimumHeight(130);
     historyDetailLayout->addWidget(historyDetailView);
     historyLayout->addWidget(historyDetailBox);
-    tabs->addTab(historyTab, "执行历史");
+    tabs->addTab(historyTab, "执行记录");
 
     auto *servicesTab = new QWidget;
     auto *servicesLayout = new QVBoxLayout(servicesTab);
@@ -347,18 +388,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     metricsLayout->addLayout(metricsToolbar);
     metricsTable = new QTableWidget;
     metricsTable->setColumnCount(2);
-    metricsTable->setHorizontalHeaderLabels({"Metric", "Value"});
+    metricsTable->setHorizontalHeaderLabels({"Metric", "值"});
     metricsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     metricsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     metricsTable->setAlternatingRowColors(true);
     metricsTable->horizontalHeader()->setStretchLastSection(true);
     metricsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     metricsLayout->addWidget(metricsTable);
-    tabs->addTab(metricsTab, "运行指标");
+    tabs->addTab(metricsTab, "Metrics");
 
     auto *demoTab = new QWidget;
     auto *demoLayout = new QVBoxLayout(demoTab);
-    auto *runtimeBox = new QGroupBox("环境与服务");
+    auto *runtimeBox = new QGroupBox("运行环境");
     auto *runtimeLayout = new QGridLayout(runtimeBox);
     startDepsBtn = new QPushButton("启动依赖");
     stopDepsBtn = new QPushButton("停止依赖");
@@ -374,6 +415,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     dockerBuildBtn = new QPushButton("构建镜像");
     showBenchmarkResultBtn = new QPushButton("查看压测结果");
     showDeployDocBtn = new QPushButton("查看部署文档");
+    showRedisSnapshotBtn = new QPushButton("Redis 快照");
+    showMySQLSnapshotBtn = new QPushButton("MySQL 快照");
     setButtonRole(startDepsBtn, "primary");
     setButtonRole(startServerBtn, "primary");
     setButtonRole(startSecondServerBtn, "primary");
@@ -395,7 +438,29 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     runtimeLayout->addWidget(dockerBuildBtn, 3, 0);
     runtimeLayout->addWidget(showBenchmarkResultBtn, 3, 1);
     runtimeLayout->addWidget(showDeployDocBtn, 3, 2);
+    runtimeLayout->addWidget(showRedisSnapshotBtn, 4, 0);
+    runtimeLayout->addWidget(showMySQLSnapshotBtn, 4, 1);
     demoLayout->addWidget(runtimeBox);
+
+    auto *monitoringBox = new QGroupBox("可观测性");
+    auto *monitoringLayout = new QGridLayout(monitoringBox);
+    startMonitoringBtn = new QPushButton("启动监控栈");
+    stopMonitoringBtn = new QPushButton("停止监控栈");
+    openPrometheusBtn = new QPushButton("打开 Prometheus");
+    openAlertmanagerBtn = new QPushButton("打开 Alertmanager");
+    openGrafanaBtn = new QPushButton("打开 Grafana");
+    showAlertsBtn = new QPushButton("查看 Alerts");
+    showRawMetricsBtn = new QPushButton("查看原始 Metrics");
+    setButtonRole(startMonitoringBtn, "primary");
+    setButtonRole(stopMonitoringBtn, "danger");
+    monitoringLayout->addWidget(startMonitoringBtn, 0, 0);
+    monitoringLayout->addWidget(stopMonitoringBtn, 0, 1);
+    monitoringLayout->addWidget(openPrometheusBtn, 1, 0);
+    monitoringLayout->addWidget(openAlertmanagerBtn, 1, 1);
+    monitoringLayout->addWidget(openGrafanaBtn, 1, 2);
+    monitoringLayout->addWidget(showAlertsBtn, 2, 0);
+    monitoringLayout->addWidget(showRawMetricsBtn, 2, 1);
+    demoLayout->addWidget(monitoringBox);
 
     auto *benchmarkBox = new QGroupBox("压测");
     auto *benchmarkLayout = new QHBoxLayout(benchmarkBox);
@@ -409,15 +474,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     benchmarkReuseBtn = new QPushButton("长连接压测");
     setButtonRole(benchmarkShortBtn, "primary");
     setButtonRole(benchmarkReuseBtn, "primary");
-    benchmarkLayout->addWidget(new QLabel("Concurrency"));
+    benchmarkLayout->addWidget(new QLabel("并发数"));
     benchmarkLayout->addWidget(benchConcurrencySpin);
-    benchmarkLayout->addWidget(new QLabel("Requests"));
+    benchmarkLayout->addWidget(new QLabel("请求数"));
     benchmarkLayout->addWidget(benchRequestsSpin);
     benchmarkLayout->addWidget(benchmarkShortBtn);
     benchmarkLayout->addWidget(benchmarkReuseBtn);
     demoLayout->addWidget(benchmarkBox);
 
-    auto *diagnosticBox = new QGroupBox("协议异常演示");
+    auto *diagnosticBox = new QGroupBox("协议异常");
     auto *diagnosticLayout = new QHBoxLayout(diagnosticBox);
     authFailureBtn = new QPushButton("鉴权失败");
     unknownRpcBtn = new QPushButton("未知方法");
@@ -431,19 +496,36 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     diagnosticLayout->addStretch(1);
     demoLayout->addWidget(diagnosticBox);
 
+    auto *operationsHint = new QLabel("所有命令输出、服务端日志和压测结果都会进入底部控制台。");
+    operationsHint->setProperty("class", "statHint");
+    demoLayout->addWidget(operationsHint);
+    demoLayout->addStretch(1);
+    tabs->addTab(demoTab, "运维");
+
+    auto *bottomConsole = new QTabWidget;
+    bottomConsole->setDocumentMode(true);
+    bottomConsole->setMinimumHeight(170);
+
+    auto *toolOutputPage = new QWidget;
+    auto *toolOutputLayout = new QVBoxLayout(toolOutputPage);
+    toolOutputLayout->setContentsMargins(6, 6, 6, 6);
     toolOutput = new QPlainTextEdit;
     toolOutput->setReadOnly(true);
-    demoLayout->addWidget(toolOutput, 1);
-    tabs->addTab(demoTab, "演示控制台");
+    toolOutputLayout->addWidget(toolOutput);
+    bottomConsole->addTab(toolOutputPage, "控制台");
 
-    auto *logBox = new QGroupBox("响应日志");
+    auto *logBox = new QWidget;
     auto *logLayout = new QVBoxLayout(logBox);
+    logLayout->setContentsMargins(6, 6, 6, 6);
     logView = new QPlainTextEdit;
     logView->setReadOnly(true);
     clearLogBtn = new QPushButton("清空日志");
     logLayout->addWidget(logView);
     logLayout->addWidget(clearLogBtn);
-    tabs->addTab(logBox, "日志");
+    bottomConsole->addTab(logBox, "事件");
+    mainSplitter->addWidget(bottomConsole);
+    mainSplitter->setStretchFactor(0, 4);
+    mainSplitter->setStretchFactor(1, 1);
 
     connect(connectBtn, &QPushButton::clicked, this, &MainWindow::onConnect);
     connect(disconnectBtn, &QPushButton::clicked, this, &MainWindow::onDisconnect);
@@ -485,6 +567,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(dockerBuildBtn, &QPushButton::clicked, this, &MainWindow::onDockerBuild);
     connect(showBenchmarkResultBtn, &QPushButton::clicked, this, &MainWindow::onShowBenchmarkResult);
     connect(showDeployDocBtn, &QPushButton::clicked, this, &MainWindow::onShowDeployDoc);
+    connect(startMonitoringBtn, &QPushButton::clicked, this, &MainWindow::onStartMonitoringStack);
+    connect(stopMonitoringBtn, &QPushButton::clicked, this, &MainWindow::onStopMonitoringStack);
+    connect(openPrometheusBtn, &QPushButton::clicked, this, &MainWindow::onOpenPrometheus);
+    connect(openAlertmanagerBtn, &QPushButton::clicked, this, &MainWindow::onOpenAlertmanager);
+    connect(openGrafanaBtn, &QPushButton::clicked, this, &MainWindow::onOpenGrafana);
+    connect(showAlertsBtn, &QPushButton::clicked, this, &MainWindow::onShowAlerts);
+    connect(showRawMetricsBtn, &QPushButton::clicked, this, &MainWindow::onShowRawMetrics);
+    connect(showRedisSnapshotBtn, &QPushButton::clicked, this, &MainWindow::onShowRedisSnapshot);
+    connect(showMySQLSnapshotBtn, &QPushButton::clicked, this, &MainWindow::onShowMySQLSnapshot);
     connect(benchmarkShortBtn, &QPushButton::clicked, this, &MainWindow::onBenchmarkShort);
     connect(benchmarkReuseBtn, &QPushButton::clicked, this, &MainWindow::onBenchmarkReuse);
     connect(authFailureBtn, &QPushButton::clicked, this, &MainWindow::onAuthFailureTest);
@@ -511,9 +602,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         appendToolOutput(QString::fromLocal8Bit(toolProcess->readAllStandardOutput()));
     });
     connect(toolProcess, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        appendToolOutput(QString("\n[tool finished] exit=%1 status=%2\n")
+        appendToolOutput(QString("\n[工具结束] exit=%1 status=%2\n")
                              .arg(exitCode)
-                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+                             .arg(status == QProcess::NormalExit ? "正常" : "异常"));
         updateUiState();
     });
 
@@ -523,13 +614,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         appendToolOutput(QString::fromLocal8Bit(serverProcess->readAllStandardOutput()));
     });
     connect(serverProcess, &QProcess::started, this, [this]() {
-        appendToolOutput("[server started]\n");
+        appendToolOutput("[服务端已启动]\n");
         updateUiState();
     });
     connect(serverProcess, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        appendToolOutput(QString("\n[server finished] exit=%1 status=%2\n")
+        appendToolOutput(QString("\n[服务端已退出] exit=%1 status=%2\n")
                              .arg(exitCode)
-                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+                             .arg(status == QProcess::NormalExit ? "正常" : "异常"));
         updateUiState();
     });
 
@@ -539,13 +630,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         appendToolOutput(QString::fromLocal8Bit(server2Process->readAllStandardOutput()));
     });
     connect(server2Process, &QProcess::started, this, [this]() {
-        appendToolOutput("[server2 started]\n");
+        appendToolOutput("[二节点已启动]\n");
         updateUiState();
     });
     connect(server2Process, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        appendToolOutput(QString("\n[server2 finished] exit=%1 status=%2\n")
+        appendToolOutput(QString("\n[二节点已退出] exit=%1 status=%2\n")
                              .arg(exitCode)
-                             .arg(status == QProcess::NormalExit ? "normal" : "crash"));
+                             .arg(status == QProcess::NormalExit ? "正常" : "异常"));
         updateUiState();
     });
     updateUiState();
@@ -840,28 +931,28 @@ void MainWindow::onResetDependencies() {
 }
 
 void MainWindow::onStartServer() {
-    startServerProcess(serverProcess, "config/server.conf", "server");
+    startServerProcess(serverProcess, "config/server.conf", "服务端");
 }
 
 void MainWindow::onStopServer() {
     if (serverProcess->state() == QProcess::NotRunning) {
-        appendToolOutput("[server is not running by this Qt client]\n");
+        appendToolOutput("[当前 Qt 客户端没有启动服务端]\n");
         return;
     }
-    appendToolOutput("[stopping server]\n");
+    appendToolOutput("[正在停止服务端]\n");
     serverProcess->terminate();
 }
 
 void MainWindow::onStartSecondServer() {
-    startServerProcess(server2Process, "config/server2.conf", "server2");
+    startServerProcess(server2Process, "config/server2.conf", "二节点");
 }
 
 void MainWindow::onStopSecondServer() {
     if (server2Process->state() == QProcess::NotRunning) {
-        appendToolOutput("[server2 is not running by this Qt client]\n");
+        appendToolOutput("[当前 Qt 客户端没有启动二节点]\n");
         return;
     }
-    appendToolOutput("[stopping server2]\n");
+    appendToolOutput("[正在停止二节点]\n");
     server2Process->terminate();
 }
 
@@ -887,12 +978,72 @@ void MainWindow::onDockerBuild() {
 
 void MainWindow::onShowBenchmarkResult() {
     runTool("bash", {"-lc", "cat docs/assets/benchmark/latest.txt 2>/dev/null || echo 'No benchmark result yet.'"},
-            "show benchmark result");
+            "查看压测结果");
 }
 
 void MainWindow::onShowDeployDoc() {
     runTool("bash", {"-lc", "printf '%s\\n' '== deploy.md ==' && cat docs/guide/deploy.md && printf '%s\\n' '\\n== systemd/corpcron.service ==' && cat systemd/corpcron.service"},
-            "show deploy doc");
+            "查看部署文档");
+}
+
+void MainWindow::onStartMonitoringStack() {
+    runTool("docker", {"compose", "-f", "deploy/monitoring/docker-compose.monitoring.yml", "up", "-d"},
+            "启动监控栈");
+}
+
+void MainWindow::onStopMonitoringStack() {
+    runTool("docker", {"compose", "-f", "deploy/monitoring/docker-compose.monitoring.yml", "down"},
+            "停止监控栈");
+}
+
+void MainWindow::onOpenPrometheus() {
+    QDesktopServices::openUrl(QUrl("http://127.0.0.1:9090"));
+    appendToolOutput("[打开] http://127.0.0.1:9090\n");
+}
+
+void MainWindow::onOpenAlertmanager() {
+    QDesktopServices::openUrl(QUrl("http://127.0.0.1:9093"));
+    appendToolOutput("[打开] http://127.0.0.1:9093\n");
+}
+
+void MainWindow::onOpenGrafana() {
+    QDesktopServices::openUrl(QUrl("http://127.0.0.1:3000"));
+    appendToolOutput("[打开] http://127.0.0.1:3000 admin/admin\n");
+}
+
+void MainWindow::onShowAlerts() {
+    runTool("bash", {"-lc", "curl -sS http://127.0.0.1:9091/alerts || true"}, "查看 Alerts");
+}
+
+void MainWindow::onShowRawMetrics() {
+    runTool("bash", {"-lc", "curl -sS http://127.0.0.1:9091/metrics || true"}, "查看原始 Metrics");
+}
+
+void MainWindow::onShowRedisSnapshot() {
+    const QString script =
+        "printf '%s\\n' '== services:rpc members ==' && "
+        "docker exec corpcron-redis redis-cli --raw SMEMBERS services:rpc && "
+        "printf '%s\\n' '\\n== services:rpc keys and ttl ==' && "
+        "for k in $(docker exec corpcron-redis redis-cli --raw KEYS 'services:rpc:*'); do "
+        "ttl=$(docker exec corpcron-redis redis-cli --raw TTL \"$k\"); "
+        "printf '%s ttl=%s\\n' \"$k\" \"$ttl\"; "
+        "done";
+    runTool("bash", {"-lc", script}, "Redis 快照");
+}
+
+void MainWindow::onShowMySQLSnapshot() {
+    const QString script =
+        "printf '%s\\n' '== tasks ==' && "
+        "docker exec -e MYSQL_PWD=\"${CORPCRON_MYSQL_PASSWORD:-corpcron_dev_password}\" "
+        "corpcron-mysql mysql -ucorpcron corpcron "
+        "-e \"SELECT id,handler,status,current_execution_id,running_node,next_run_at,last_run_at,retry_count "
+        "FROM tasks ORDER BY created_at DESC LIMIT 10;\" && "
+        "printf '%s\\n' '\\n== task_history ==' && "
+        "docker exec -e MYSQL_PWD=\"${CORPCRON_MYSQL_PASSWORD:-corpcron_dev_password}\" "
+        "corpcron-mysql mysql -ucorpcron corpcron "
+        "-e \"SELECT execution_id,task_id,exec_node,success,result,error,start_time,end_time "
+        "FROM task_history ORDER BY id DESC LIMIT 10;\"";
+    runTool("bash", {"-lc", script}, "MySQL 快照");
 }
 
 void MainWindow::onBenchmarkShort() {
@@ -900,7 +1051,7 @@ void MainWindow::onBenchmarkShort() {
             {hostEdit->text(), QString::number(portSpin->value()),
              QString::number(benchConcurrencySpin->value()),
              QString::number(benchRequestsSpin->value()), "short"},
-            "benchmark short");
+            "短连接压测");
 }
 
 void MainWindow::onBenchmarkReuse() {
@@ -908,7 +1059,7 @@ void MainWindow::onBenchmarkReuse() {
             {hostEdit->text(), QString::number(portSpin->value()),
              QString::number(benchConcurrencySpin->value()),
              QString::number(benchRequestsSpin->value()), "reuse"},
-            "benchmark reuse");
+            "长连接压测");
 }
 
 void MainWindow::onAuthFailureTest() {
@@ -970,12 +1121,12 @@ void MainWindow::onHistorySelectionChanged() {
     QString detail;
     detail += "Execution ID: " + textAt(0) + "\n";
     detail += "Task ID: " + textAt(1) + "\n";
-    detail += "Node: " + textAt(2) + "\n";
-    detail += "Success: " + textAt(3) + "\n";
-    detail += "Start: " + textAt(6) + "\n";
-    detail += "End: " + textAt(7) + "\n\n";
-    detail += "Result:\n" + textAt(4) + "\n\n";
-    detail += "Error:\n" + textAt(5);
+    detail += "节点: " + textAt(2) + "\n";
+    detail += "结果: " + textAt(3) + "\n";
+    detail += "开始时间: " + textAt(6) + "\n";
+    detail += "结束时间: " + textAt(7) + "\n\n";
+    detail += "返回结果:\n" + textAt(4) + "\n\n";
+    detail += "错误:\n" + textAt(5);
     historyDetailView->setPlainText(detail);
 }
 
@@ -1084,7 +1235,7 @@ QProcessEnvironment MainWindow::processEnvironment() const {
 
 void MainWindow::runTool(const QString& program, const QStringList& arguments, const QString& label) {
     if (toolProcess->state() != QProcess::NotRunning) {
-        appendToolOutput("[tool is already running]\n");
+        appendToolOutput("[已有工具命令正在运行]\n");
         return;
     }
     QString root = projectRoot();
@@ -1098,7 +1249,7 @@ void MainWindow::runTool(const QString& program, const QStringList& arguments, c
 
 void MainWindow::startServerProcess(QProcess *process, const QString& configPath, const QString& label) {
     if (process->state() != QProcess::NotRunning) {
-        appendToolOutput("[" + label + " already running]\n");
+        appendToolOutput("[" + label + " 已在运行]\n");
         return;
     }
     QString root = projectRoot();
@@ -1165,6 +1316,15 @@ void MainWindow::updateUiState() {
     dockerBuildBtn->setEnabled(toolIdle);
     showBenchmarkResultBtn->setEnabled(toolIdle);
     showDeployDocBtn->setEnabled(toolIdle);
+    startMonitoringBtn->setEnabled(toolIdle);
+    stopMonitoringBtn->setEnabled(toolIdle);
+    openPrometheusBtn->setEnabled(true);
+    openAlertmanagerBtn->setEnabled(true);
+    openGrafanaBtn->setEnabled(true);
+    showAlertsBtn->setEnabled(toolIdle);
+    showRawMetricsBtn->setEnabled(toolIdle);
+    showRedisSnapshotBtn->setEnabled(toolIdle);
+    showMySQLSnapshotBtn->setEnabled(toolIdle);
     benchmarkShortBtn->setEnabled(toolIdle);
     benchmarkReuseBtn->setEnabled(toolIdle);
     startServerBtn->setEnabled(serverIdle);
