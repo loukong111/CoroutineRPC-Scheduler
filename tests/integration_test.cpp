@@ -1,0 +1,238 @@
+#include "corpcron/mysql/mysql_client.hpp"
+#include "corpcron/redis/redis_client.hpp"
+#include <algorithm>
+#include <cassert>
+#include <chrono>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <thread>
+
+namespace {
+
+std::string getenv_or(const char* name, const std::string& fallback) {
+    const char* value = std::getenv(name);
+    return value ? value : fallback;
+}
+
+int getenv_int_or(const char* name, int fallback) {
+    const char* value = std::getenv(name);
+    if (!value) return fallback;
+    try {
+        return std::stoi(value);
+    } catch (...) {
+        return fallback;
+    }
+}
+
+std::string unique_id(const std::string& prefix) {
+    auto now = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    return prefix + std::to_string(now);
+}
+
+} // namespace
+
+int main() {
+    const char* run = std::getenv("CORPCRON_RUN_INTEGRATION_TESTS");
+    if (!run || std::string(run) != "1") {
+        std::cout << "Skipping integration test. Set CORPCRON_RUN_INTEGRATION_TESTS=1 to enable.\n";
+        return 77;
+    }
+
+    corpcron::RedisClientOptions redis_options;
+    redis_options.pool_size = 2;
+    redis_options.connect_timeout_ms = 1000;
+    redis_options.command_timeout_ms = 1000;
+    corpcron::RedisClient redis(getenv_or("CORPCRON_REDIS_HOST", "127.0.0.1"),
+                                getenv_int_or("CORPCRON_REDIS_PORT", 6380),
+                                redis_options);
+    assert(redis.connect());
+    assert(redis.lastError().ok());
+
+    std::string service_name = "itest-" + unique_id("");
+    std::string endpoint1 = "127.0.0.1:18081";
+    std::string endpoint2 = "127.0.0.1:18082";
+    assert(redis.registerService(service_name, endpoint1, 30));
+    assert(redis.registerService(service_name, endpoint2, 2));
+    auto endpoints = redis.discoverServices(service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), endpoint1) != endpoints.end());
+    assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) != endpoints.end());
+    assert(redis.heartbeat(service_name, endpoint2, 3));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    endpoints = redis.discoverServices(service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) != endpoints.end());
+
+    std::string stale_service_name = service_name + "-stale";
+    std::string alive_endpoint = "127.0.0.1:18083";
+    std::string stale_endpoint = "127.0.0.1:18084";
+    assert(redis.registerService(stale_service_name, alive_endpoint, 30));
+    assert(redis.registerService(stale_service_name, stale_endpoint, 1));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    endpoints = redis.discoverServices(stale_service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), alive_endpoint) != endpoints.end());
+    assert(std::find(endpoints.begin(), endpoints.end(), stale_endpoint) == endpoints.end());
+    endpoints = redis.discoverServices(stale_service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), stale_endpoint) == endpoints.end());
+    redis.unregisterService(stale_service_name, alive_endpoint);
+
+    std::string lock_key = "itest:" + unique_id("");
+    assert(redis.lock(lock_key, "owner-a", 5, 1000));
+    assert(!redis.unlock(lock_key, "owner-b"));
+    assert(!redis.lock(lock_key, "owner-c", 5, 100));
+    assert(redis.renewLock(lock_key, "owner-a", 5));
+    assert(redis.unlock(lock_key, "owner-a"));
+    assert(redis.lock(lock_key, "owner-c", 5, 1000));
+    assert(redis.unlock(lock_key, "owner-c"));
+
+    std::string ttl_lock_key = "itest-ttl:" + unique_id("");
+    assert(redis.lock(ttl_lock_key, "ttl-owner-a", 1, 1000));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    assert(redis.lock(ttl_lock_key, "ttl-owner-b", 5, 1000));
+    assert(redis.unlock(ttl_lock_key, "ttl-owner-b"));
+
+    redis.unregisterService(service_name, endpoint1);
+    redis.unregisterService(service_name, endpoint2);
+    endpoints = redis.discoverServices(service_name);
+    assert(std::find(endpoints.begin(), endpoints.end(), endpoint1) == endpoints.end());
+    assert(std::find(endpoints.begin(), endpoints.end(), endpoint2) == endpoints.end());
+
+    corpcron::MySQLClientOptions mysql_options;
+    mysql_options.pool_size = 2;
+    mysql_options.connect_timeout_sec = 3;
+    mysql_options.read_timeout_sec = 5;
+    mysql_options.write_timeout_sec = 5;
+    corpcron::MySQLClient db(getenv_or("CORPCRON_MYSQL_HOST", "127.0.0.1"),
+                             getenv_int_or("CORPCRON_MYSQL_PORT", 3307),
+                             getenv_or("CORPCRON_MYSQL_USER", "corpcron"),
+                             getenv_or("CORPCRON_MYSQL_PASSWORD", "corpcron_dev_password"),
+                             getenv_or("CORPCRON_MYSQL_DATABASE", "corpcron"),
+                             mysql_options);
+    assert(db.connect());
+    assert(db.lastError().ok());
+
+    corpcron::TaskMeta task;
+    task.id = unique_id("itest-task-");
+    task.cron_expr = "* * * * * ?";
+    task.params = "integration";
+    task.handler = "Echo";
+    task.status = 1;
+    task.next_run_at = "2000-01-01 00:00:00";
+    task.max_retries = 3;
+    assert(db.addTask(task));
+
+    corpcron::TaskMeta loaded;
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.id == task.id);
+    assert(loaded.status == 1);
+    assert(loaded.next_run_at == "2000-01-01 00:00:00");
+
+    auto tasks = db.getAllTasks();
+    auto found = std::find_if(tasks.begin(), tasks.end(), [&](const corpcron::TaskMeta& item) {
+        return item.id == task.id;
+    });
+    assert(found != tasks.end());
+    auto due_tasks = db.getDueTasks(100);
+    auto due_found = std::find_if(due_tasks.begin(), due_tasks.end(), [&](const corpcron::TaskMeta& item) {
+        return item.id == task.id;
+    });
+    assert(due_found != due_tasks.end());
+
+    corpcron::TaskHistory latest;
+    std::string execution_id = task.id + "-execution-1";
+    assert(db.claimTaskExecution(task.id, execution_id, "integration-node"));
+    assert(!db.claimTaskExecution(task.id, task.id + "-execution-dup", "integration-node"));
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.status == corpcron::TASK_RUNNING);
+    assert(loaded.current_execution_id == execution_id);
+    assert(loaded.running_node == "integration-node");
+    assert(!loaded.started_at.empty());
+
+    corpcron::TaskHistory running_history;
+    running_history.execution_id = execution_id;
+    running_history.task_id = task.id;
+    running_history.exec_node = "integration-node";
+    running_history.success = true;
+    running_history.result = "idempotent-ok";
+    running_history.start_time = "2026-01-01 00:00:00";
+    running_history.end_time = "2026-01-01 00:00:01";
+    int before_history_count = db.historyCount(task.id);
+    assert(db.addHistory(running_history));
+    running_history.result = "idempotent-ok-updated";
+    assert(db.addHistory(running_history));
+    assert(db.historyCount(task.id) == before_history_count + 1);
+    assert(db.getLatestHistory(task.id, latest));
+    assert(latest.execution_id == execution_id);
+    assert(latest.result == "idempotent-ok-updated");
+
+    assert(db.completeTaskExecution(task.id, execution_id, corpcron::TASK_DISABLED,
+                                    "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(!db.completeTaskExecution(task.id, execution_id, corpcron::TASK_DISABLED,
+                                     "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.status == corpcron::TASK_DISABLED);
+    assert(loaded.current_execution_id.empty());
+    assert(loaded.running_node.empty());
+    assert(loaded.started_at.empty());
+
+    assert(db.updateTaskRuntime(task.id, 0, "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(db.updateTaskRuntime(task.id, 0, "2099-01-02 00:00:00", "2026-01-01 00:00:00", 1));
+    assert(db.getTask(task.id, loaded));
+    assert(loaded.status == 0);
+    assert(loaded.next_run_at == "2099-01-02 00:00:00");
+    assert(loaded.last_run_at == "2026-01-01 00:00:00");
+    assert(loaded.retry_count == 1);
+
+    corpcron::TaskHistory history;
+    history.task_id = task.id;
+    history.exec_node = "integration-node";
+    history.success = true;
+    history.result = "ok";
+    history.start_time = "2026-01-01 00:00:00";
+    history.end_time = "2026-01-01 00:00:01";
+    assert(db.addHistory(history));
+    assert(db.historyCount(task.id) > 0);
+    assert(db.getLatestHistory(task.id, latest));
+    assert(latest.task_id == task.id);
+    assert(latest.exec_node == "integration-node");
+    assert(latest.success);
+    assert(latest.result == "ok");
+    assert(db.deleteTask(task.id));
+    assert(!db.deleteTask(task.id));
+    assert(!db.getTask(task.id, loaded));
+
+    corpcron::TaskMeta stale_task;
+    stale_task.id = unique_id("itest-stale-task-");
+    stale_task.cron_expr = "* * * * * ?";
+    stale_task.params = "stale";
+    stale_task.handler = "Echo";
+    stale_task.status = corpcron::TASK_SCHEDULED;
+    stale_task.next_run_at = "2000-01-01 00:00:00";
+    assert(db.addTask(stale_task));
+
+    const std::string stale_execution_id = stale_task.id + "-execution";
+    assert(db.claimTaskExecution(stale_task.id, stale_execution_id, "dead-node"));
+    assert(db.getTask(stale_task.id, loaded));
+    loaded.status = corpcron::TASK_DISABLED;
+    assert(!db.updateTaskDefinition(loaded));
+    assert(!db.updateTaskRuntime(stale_task.id, corpcron::TASK_SCHEDULED,
+                                 stale_task.next_run_at, "", 0));
+    assert(!db.deleteTask(stale_task.id));
+
+    auto stale_tasks = db.getStaleRunningTasks(0, 100);
+    auto stale_found = std::find_if(stale_tasks.begin(), stale_tasks.end(),
+                                    [&](const corpcron::TaskMeta& item) {
+        return item.id == stale_task.id;
+    });
+    assert(stale_found != stale_tasks.end());
+    assert(!db.recoverTaskExecution(stale_task.id, "wrong-execution"));
+    assert(db.recoverTaskExecution(stale_task.id, stale_execution_id));
+    assert(db.getTask(stale_task.id, loaded));
+    assert(loaded.status == corpcron::TASK_SCHEDULED);
+    assert(loaded.current_execution_id.empty());
+    assert(loaded.running_node.empty());
+    assert(loaded.started_at.empty());
+    assert(db.deleteTask(stale_task.id));
+
+    return 0;
+}

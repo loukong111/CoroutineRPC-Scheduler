@@ -5,15 +5,18 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 ## 功能
 
 - 自定义 TCP RPC 协议，使用 Protobuf 编解码业务消息。
+- `proto/rpc.proto` 声明 `CorpCronRpc` service，并通过脚本生成 C++ typed stub / skeleton 绑定。
+- 支持简化版 server-side streaming，服务端可在同一请求内连续推送多帧响应。
+- RPC 服务端支持 interceptor 中间件链，统一承载异常兜底、结构化日志和指标统计。
 - RPC 包长校验，支持半包处理，并限制最大帧大小。
 - Redis 服务注册、心跳续约、服务发现和分布式锁。
 - MySQL 持久化任务、执行历史和下一次调度时间。
 - 调度器按 `next_run_at` 查询到期任务，抢锁后执行并写入历史。
-- 调度侧 RPC 客户端支持连接池、round-robin 负载均衡和失败 endpoint 短暂冷却。
-- 任务状态机支持 scheduled/running/disabled 流转，执行过程使用 `execution_id` 做幂等保护。
+- 调度侧 RPC 客户端支持连接池、round-robin、deadline/cancellation、标准健康检查和熔断半开探测。
+- 任务状态机支持 scheduled/running/disabled 流转，执行过程使用 `execution_id` 做幂等保护，并可回收节点崩溃后遗留的 running 状态。
 - 任务失败后按指数退避重试，超过 `max_retries` 后自动禁用。
 - 执行期间会续约 Redis 锁，降低长任务重复执行风险。
-- 调度器支持任务 RPC 执行超时配置，并对 Redis/MySQL 短暂断连做基础重连。
+- 调度器支持任务 RPC 执行超时和取消语义，并对 Redis/MySQL 短暂断连做基础重连。
 - Redis/MySQL 客户端支持连接池、连接/读写超时和基础错误分类，便于定位认证、连接、超时和 SQL 异常。
 - 服务端为每个 RPC 请求生成 `request_id` 日志，并支持通过 RPC 查询运行指标。
 - 指标包含任务执行耗时和调度延迟的 max、p95、p99，支持 `/metrics` 导出。
@@ -22,11 +25,11 @@ Corpcron 是一个 C++20 实现的轻量级分布式定时任务调度项目，�
 - RPC 支持统一错误响应 `RpcError`，便于客户端识别协议级错误。
 - 支持基础 RPC token 鉴权、连接数上限和取消任务接口。
 - Qt 可视化管理端支持任务提交、服务端分页筛选、编辑、启停、删除、立即执行、执行历史筛选和执行详情查看。
-- Qt 演示控制台覆盖项目完整演示链路，支持依赖启停、服务端单/双节点启动、监控栈启停、测试、压测、镜像构建、数据快照、部署材料查看和协议异常演示。
+- Qt 演示控制台覆盖项目完整演示链路，支持依赖启停、服务端单/双节点启动、HealthCheck、StreamMetrics、deadline/cancellation、熔断半开探测、监控栈启停、测试、压测、镜像构建、数据快照、部署材料查看和协议异常演示。
 - 支持环境变量覆盖配置，避免在配置文件中提交真实密码。
 - Docker Compose 提供 Redis/MySQL 开发环境。
 - 提供 Dockerfile、systemd unit、Nginx 反向代理/TLS 示例和生产部署安全文档。
-- CTest 接入基础协议单测和可选 Redis/MySQL 集成测试。
+- CTest 接入基础协议、RPC 绑定、RPC 客户端和可选 Redis/MySQL 集成测试。
 - 提供多节点压测脚本和报告，验证双节点吞吐、锁竞争、故障接管和重复执行保护。
 - 提供工程检查脚本、格式配置和项目讲解文档，便于复现与答辩。
 
@@ -110,7 +113,7 @@ cmake --build build -j
 ./build/client/corpcron_client
 ```
 
-Qt 端可以完成项目完整演示链路：启动/重置依赖、启动单节点或双节点服务端、启动/停止监控栈、打开 Prometheus/Alertmanager/Grafana、连接 RPC、提交和分页管理任务、筛选执行历史并查看执行详情、查看服务发现、查看运行指标、查看 Redis/MySQL 快照、运行默认/集成测试、触发短连接/长连接压测、构建 Docker 镜像、查看部署材料并演示鉴权失败、未知方法和坏包断连。若 Docker 需要 sudo 权限，请先在系统层面配置当前用户访问 Docker。
+Qt 端可以完成项目完整演示链路：启动/重置依赖、启动单节点或双节点服务端、启动/停止监控栈、打开 Prometheus/Alertmanager/Grafana、连接 RPC、提交和分页管理任务、筛选执行历史并查看执行详情、查看服务发现、查看运行指标、触发 HealthCheck 和 StreamMetrics 流式 RPC、查看 Redis/MySQL 快照、运行默认/集成测试、验证 deadline/cancellation、熔断半开探测和 generated streaming stub、触发短连接/长连接压测、构建 Docker 镜像、查看部署材料并演示鉴权失败、未知方法和坏包断连。若 Docker 需要 sudo 权限，请先在系统层面配置当前用户访问 Docker；如果环境里设置了 `DOCKER_HOST` 指向 Podman socket，Qt 会在启动工具命令时自动移除该变量。
 
 提交测试任务：
 
@@ -246,7 +249,7 @@ tools/           测试客户端和压测工具
 ## 当前限制
 
 - RPC 已支持基础 Token 鉴权和连接数限制；服务端协议未内置 TLS，生产部署建议通过 Nginx stream 做 TLS 终止，不要直接裸露公网。
-- Redis 锁已支持续约，但任务执行仍应尽量设计为幂等。
+- Redis 锁已支持续约和失锁取消，超时 running 状态会在确认锁已释放后恢复；任务处理仍应按至少一次语义设计为幂等。
 - 调度策略已使用 `next_run_at`，并支持 misfire、任务取消、任务编辑和立即执行。
 - 服务端提供结构化关键链路日志、RPC 指标查询和 Prometheus 风格 `/metrics` 导出，便于压测和运行观测。
 - 服务端提供 `/alerts` 轻量告警入口，适合本地演示和快速排查；项目也提供 Prometheus/Alertmanager/Grafana 示例用于长期采集和可视化。
