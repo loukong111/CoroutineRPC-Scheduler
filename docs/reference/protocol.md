@@ -67,6 +67,8 @@ service CorpCronRpc {
 
 `ListTasksResponse.TaskInfo` 会返回任务状态、下一次执行时间、重试计数，以及运行中的 `current_execution_id`、`running_node` 和 `started_at`。`ListHistoryResponse.TaskHistoryInfo` 会返回 `execution_id`，用于定位一次具体执行并避免重复历史记录。
 
+`ExecuteTaskRequest` 除任务和 Handler 参数外，还携带 `execution_id` 与 `deadline_unix_ms`。Worker 会拒绝已经过期的请求，并把这两个字段传入 Handler 执行上下文。
+
 `GetMetricsResponse` 会返回 RPC、连接、任务、锁、任务执行耗时和调度延迟指标，其中执行耗时和调度延迟包含 max、p95、p99 与样本总数。
 
 `HealthCheck` 用作标准健康探针，返回当前 RPC 进程的 serving 状态、节点标识和服务端时间。连接池在熔断半开恢复时会先调用该接口，探测通过后再恢复真实业务流量。
@@ -87,6 +89,10 @@ enum ErrorCode {
     DB_ERROR = 5;
     HANDLER_NOT_FOUND = 6;
     UNAUTHORIZED = 7;
+    DEADLINE_EXCEEDED = 8;
+    CANCELED = 9;
+    RESOURCE_EXHAUSTED = 10;
+    UNAVAILABLE = 11;
 }
 
 message RpcError {
@@ -96,6 +102,8 @@ message RpcError {
 ```
 
 业务响应仍然可以携带业务级失败信息，例如 `SubmitTaskResponse.success=false`。
+
+控制节点和 Worker 会校验方法角色。控制节点不接受 `ExecuteTask`，Worker 不接受任务 CRUD；调用错误角色的方法返回 `UNKNOWN_METHOD`。RPC 执行队列达到上限时返回 `RESOURCE_EXHAUSTED`，节点停机过程中无法继续分发时返回 `UNAVAILABLE`。
 
 ## 鉴权
 

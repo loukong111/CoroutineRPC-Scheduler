@@ -52,8 +52,22 @@ int main() {
     corpcron::HandlerRegistry::instance().registerHandler("Echo", [](const std::string& value) {
         return "Echo: " + value;
     });
+    std::atomic<bool> slow_started{false};
+    std::atomic<bool> release_slow{false};
+    corpcron::HandlerRegistry::instance().registerHandler(
+        "Slow", [&](const std::string& value) {
+            slow_started.store(true, std::memory_order_release);
+            while (!release_slow.load(std::memory_order_acquire)) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
+            return "Slow: " + value;
+        });
     auto dispatcher = std::make_shared<corpcron::RpcDispatcher>(nullptr, "");
-    corpcron::TcpServer server("127.0.0.1", port, dispatcher, 8);
+    corpcron::RpcExecutorOptions executor_options;
+    executor_options.min_threads = 2;
+    executor_options.max_threads = 2;
+    executor_options.max_pending_requests = 8;
+    corpcron::TcpServer server("127.0.0.1", port, dispatcher, 8, executor_options);
 
     bool server_result = false;
     std::atomic<bool> listening_hook_called{false};
@@ -81,6 +95,51 @@ int main() {
     assert(response.ParseFromString(response_payload));
     assert(response.message() == "Echo: lifecycle");
     assert(listening_hook_called.load(std::memory_order_acquire));
+
+    corpcron::rpc::ExecuteTaskRequest slow_request;
+    slow_request.set_task_id("slow-task");
+    slow_request.set_execution_id("slow-execution");
+    slow_request.set_handler("Slow");
+    slow_request.set_params("value");
+    std::string slow_payload;
+    assert(slow_request.SerializeToString(&slow_payload));
+    std::atomic<bool> slow_ok{false};
+    std::thread slow_client([&]() {
+        corpcron::RpcClient client("127.0.0.1", port);
+        uint32_t serial_id = 0;
+        std::string payload;
+        if (!client.call(corpcron::rpc::kExecuteTaskRequestSerialId, slow_payload,
+                         serial_id, payload, 2000)) {
+            return;
+        }
+        corpcron::rpc::ExecuteTaskResponse result;
+        slow_ok.store(
+            serial_id == corpcron::rpc::kExecuteTaskResponseSerialId &&
+                result.ParseFromString(payload) && result.success() &&
+                result.result() == "Slow: value",
+            std::memory_order_release);
+    });
+    const auto slow_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(1);
+    while (!slow_started.load(std::memory_order_acquire) &&
+           std::chrono::steady_clock::now() < slow_deadline) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    assert(slow_started.load(std::memory_order_acquire));
+
+    corpcron::RpcClient concurrent_client("127.0.0.1", port);
+    response_serial_id = 0;
+    response_payload.clear();
+    const auto echo_start = std::chrono::steady_clock::now();
+    assert(concurrent_client.call(corpcron::rpc::kEchoRequestSerialId, request_payload,
+                                  response_serial_id, response_payload, 500));
+    const auto echo_elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::steady_clock::now() - echo_start);
+    assert(echo_elapsed < std::chrono::milliseconds(400));
+    assert(response_serial_id == corpcron::rpc::kEchoResponseSerialId);
+
+    release_slow.store(true, std::memory_order_release);
+    slow_client.join();
+    assert(slow_ok.load(std::memory_order_acquire));
 
     server.stop();
     server_thread.join();

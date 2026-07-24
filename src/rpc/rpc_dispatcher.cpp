@@ -4,6 +4,7 @@
 #include "corpcron/metrics/metrics.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
+#include "corpcron/rpc/rpc_client_pool.hpp"
 #include "corpcron/rpc/protocol.hpp"
 #include "corpcron/rpc/rpc_interceptor.hpp"
 #include "corpcron/scheduler/cron_parser.hpp"
@@ -92,14 +93,28 @@ void fill_metrics_response(corpcron::rpc::GetMetricsResponse& resp) {
 } // namespace
 
 RpcDispatcher::RpcDispatcher(std::shared_ptr<MySQLClient> db, std::string auth_token)
-    : db_(std::move(db)), auth_token_(std::move(auth_token)) {}
+    : RpcDispatcher(std::move(db), nullptr, std::move(auth_token), {},
+                    RpcDispatcherOptions{}) {}
 
 RpcDispatcher::RpcDispatcher(std::shared_ptr<MySQLClient> db, std::shared_ptr<RedisClient> redis,
-                             std::string auth_token, std::string node_id)
+                             std::string auth_token, std::string node_id,
+                             RpcDispatcherOptions options)
     : db_(std::move(db)),
       redis_(std::move(redis)),
       auth_token_(std::move(auth_token)),
-      node_id_(std::move(node_id)) {}
+      node_id_(std::move(node_id)),
+      options_(std::move(options)) {
+    if (options_.worker_timeout_ms <= 0) options_.worker_timeout_ms = 5000;
+    if (options_.service_name.empty()) options_.service_name = "rpc";
+    if (options_.worker_service_name.empty()) options_.worker_service_name = "worker";
+    if (redis_) {
+        RpcClientPool::Options pool_options;
+        pool_options.health_check_service_name = options_.worker_service_name;
+        worker_pool_ = std::make_unique<RpcClientPool>(std::move(pool_options));
+    }
+}
+
+RpcDispatcher::~RpcDispatcher() = default;
 
 RpcResponse RpcDispatcher::dispatch(uint32_t serial_id, const std::string& payload) const {
     RpcContext context;
@@ -129,6 +144,10 @@ RpcStreamResult RpcDispatcher::dispatchStreamWithContext(RpcContext context,
         RpcStreamResult result;
         result.responses.push_back(dispatchWithContext(std::move(context), payload));
         return result;
+    }
+    if (!methodAllowed(context.request_serial_id)) {
+        return RpcStreamResult{{make_error_response(
+            rpc::UNKNOWN_METHOD, "Method is not available on this node role")}};
     }
 
     if (context.started_at.time_since_epoch().count() == 0) {
@@ -177,6 +196,10 @@ void RpcDispatcher::setInterceptors(std::shared_ptr<RpcInterceptorChain> interce
 }
 
 RpcResponse RpcDispatcher::dispatchCore(uint32_t serial_id, const std::string& payload) const {
+    if (!methodAllowed(serial_id)) {
+        return make_error_response(corpcron::rpc::UNKNOWN_METHOD,
+                                   "Method is not available on this node role");
+    }
     switch (serial_id) {
         case rpc::kEchoRequestSerialId:
             return handleEcho(payload);
@@ -224,7 +247,7 @@ RpcResponse RpcDispatcher::handleEcho(const std::string& payload) const {
     }
 
     corpcron::rpc::EchoResponse resp;
-    resp.set_message(HandlerRegistry::instance().execute("Echo", req.message()));
+    resp.set_message("Echo: " + req.message());
     return make_response(rpc::kEchoResponseSerialId, resp);
 }
 
@@ -247,7 +270,7 @@ RpcResponse RpcDispatcher::handleSubmitTask(const std::string& payload) const {
     if (task.cron_expr.empty() || task.handler.empty()) {
         return make_error_response(corpcron::rpc::BAD_REQUEST, "Cron and handler are required");
     }
-    if (!HandlerRegistry::instance().hasHandler(task.handler)) {
+    if (!handlerAvailable(task.handler)) {
         return make_error_response(corpcron::rpc::HANDLER_NOT_FOUND,
                                    "Handler not found: " + task.handler);
     }
@@ -291,11 +314,22 @@ RpcResponse RpcDispatcher::handleExecuteTask(const std::string& payload) const {
         return make_error_response(corpcron::rpc::HANDLER_NOT_FOUND,
                                    "Handler not found: " + req.handler());
     }
+    const auto now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+    if (req.deadline_unix_ms() > 0 &&
+        static_cast<uint64_t>(now_ms) >= req.deadline_unix_ms()) {
+        return make_error_response(corpcron::rpc::DEADLINE_EXCEEDED,
+                                   "Task deadline exceeded before execution");
+    }
 
     std::string result;
     std::string error;
     try {
-        result = HandlerRegistry::instance().execute(req.handler(), req.params());
+        TaskExecutionContext context;
+        context.task_id = req.task_id();
+        context.execution_id = req.execution_id();
+        context.deadline_unix_ms = req.deadline_unix_ms();
+        result = HandlerRegistry::instance().execute(req.handler(), context, req.params());
     } catch (const std::exception& e) {
         error = e.what();
         result = "Exception: " + error;
@@ -500,7 +534,7 @@ RpcResponse RpcDispatcher::handleUpdateTask(const std::string& payload) const {
         return make_error_response(corpcron::rpc::BAD_REQUEST,
                                    "Task status must be disabled or scheduled");
     }
-    if (!HandlerRegistry::instance().hasHandler(task.handler)) {
+    if (!handlerAvailable(task.handler)) {
         return make_error_response(corpcron::rpc::HANDLER_NOT_FOUND,
                                    "Handler not found: " + task.handler);
     }
@@ -638,14 +672,14 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
         resp.set_error("Task has an invalid status");
         return make_response(rpc::kRunTaskNowResponseSerialId, resp);
     }
-    if (!HandlerRegistry::instance().hasHandler(task.handler)) {
+    if (!handlerAvailable(task.handler)) {
         return make_error_response(corpcron::rpc::HANDLER_NOT_FOUND,
                                    "Handler not found: " + task.handler);
     }
 
     const std::string execution_id = "manual:" + task.id + ":" + generate_uuid();
-    const std::string execution_node = node_id_.empty() ? "manual-rpc" : node_id_;
-    if (!db_->claimTaskExecution(task.id, execution_id, execution_node, task.status)) {
+    const std::string dispatch_node = node_id_.empty() ? "manual-rpc" : node_id_;
+    if (!db_->claimTaskExecution(task.id, execution_id, dispatch_node, task.status)) {
         resp.set_success(false);
         resp.set_error("Task state changed before execution");
         return make_response(rpc::kRunTaskNowResponseSerialId, resp);
@@ -653,22 +687,15 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
 
     auto start = std::chrono::system_clock::now();
     auto steady_start = std::chrono::steady_clock::now();
-    std::string result;
-    std::string error;
-    try {
-        result = HandlerRegistry::instance().execute(task.handler, task.params);
-    } catch (const std::exception& e) {
-        error = e.what();
-        result = "Exception: " + error;
-    } catch (...) {
-        error = "Unknown handler exception";
-        result = "Exception: " + error;
-    }
+    WorkerResult worker_result =
+        invokeWorker(task.id, execution_id, task.handler, task.params);
+    std::string result = worker_result.result;
+    std::string error = worker_result.error;
     auto end = std::chrono::system_clock::now();
     auto duration_ms = static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::milliseconds>(
         std::chrono::steady_clock::now() - steady_start).count());
     Metrics::instance().observeTaskDuration(duration_ms);
-    if (error.empty()) {
+    if (worker_result.success) {
         Metrics::instance().incTaskSuccess();
     } else {
         Metrics::instance().incTaskFailure();
@@ -677,8 +704,8 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
     TaskHistory history;
     history.execution_id = execution_id;
     history.task_id = task.id;
-    history.exec_node = execution_node;
-    history.success = error.empty();
+    history.exec_node = worker_result.endpoint.empty() ? dispatch_node : worker_result.endpoint;
+    history.success = worker_result.success;
     history.result = result;
     history.error = error;
     history.start_time = to_datetime_string(std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -698,7 +725,7 @@ RpcResponse RpcDispatcher::handleRunTaskNow(const std::string& payload) const {
         error += "Task state changed while completing execution";
     }
 
-    resp.set_success(error.empty() && history_saved && state_completed);
+    resp.set_success(worker_result.success && history_saved && state_completed);
     resp.set_result(result);
     resp.set_error(error);
     return make_response(rpc::kRunTaskNowResponseSerialId, resp);
@@ -728,7 +755,8 @@ RpcResponse RpcDispatcher::handleHealthCheck(const std::string& payload) const {
         std::chrono::system_clock::now().time_since_epoch()).count();
 
     corpcron::rpc::HealthCheckResponse resp;
-    const bool known_service = req.service_name().empty() || req.service_name() == "rpc";
+    const bool known_service =
+        req.service_name().empty() || req.service_name() == options_.service_name;
     resp.set_serving(known_service);
     resp.set_status(known_service ? "SERVING" : "UNKNOWN_SERVICE");
     resp.set_node_id(node_id_);
@@ -772,6 +800,127 @@ bool RpcDispatcher::authorized(const std::string& request_token) const {
                       static_cast<unsigned char>(request_token[i]);
     }
     return difference == 0;
+}
+
+bool RpcDispatcher::methodAllowed(uint32_t serial_id) const {
+    if (options_.role == RpcNodeRole::Combined) return true;
+    if (options_.role == RpcNodeRole::ControlPlane) {
+        return serial_id != rpc::kExecuteTaskRequestSerialId;
+    }
+    switch (serial_id) {
+        case rpc::kEchoRequestSerialId:
+        case rpc::kExecuteTaskRequestSerialId:
+        case rpc::kGetMetricsRequestSerialId:
+        case rpc::kHealthCheckRequestSerialId:
+        case rpc::kStreamMetricsRequestSerialId:
+            return true;
+        default:
+            return false;
+    }
+}
+
+bool RpcDispatcher::handlerAvailable(const std::string& handler) const {
+    if (handler.empty()) return false;
+    if (options_.role != RpcNodeRole::ControlPlane &&
+        HandlerRegistry::instance().hasHandler(handler)) {
+        return true;
+    }
+    if (!redis_) return HandlerRegistry::instance().hasHandler(handler);
+    const std::string capability = options_.worker_service_name + ":" + handler;
+    return !redis_->discoverServices(capability).empty();
+}
+
+RpcDispatcher::WorkerResult RpcDispatcher::invokeWorker(
+    const std::string& task_id, const std::string& execution_id,
+    const std::string& handler, const std::string& params) const {
+    WorkerResult outcome;
+    if (options_.role == RpcNodeRole::Combined &&
+        HandlerRegistry::instance().hasHandler(handler)) {
+        try {
+            TaskExecutionContext context;
+            context.task_id = task_id;
+            context.execution_id = execution_id;
+            context.deadline_unix_ms = static_cast<uint64_t>(
+                std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::system_clock::now().time_since_epoch()).count() +
+                options_.worker_timeout_ms);
+            outcome.result = HandlerRegistry::instance().execute(handler, context, params);
+            outcome.success = true;
+            outcome.endpoint = node_id_.empty() ? "local" : node_id_;
+        } catch (const std::exception& e) {
+            outcome.error = e.what();
+        } catch (...) {
+            outcome.error = "Unknown handler exception";
+        }
+        return outcome;
+    }
+
+    if (!redis_ || !worker_pool_) {
+        outcome.error = "Worker discovery is not available";
+        return outcome;
+    }
+    std::vector<std::string> endpoints =
+        redis_->discoverServices(options_.worker_service_name + ":" + handler);
+    if (endpoints.empty()) {
+        outcome.error = "No worker available for handler: " + handler;
+        return outcome;
+    }
+
+    corpcron::rpc::ExecuteTaskRequest request;
+    request.set_task_id(task_id);
+    request.set_execution_id(execution_id);
+    request.set_handler(handler);
+    request.set_params(params);
+    request.set_auth_token(auth_token_);
+    const auto deadline_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count() +
+        options_.worker_timeout_ms;
+    request.set_deadline_unix_ms(static_cast<uint64_t>(deadline_ms));
+
+    std::string request_payload;
+    if (!request.SerializeToString(&request_payload)) {
+        outcome.error = "Failed to serialize ExecuteTaskRequest";
+        return outcome;
+    }
+
+    uint32_t response_serial_id = 0;
+    std::string response_payload;
+    std::string pool_error;
+    RpcCallOptions call_options = RpcCallOptions::fromTimeout(options_.worker_timeout_ms);
+    if (!worker_pool_->call(endpoints, rpc::kExecuteTaskRequestSerialId, request_payload,
+                            response_serial_id, response_payload, call_options,
+                            &outcome.endpoint, &pool_error)) {
+        outcome.error = pool_error.empty() ? "Worker RPC call failed" : pool_error;
+        return outcome;
+    }
+    if (response_serial_id == rpc::kRpcErrorSerialId) {
+        corpcron::rpc::RpcError error;
+        if (error.ParseFromString(response_payload)) {
+            outcome.error = "RPC error " + std::to_string(error.code()) + ": " +
+                            error.message();
+        } else {
+            outcome.error = "Worker RPC error response parse failed";
+        }
+        return outcome;
+    }
+    if (response_serial_id != rpc::kExecuteTaskResponseSerialId) {
+        outcome.error = "Unexpected worker response serial_id: " +
+                        std::to_string(response_serial_id);
+        return outcome;
+    }
+
+    corpcron::rpc::ExecuteTaskResponse response;
+    if (!response.ParseFromString(response_payload)) {
+        outcome.error = "Failed to parse ExecuteTaskResponse";
+        return outcome;
+    }
+    outcome.success = response.success();
+    outcome.result = response.result();
+    outcome.error = response.error();
+    if (!outcome.success && outcome.error.empty()) {
+        outcome.error = "Worker reported task failure";
+    }
+    return outcome;
 }
 
 } // namespace corpcron

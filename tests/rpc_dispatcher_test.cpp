@@ -4,6 +4,7 @@
 #include "corpcron/rpc/rpc_interceptor.hpp"
 #include "rpc.pb.h"
 #include <cassert>
+#include <chrono>
 #include <memory>
 #include <string>
 
@@ -128,6 +129,74 @@ int main() {
     stream_result = dispatcher.dispatchStreamWithContext(stream_context, stream_metrics_payload);
     assert(stream_result.responses.size() == 1);
     assert_error(stream_result.responses.front(), corpcron::rpc::UNAUTHORIZED);
+
+    std::string observed_task_id;
+    std::string observed_execution_id;
+    uint64_t observed_deadline = 0;
+    corpcron::HandlerRegistry::instance().registerContextHandler(
+        "ContextProbe",
+        [&](const corpcron::TaskExecutionContext& context, const std::string& params) {
+            observed_task_id = context.task_id;
+            observed_execution_id = context.execution_id;
+            observed_deadline = context.deadline_unix_ms;
+            return "Context: " + params;
+        });
+
+    corpcron::RpcDispatcherOptions worker_options;
+    worker_options.role = corpcron::RpcNodeRole::Worker;
+    worker_options.service_name = "worker";
+    corpcron::RpcDispatcher worker_dispatcher(
+        nullptr, nullptr, "secret", "worker-test", worker_options);
+
+    corpcron::rpc::ExecuteTaskRequest execute;
+    execute.set_task_id("task-1");
+    execute.set_execution_id("execution-1");
+    execute.set_handler("ContextProbe");
+    execute.set_params("payload");
+    execute.set_auth_token("secret");
+    const auto future_deadline =
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::system_clock::now().time_since_epoch()).count() + 1000;
+    execute.set_deadline_unix_ms(static_cast<uint64_t>(future_deadline));
+    std::string execute_payload;
+    assert(execute.SerializeToString(&execute_payload));
+    auto execute_response = worker_dispatcher.dispatch(
+        corpcron::rpc::kExecuteTaskRequestSerialId, execute_payload);
+    assert(execute_response.serial_id == corpcron::rpc::kExecuteTaskResponseSerialId);
+    corpcron::rpc::ExecuteTaskResponse execute_result;
+    assert(execute_result.ParseFromString(execute_response.payload));
+    assert(execute_result.success());
+    assert(execute_result.result() == "Context: payload");
+    assert(observed_task_id == "task-1");
+    assert(observed_execution_id == "execution-1");
+    assert(observed_deadline == static_cast<uint64_t>(future_deadline));
+
+    execute.set_deadline_unix_ms(1);
+    assert(execute.SerializeToString(&execute_payload));
+    execute_response = worker_dispatcher.dispatch(
+        corpcron::rpc::kExecuteTaskRequestSerialId, execute_payload);
+    assert_error(execute_response, corpcron::rpc::DEADLINE_EXCEEDED);
+
+    auto worker_admin_response = worker_dispatcher.dispatch(
+        corpcron::rpc::kSubmitTaskRequestSerialId, submit_payload);
+    assert_error(worker_admin_response, corpcron::rpc::UNKNOWN_METHOD);
+
+    health_request.set_service_name("worker");
+    assert(health_request.SerializeToString(&health_payload));
+    health_response = worker_dispatcher.dispatch(
+        corpcron::rpc::kHealthCheckRequestSerialId, health_payload);
+    assert(health_response.serial_id == corpcron::rpc::kHealthCheckResponseSerialId);
+    assert(health.ParseFromString(health_response.payload));
+    assert(health.serving());
+    assert(health.node_id() == "worker-test");
+
+    corpcron::RpcDispatcherOptions control_options;
+    control_options.role = corpcron::RpcNodeRole::ControlPlane;
+    corpcron::RpcDispatcher control_dispatcher(
+        nullptr, nullptr, "secret", "control-test", control_options);
+    auto control_execute_response = control_dispatcher.dispatch(
+        corpcron::rpc::kExecuteTaskRequestSerialId, execute_payload);
+    assert_error(control_execute_response, corpcron::rpc::UNKNOWN_METHOD);
 
     return 0;
 }

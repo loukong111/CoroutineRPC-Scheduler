@@ -28,6 +28,7 @@ private:
         bool success = false;
         std::string result;
         std::string error;
+        std::string endpoint;
     };
 
     class LockRenewer {
@@ -64,7 +65,8 @@ private:
     void schedulerLoop();
     void scanAndDispatch();
     void recoverStaleExecutions();
-    ExecutionOutcome executeTask(const TaskMeta& task, const CancellationToken& cancellation);
+    ExecutionOutcome executeTask(const TaskMeta& task, const std::string& execution_id,
+                                 const CancellationToken& cancellation);
 
     std::shared_ptr<MySQLClient> db_;
     std::shared_ptr<RedisClient> redis_;

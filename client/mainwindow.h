@@ -52,6 +52,10 @@ private slots:
     void onStopServer();
     void onStartSecondServer();
     void onStopSecondServer();
+    void onStartWorker();
+    void onStopWorker();
+    void onStartSecondWorker();
+    void onStopSecondWorker();
     void onDemoCheck();
     void onCleanDemoData();
     void onRunCheck();
@@ -164,6 +168,10 @@ private:
     QPushButton *stopServerBtn;
     QPushButton *startSecondServerBtn;
     QPushButton *stopSecondServerBtn;
+    QPushButton *startWorkerBtn;
+    QPushButton *stopWorkerBtn;
+    QPushButton *startSecondWorkerBtn;
+    QPushButton *stopSecondWorkerBtn;
     QPushButton *demoCheckBtn;
     QPushButton *cleanDataBtn;
     QPushButton *runCheckBtn;
@@ -199,6 +207,8 @@ private:
     QProcess *toolProcess;
     QProcess *serverProcess;
     QProcess *server2Process;
+    QProcess *workerProcess;
+    QProcess *worker2Process;
     QByteArray recvBuffer;
     QTimer *autoRefreshTimer;
     int tasksPageOffset_ = 0;
@@ -213,7 +223,9 @@ private:
     QString projectRoot() const;
     QProcessEnvironment processEnvironment() const;
     void runTool(const QString& program, const QStringList& arguments, const QString& label);
-    void startServerProcess(QProcess *process, const QString& configPath, const QString& label);
+    void startNodeProcess(QProcess *process, const QString& binary,
+                          const QString& configPath, const QString& label);
+    void stopManagedProcess(QProcess *process);
     void appendToolOutput(const QString& message);
     void appendLog(const QString& message);
     void updateUiState();

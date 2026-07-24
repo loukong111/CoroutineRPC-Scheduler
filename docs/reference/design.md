@@ -11,15 +11,15 @@ Client
   |
   | TCP + 自定义 RPC 帧
   v
-TcpServer
+Control Plane (corpcron_server)
   |
-  | SubmitTask / CancelTask / ExecuteTask
+  | SubmitTask / CancelTask / RunTaskNow
   v
-MySQL <---- TaskScheduler ----> Redis
+MySQL <---- TaskScheduler ----> Redis <---- Worker capability heartbeat
                          |
-                         | 发现 RPC 节点
+                         | 发现 worker:<handler>
                          v
-                    RpcClientPool -> TcpServer
+                    RpcClientPool -> Worker (corpcron_worker)
 ```
 
 ## 可观测性
@@ -38,9 +38,11 @@ MySQL <---- TaskScheduler ----> Redis
 4 bytes total_len | 4 bytes serial_id | protobuf payload
 ```
 
-服务端会校验帧长度、处理 TCP 半包、拒绝异常帧，并通过 `RpcError` 返回协议级错误。网络层只负责连接、收发、解包和生成 `RpcContext`，业务分发前会进入 interceptor 链；默认链路包含异常兜底、结构化日志和 RPC 指标统计，避免横切逻辑散落在 `TcpServer` 中。
+服务端会校验帧长度、处理 TCP 半包、拒绝异常帧，并通过 `RpcError` 返回协议级错误。网络层只负责连接、收发、解包和生成 `RpcContext`。Dispatcher 调用通过 eventfd awaitable 投递到有界动态线程池，完成后再回到 epoll 协程发送响应；因此 MySQL/Redis 调用和慢 Handler 不会占住事件循环。队列达到 `max_pending_requests` 时直接返回 `RESOURCE_EXHAUSTED`，形成基础过载保护。
 
-RPC 客户端调用使用统一的 `RpcCallOptions`，支持总 deadline 和 cancellation token。deadline 按一次调用的整体剩余时间计算，不再是每段 send/recv 单独等待同一个 timeout；调度器停止或任务被取消时，会通过取消令牌打断正在等待响应的 RPC 调用。
+控制节点和 Worker 使用同一套协议实现，但 Dispatcher 有明确角色边界。控制节点提供任务管理、历史、服务发现和调度接口，不接受 `ExecuteTask`；Worker 只提供 `ExecuteTask`、Echo、HealthCheck、Metrics 和 streaming。Worker 会向 Redis 注册基础服务 `worker`，并按内置 Handler 注册 `worker:Echo`、`worker:Uppercase` 等能力。
+
+RPC 客户端调用使用统一的 `RpcCallOptions`，支持总 deadline 和 cancellation token。deadline 按一次调用的整体剩余时间计算，不再是每段 send/recv 单独等待同一个 timeout；`ExecuteTaskRequest` 还会携带 `execution_id` 和绝对 deadline，Worker 在执行前检查并把它们交给 Handler 上下文。调度器停止或任务被取消时，会通过取消令牌打断正在等待响应的 RPC 调用；当前尚未实现独立的远端取消帧，因此已经开始运行的 Handler 仍需要自行遵守 deadline。
 
 项目还支持简化版 server-side streaming。`.proto` 中可以声明 `returns (stream XxxResponse)`，生成脚本会输出回调式 stub；服务端通过 `RpcStreamResult` 返回多帧响应，`TcpServer` 在同一条长连接上按顺序写回。当前示例是 `StreamMetrics`，用于连续推送多个指标快照。它没有实现完整双向流、背压和窗口控制，但能展示自定义 RPC 协议上扩展流式返回的基本方式。
 
@@ -48,9 +50,9 @@ RPC 客户端调用使用统一的 `RpcCallOptions`，支持总 deadline 和 can
 
 ## 调度流程
 
-任务持久化在 MySQL 中。调度器通过 `next_run_at` 查询到期任务，尝试获取 Redis 分布式锁，抢锁成功后通过 RPC 分发执行。
+任务持久化在 MySQL 中。调度器通过 `next_run_at` 查询到期任务，先按 `worker:<handler>` 确认存在具备对应能力的 Worker，再尝试获取 Redis 分布式锁并通过 RPC 分发执行。没有匹配 Worker 时，任务保持 `scheduled`，不会写失败历史或消耗重试次数。
 
-调度器不会每次执行任务都临时创建短连接，而是通过 `RpcClientPool` 维护到各个 endpoint 的可复用长连接。Redis 服务发现返回多个节点时，客户端池按 round-robin 选择 endpoint；某个 endpoint 连续失败后会进入 open 熔断状态。冷却期结束后 endpoint 先进入 half-open，只允许一个 `HealthCheck` 探针通过；探针成功才恢复业务请求，失败则重新进入冷却。
+调度器不会每次执行任务都临时创建短连接，而是通过 `RpcClientPool` 维护到各个 Worker endpoint 的可复用长连接。Redis 服务发现返回多个 Worker 时，客户端池按 round-robin 选择 endpoint；某个 endpoint 连续失败后会进入 open 熔断状态。冷却期结束后 endpoint 先进入 half-open，只允许一个 `HealthCheck` 探针通过；探针成功才恢复业务请求，失败则重新进入冷却。
 
 任务状态由 MySQL 持久化，当前使用三个核心状态：
 
@@ -58,7 +60,7 @@ RPC 客户端调用使用统一的 `RpcCallOptions`，支持总 deadline 和 can
 - `1 scheduled`：任务可调度，`next_run_at` 到期后会被扫描。
 - `2 running`：任务已经被某个节点认领并正在执行。
 
-调度器抢到 Redis 锁后，会先按 `execution_id` 登记 cancellation source 和锁续约，再通过 `claimTaskExecution` 把任务从 `scheduled` CAS 更新为 `running`，同时写入 `execution_id`、`running_node` 和 `started_at`。这个顺序可以覆盖 claim 与 cancellation 登记之间的竞态窗口；清理时也只删除同一 `execution_id` 和锁 owner 的记录，避免旧执行误删新执行状态。执行结束后，只有相同的 `execution_id` 才能通过 `completeTaskExecution` 推进状态。若任务执行中被取消，完成阶段不会把它重新改回 scheduled。
+调度器抢到 Redis 锁后，会先按 `execution_id` 登记 cancellation source 和锁续约，再通过 `claimTaskExecution` 把任务从 `scheduled` CAS 更新为 `running`，同时比较本次扫描得到的 `next_run_at` 且确认它仍已到期。这样即使两个节点持有同一份旧扫描结果，先完成的节点推进调度时间后，另一个节点也无法再次认领。认领成功时会写入 `execution_id`、`running_node` 和 `started_at`；清理时只删除同一 `execution_id` 和锁 owner 的记录，避免旧执行误删新执行状态。执行结束后，只有相同的 `execution_id` 才能通过 `completeTaskExecution` 推进状态。若任务执行中被取消，完成阶段不会把它重新改回 scheduled。
 
 如果节点在完成状态更新前崩溃，任务可能遗留在 `running`。调度器会扫描超过 `scheduler.running_stale_timeout_sec` 的记录，并先尝试获取对应 Redis 任务锁；只有原锁已经过期时，才按 `execution_id` CAS 恢复为 `scheduled`。锁续约失败也会触发当前 RPC cancellation，缩短失锁执行继续产生副作用的时间窗口。
 
@@ -118,6 +120,7 @@ CORPCRON_RUN_INTEGRATION_TESTS=1 ctest --test-dir build --output-on-failure
 
 - 服务端协议本身暂未内置 TLS，生产部署示例通过 Nginx stream 做 TLS 终止。
 - Token 鉴权较基础，更适合内网或项目演示。
-- Handler 是进程内注册函数，不是独立沙箱任务。
+- Handler 已运行在独立 Worker 和有界执行池中，但仍是 Worker 进程内函数，不是进程或容器级沙箱任务。
+- cancellation 能打断客户端等待并传播 deadline，但尚未通过独立控制帧强制取消已经开始的远端 Handler。
 - Redis/MySQL 客户端已经支持连接池、基础重连和超时分类，但还没有熔断和慢查询统计。
 - 项目提供 Prometheus/Alertmanager/Grafana 示例；生产环境仍需要按实际团队规范接入真实通知渠道、权限控制和数据保留策略。

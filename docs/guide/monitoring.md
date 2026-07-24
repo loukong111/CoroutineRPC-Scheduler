@@ -4,17 +4,19 @@ CorpCron 已经在指标端口暴露 `/metrics` 和 `/alerts`。本目录提供�
 
 ## 前置条件
 
-先启动 CorpCron 服务端，并确认指标端口可访问：
+先启动控制节点和 Worker，并确认指标端口可访问：
 
 ```bash
 curl http://127.0.0.1:9091/metrics
 curl http://127.0.0.1:9091/alerts
+curl http://127.0.0.1:9191/metrics
 ```
 
-双节点演示时，第二个节点默认使用 `9092`：
+双节点演示时，第二个控制节点和 Worker 默认使用 `9092`、`9192`：
 
 ```bash
 curl http://127.0.0.1:9092/metrics
+curl http://127.0.0.1:9192/metrics
 ```
 
 ## 启动监控栈
@@ -35,9 +37,10 @@ Grafana 会自动加载 Prometheus 数据源和 `CorpCron Overview` 面板，不
 
 Prometheus 默认抓取：
 
-- `host.docker.internal:9091`：本机第一个 CorpCron 节点。
+- `host.docker.internal:9091`：本机第一个控制节点。
+- `host.docker.internal:9191`：本机第一个 Worker。
 
-双节点演示时，可以在 [deploy/monitoring/prometheus/prometheus.yml](../../deploy/monitoring/prometheus/prometheus.yml) 中打开 `9092` 的抓取配置。Linux Docker 通过 `host-gateway` 把 `host.docker.internal` 映射到宿主机。如果服务端部署在其他机器，把 target 改成实际地址即可。
+双节点演示时，可以在 [deploy/monitoring/prometheus/prometheus.yml](../../deploy/monitoring/prometheus/prometheus.yml) 中打开 `9092` 和 `9192` 的抓取配置。Linux Docker 通过 `host-gateway` 把 `host.docker.internal` 映射到宿主机。开发配置将 Metrics 监听在 `0.0.0.0`，生产样例仍限制为 `127.0.0.1`；如果节点部署在其他机器，把 target 和防火墙规则改成实际内网地址即可。
 
 查看 Prometheus 抓取状态：
 
@@ -47,9 +50,9 @@ Prometheus -> Status -> Targets
 
 如果 target 显示 down，优先检查：
 
-- CorpCron 服务端是否已经启动。
-- `metrics.listen_host` 是否允许 Docker 容器访问。生产环境建议仍放在内网或反向代理后面。
-- 防火墙是否放行 `9091` / `9092`。
+- 控制节点和 Worker 是否已经启动。
+- `metrics.host` 是否允许 Docker 容器访问。生产环境建议仍放在内网或反向代理后面。
+- 防火墙是否放行控制节点 `9091/9092` 与 Worker `9191/9192`。
 
 ## 告警规则
 

@@ -614,18 +614,25 @@ std::vector<TaskMeta> MySQLClient::getStaleRunningTasks(int stale_after_sec, siz
 }
 
 bool MySQLClient::claimTaskExecution(const std::string& id, const std::string& execution_id,
-                                     const std::string& node_id, int expected_status) {
+                                     const std::string& node_id, int expected_status,
+                                     const std::string& expected_next_run_at) {
     auto lease = acquireConnection();
     if (!lease.valid()) return false;
     try {
-        std::unique_ptr<sql::PreparedStatement> pstmt(lease.conn->prepareStatement(
-            "UPDATE tasks SET status=?, current_execution_id=?, running_node=?, started_at=NOW() "
-            "WHERE id=? AND status=?"));
+        const bool compare_schedule = !expected_next_run_at.empty();
+        std::unique_ptr<sql::PreparedStatement> pstmt(
+            lease.conn->prepareStatement(compare_schedule
+                ? "UPDATE tasks SET status=?, current_execution_id=?, running_node=?, "
+                  "started_at=NOW() WHERE id=? AND status=? AND next_run_at=? "
+                  "AND next_run_at<=NOW()"
+                : "UPDATE tasks SET status=?, current_execution_id=?, running_node=?, "
+                  "started_at=NOW() WHERE id=? AND status=?"));
         pstmt->setInt(1, TASK_RUNNING);
         pstmt->setString(2, execution_id);
         pstmt->setString(3, node_id);
         pstmt->setString(4, id);
         pstmt->setInt(5, expected_status);
+        if (compare_schedule) pstmt->setString(6, expected_next_run_at);
         return pstmt->executeUpdate() > 0;
     } catch (sql::SQLException &e) {
         recordSqlError("claimTaskExecution", e);

@@ -6,17 +6,21 @@
 docker compose up -d
 cmake -S . -B build
 cmake --build build -j
+./build/corpcron_worker --config config/worker.conf
 ./build/corpcron_server --config config/server.conf
 ```
 
 本地 Compose 会将 Redis 映射到宿主机 `6380`、MySQL 映射到宿主机 `3307`，避免占用已有的 `6379` 和 `3306` 服务。
 
-服务端默认在 `127.0.0.1:9091` 暴露运行指标：
+控制节点默认在 `127.0.0.1:9091` 暴露运行指标，Worker 使用
+`127.0.0.1:9191`：
 
 ```bash
 curl http://127.0.0.1:9091/metrics
 curl http://127.0.0.1:9091/health
 curl http://127.0.0.1:9091/alerts
+curl http://127.0.0.1:9191/metrics
+curl http://127.0.0.1:9191/health
 ```
 
 可以通过配置或环境变量修改指标端口：
@@ -89,7 +93,12 @@ docker compose -f deploy/monitoring/docker-compose.monitoring.yml up -d
 
 ```bash
 docker build -t corpcron:local .
-docker run --rm -p 8081:8081 \
+docker run --rm --name corpcron-worker -p 8181:8181 \
+  -e CORPCRON_REDIS_HOST=host.docker.internal \
+  corpcron:local \
+  /app/corpcron_worker --config /app/config/worker.conf
+
+docker run --rm --name corpcron-server -p 8081:8081 \
   -e CORPCRON_REDIS_HOST=host.docker.internal \
   -e CORPCRON_MYSQL_HOST=host.docker.internal \
   -e CORPCRON_MYSQL_PASSWORD=corpcron_dev_password \
@@ -97,6 +106,7 @@ docker run --rm -p 8081:8081 \
 ```
 
 在 Linux 环境下，如果 `host.docker.internal` 不可用，可以替换成宿主机可访问的地址，或者让服务和 MySQL/Redis 运行在同一个 Compose 网络中。
+控制节点提交任务前，Redis 中必须存在匹配的 `worker:<handler>` 能力。
 
 ## systemd
 
@@ -105,12 +115,16 @@ docker run --rm -p 8081:8081 \
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin corpcron
 sudo mkdir -p /opt/corpcron/bin /etc/corpcron
-sudo cp build/corpcron_server /opt/corpcron/bin/
+sudo cp build/corpcron_server build/corpcron_worker /opt/corpcron/bin/
 sudo cp config/server.production.example.conf /etc/corpcron/server.conf
-sudo cp systemd/corpcron.service /etc/systemd/system/
+sudo cp config/worker.production.example.conf /etc/corpcron/worker.conf
+sudo cp systemd/corpcron.service systemd/corpcron-worker.service /etc/systemd/system/
 ```
 
-将敏感配置放到 `/etc/corpcron/corpcron.env`：
+分别参考 [控制节点环境变量样例](../../deploy/corpcron.env.example) 和
+[Worker 环境变量样例](../../deploy/corpcron-worker.env.example)，将敏感配置放到
+`/etc/corpcron/corpcron.env` 与 `/etc/corpcron/worker.env`。两个进程必须使用相同的
+Token：
 
 ```bash
 CORPCRON_MYSQL_PASSWORD=your_password
@@ -118,11 +132,12 @@ CORPCRON_RPC_AUTH_TOKEN=your_long_random_token
 CORPCRON_SERVER_ADVERTISE_HOST=127.0.0.1
 ```
 
-启动服务：
+先启动 Worker，再启动控制节点：
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now corpcron
+sudo systemctl enable --now corpcron-worker corpcron
+sudo journalctl -u corpcron-worker -f
 sudo journalctl -u corpcron -f
 ```
 
@@ -131,14 +146,17 @@ sudo journalctl -u corpcron -f
 生产环境不建议把 CorpCron RPC 直接暴露到公网。推荐拓扑：
 
 ```text
-Client -> Nginx stream TLS :8443 -> 127.0.0.1:8081 CorpCron RPC
+Client -> Nginx stream TLS :8443 -> 127.0.0.1:8081 Control Plane RPC
+Control Plane -> private network :8181 -> Worker RPC
 Prometheus/VPN -> Nginx HTTPS :9443 -> 127.0.0.1:9091 /metrics /alerts
 ```
 
 相关模板：
 
 - [生产配置样例](../../config/server.production.example.conf)
+- [Worker 生产配置样例](../../config/worker.production.example.conf)
 - [环境变量样例](../../deploy/corpcron.env.example)
+- [Worker 环境变量样例](../../deploy/corpcron-worker.env.example)
 - [Nginx RPC stream TLS 示例](../../deploy/nginx/corpcron-stream.conf)
 - [Nginx metrics HTTPS 示例](../../deploy/nginx/corpcron-metrics.conf)
 - [生产部署安全说明](production-security.md)
@@ -146,6 +164,7 @@ Prometheus/VPN -> Nginx HTTPS :9443 -> 127.0.0.1:9091 /metrics /alerts
 最小安全要求：
 
 - `server.bind_host` 使用 `127.0.0.1` 或内网地址。
+- `worker.bind_host` 只使用控制节点可访问的内网地址，不暴露公网。
 - 设置强随机 `CORPCRON_RPC_AUTH_TOKEN`。
 - MySQL/Redis 不暴露公网。
 - `/metrics` 和 `/alerts` 只允许监控网络或 VPN 访问。

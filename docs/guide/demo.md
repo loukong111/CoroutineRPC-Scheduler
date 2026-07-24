@@ -14,7 +14,8 @@ docker compose up -d
 ```text
 Redis: 127.0.0.1:6380
 MySQL: 127.0.0.1:3307
-RPC:   127.0.0.1:8081
+控制节点 RPC: 127.0.0.1:8081
+Worker RPC:    127.0.0.1:8181
 ```
 
 ## 2. 编译和测试
@@ -43,7 +44,17 @@ RPC:   127.0.0.1:8081
 
 该脚本会清空 `tasks`、`task_history`，并清理 Redis 当前 DB。
 
-## 4. 启动服务端
+## 4. 启动 Worker
+
+```bash
+./build/corpcron_worker --config config/worker.conf
+```
+
+启动后应看到 Worker 监听 `0.0.0.0:8181`。它会向 Redis 注册
+`worker` 以及 `worker:Echo`、`worker:Uppercase`、`worker:Sleep`
+和 `worker:Fail` 等 Handler 能力。
+
+## 5. 启动控制节点
 
 ```bash
 ./build/corpcron_server --config config/server.conf
@@ -55,7 +66,9 @@ RPC:   127.0.0.1:8081
 TcpServer listening on 0.0.0.0:8081
 ```
 
-## 5. 打开 Qt 管理端
+控制节点负责 RPC 接入、任务管理与调度，不在自身进程中执行任务 Handler。
+
+## 6. 打开 Qt 管理端
 
 ```bash
 ./build/client/corpcron_client
@@ -83,6 +96,8 @@ Token: 留空，除非配置了 rpc.auth_token
 - 重置依赖：等价于 `docker compose down -v`
 - 启动服务端：等价于 `./build/corpcron_server --config config/server.conf`
 - 启动二节点：等价于 `./build/corpcron_server --config config/server2.conf`
+- 启动 Worker：等价于 `./build/corpcron_worker --config config/worker.conf`
+- 启动二号 Worker：等价于 `./build/corpcron_worker --config config/worker2.conf`
 - 环境检查：等价于 `./scripts/demo_check.sh`
 - 清理数据：等价于 `./scripts/clean_demo_data.sh`
 - 构建测试：等价于 `./scripts/check.sh`
@@ -92,7 +107,7 @@ Token: 留空，除非配置了 rpc.auth_token
 - 查看部署文档：显示 `docs/guide/deploy.md` 与 `systemd/corpcron.service`
 - 启动/停止监控栈：等价于 `docker compose -f deploy/monitoring/docker-compose.monitoring.yml up -d/down`
 - 打开监控页面：打开 Prometheus、Alertmanager 和 Grafana 本地页面
-- Redis 快照：显示 `services:rpc` 成员、服务发现 key 和 TTL
+- Redis 快照：显示控制节点、Worker、Handler 能力及其租约 TTL
 - MySQL 快照：显示最近任务和执行历史
 - 短连接/长连接压测：等价于 `./scripts/benchmark.sh ... short/reuse`
 - RPC 框架能力：HealthCheck、StreamMetrics、deadline/cancellation、熔断半开探测、generated streaming stub
@@ -100,7 +115,7 @@ Token: 留空，除非配置了 rpc.auth_token
 
 如果 Docker 当前需要 sudo 权限，Qt 无法自动输入 sudo 密码。建议提前把当前用户加入 docker 组；配置好后，完整演示可以基本脱离终端完成。若当前 shell 设置了 `DOCKER_HOST` 指向 Podman socket，Qt 会在启动工具命令时自动移除该变量，避免 Docker 命令连错 socket。
 
-## 6. 演示 RPC 和任务链路
+## 7. 演示 RPC 和任务链路
 
 ### Echo
 
@@ -137,11 +152,14 @@ Params: demo
 
 ### 服务发现
 
-在“服务发现”页点击刷新，应看到当前 RPC 节点，例如：
+在“服务发现”页查询 `worker`，应看到可用 Worker，例如：
 
 ```text
-127.0.0.1:8081
+127.0.0.1:8181
 ```
+
+再查询 `worker:Echo`，可以验证 Worker 按 Handler 注册的执行能力。查询
+`rpc` 则会返回控制节点 `127.0.0.1:8081`。
 
 ### 运行指标
 
@@ -160,7 +178,7 @@ Params: demo
 
 可以先发送几次 Echo 或刷新任务列表，再观察指标递增。
 
-## 7. 查看 MySQL 数据
+## 8. 查看 MySQL 数据
 
 ```bash
 docker exec -it corpcron-mysql mysql -ucorpcron -pcorpcron_dev_password corpcron
@@ -184,7 +202,7 @@ ORDER BY id DESC
 LIMIT 10;
 ```
 
-## 8. 查看 Redis 服务发现
+## 9. 查看 Redis 服务发现
 
 ```bash
 docker exec -it corpcron-redis redis-cli
@@ -194,9 +212,13 @@ docker exec -it corpcron-redis redis-cli
 SMEMBERS services:rpc
 KEYS services:rpc:*
 TTL services:rpc:127.0.0.1:8081
+SMEMBERS services:worker
+SMEMBERS services:worker:Echo
+KEYS services:worker:*
+TTL services:worker:127.0.0.1:8181
 ```
 
-## 9. 运行压测
+## 10. 运行压测
 
 短连接模式：
 
@@ -218,13 +240,10 @@ docs/assets/benchmark/latest.txt
 
 上述压测也可以在 Qt “演示控制台”页点击按钮完成。
 
-## 10. 演示结束
+## 11. 演示结束
 
-停止服务端：
-
-```bash
-Ctrl+C
-```
+分别在 Worker 和控制节点终端按 `Ctrl+C`，或在 Qt 演示控制台点击对应的
+“停止 Worker”和“停止服务端”按钮。
 
 停止依赖：
 

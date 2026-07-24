@@ -1,7 +1,6 @@
 #include "corpcron/app/server_app.hpp"
 #include "corpcron/common/config.hpp"
 #include "corpcron/common/logger.hpp"
-#include "corpcron/rpc/handler_registry.hpp"
 #include "corpcron/rpc/rpc_interceptor.hpp"
 #include <fcntl.h>
 #include <pthread.h>
@@ -30,16 +29,22 @@ int ServerApp::run() {
     signal(SIGPIPE, SIG_IGN);
     if (!setupSignalHandling()) return 1;
 
-    registerHandlers();
-
     if (!initRedis()) return 1;
     if (!initMySQL()) return 1;
 
     if (!startMetricsExporter()) return 1;
 
-    dispatcher_ = std::make_shared<RpcDispatcher>(db_, redis_, auth_token_, node_id_);
+    RpcDispatcherOptions dispatcher_options;
+    dispatcher_options.role = RpcNodeRole::ControlPlane;
+    dispatcher_options.service_name = "rpc";
+    dispatcher_options.worker_service_name = worker_service_name_;
+    dispatcher_options.worker_timeout_ms =
+        Config::instance().getInt("scheduler.task_timeout_ms", 5000);
+    dispatcher_ = std::make_shared<RpcDispatcher>(
+        db_, redis_, auth_token_, node_id_, std::move(dispatcher_options));
     dispatcher_->setInterceptors(makeDefaultRpcInterceptorChain());
-    server_ = std::make_unique<TcpServer>(bind_host_, port_, dispatcher_, max_connections_);
+    server_ = std::make_unique<TcpServer>(
+        bind_host_, port_, dispatcher_, max_connections_, executor_options_);
 
     bool ok = server_->start([this]() {
         // The listen socket is active at this point. Registering and starting the
@@ -108,6 +113,32 @@ bool ServerApp::loadConfig() {
     }
     max_connections_ = static_cast<size_t>(max_connections);
     auth_token_ = Config::instance().get("rpc.auth_token", "");
+    worker_service_name_ =
+        Config::instance().get("scheduler.worker_service_name", "worker");
+    if (worker_service_name_.empty()) {
+        LOG_ERROR("scheduler.worker_service_name must not be empty");
+        return false;
+    }
+    auto positive_size = [](const std::string& key, size_t fallback) {
+        const int value = Config::instance().getInt(key, static_cast<int>(fallback));
+        return value > 0 ? static_cast<size_t>(value) : fallback;
+    };
+    executor_options_.min_threads =
+        positive_size("rpc_executor.min_threads", executor_options_.min_threads);
+    executor_options_.max_threads =
+        positive_size("rpc_executor.max_threads", executor_options_.max_threads);
+    if (executor_options_.max_threads < executor_options_.min_threads) {
+        executor_options_.max_threads = executor_options_.min_threads;
+    }
+    executor_options_.backlog_threshold = positive_size(
+        "rpc_executor.backlog_threshold", executor_options_.backlog_threshold);
+    executor_options_.max_pending_requests = positive_size(
+        "rpc_executor.max_pending_requests", executor_options_.max_pending_requests);
+    executor_options_.idle_timeout_sec =
+        Config::instance().getInt("rpc_executor.idle_timeout_sec", 5);
+    if (executor_options_.idle_timeout_sec <= 0) {
+        executor_options_.idle_timeout_sec = 5;
+    }
     metrics_enabled_ = Config::instance().getInt("metrics.enabled", 1) == 1;
     metrics_host_ = Config::instance().get("metrics.host", "127.0.0.1");
     metrics_port_ = Config::instance().getInt("metrics.port", 9091);
@@ -216,14 +247,9 @@ bool ServerApp::initMySQL() {
     return true;
 }
 
-void ServerApp::registerHandlers() {
-    HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
-        return "Echo: " + params;
-    });
-}
-
 void ServerApp::startScheduler() {
-    scheduler_ = std::make_unique<TaskScheduler>(db_, redis_, node_id_);
+    scheduler_ =
+        std::make_unique<TaskScheduler>(db_, redis_, node_id_, worker_service_name_);
     scheduler_->start();
 }
 

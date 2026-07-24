@@ -7,10 +7,12 @@
 namespace corpcron {
 
 DynamicThreadPool::DynamicThreadPool(size_t init_threads, size_t max_threads,
-                                     size_t backlog_threshold, int idle_timeout_sec)
+                                     size_t backlog_threshold, int idle_timeout_sec,
+                                     size_t max_pending_tasks)
     : init_threads_(std::max<size_t>(1, init_threads)),
       max_threads_(std::max(init_threads_, max_threads)),
-      backlog_threshold_(backlog_threshold), idle_timeout_sec_(idle_timeout_sec),
+      backlog_threshold_(backlog_threshold), max_pending_tasks_(max_pending_tasks),
+      idle_timeout_sec_(idle_timeout_sec),
       current_threads_(init_threads_) {
     if (idle_timeout_sec_ <= 0) idle_timeout_sec_ = 1;
     workers_.reserve(max_threads_);
@@ -56,6 +58,7 @@ bool DynamicThreadPool::enqueue(std::function<void()> task) {
     {
         std::lock_guard<std::mutex> lock(mutex_);
         if (stopping_) return false;
+        if (max_pending_tasks_ > 0 && tasks_.size() >= max_pending_tasks_) return false;
         tasks_.push(std::move(task));
     }
     cv_.notify_one();

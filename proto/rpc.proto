@@ -10,6 +10,10 @@ enum ErrorCode {
     DB_ERROR = 5;
     HANDLER_NOT_FOUND = 6;
     UNAUTHORIZED = 7;
+    DEADLINE_EXCEEDED = 8;
+    CANCELED = 9;
+    RESOURCE_EXHAUSTED = 10;
+    UNAVAILABLE = 11;
 }
 
 message RpcError {
@@ -43,6 +47,8 @@ message ExecuteTaskRequest {
     string params = 2;
     string handler = 3;
     string auth_token = 4;
+    string execution_id = 5;
+    uint64 deadline_unix_ms = 6;
 }
 message ExecuteTaskResponse {
     bool success = 1;

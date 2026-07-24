@@ -13,7 +13,8 @@ namespace corpcron {
 class DynamicThreadPool {
 public:
     DynamicThreadPool(size_t init_threads = 4, size_t max_threads = 32,
-                      size_t backlog_threshold = 100, int idle_timeout_sec = 5);
+                      size_t backlog_threshold = 100, int idle_timeout_sec = 5,
+                      size_t max_pending_tasks = 0);
     ~DynamicThreadPool();
 
     bool enqueue(std::function<void()> task);
@@ -42,6 +43,7 @@ private:
     size_t init_threads_;
     size_t max_threads_;
     size_t backlog_threshold_;
+    size_t max_pending_tasks_;
     int idle_timeout_sec_;
     size_t current_threads_;
 };

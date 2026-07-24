@@ -20,6 +20,7 @@ public:
         int cooldown_ms = 3000;
         bool health_check_probe = true;
         int health_check_timeout_ms = 500;
+        std::string health_check_service_name = "rpc";
     };
 
     RpcClientPool();

@@ -62,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     auto *runMenu = menuBar()->addMenu("运行");
     runMenu->addAction("启动依赖", this, &MainWindow::onStartDependencies);
     runMenu->addAction("启动服务端", this, &MainWindow::onStartServer);
+    runMenu->addAction("启动 Worker", this, &MainWindow::onStartWorker);
     runMenu->addAction("运行检查", this, &MainWindow::onRunCheck);
     auto *observabilityMenu = menuBar()->addMenu("可观测性");
     observabilityMenu->addAction("打开 Grafana", this, &MainWindow::onOpenGrafana);
@@ -379,7 +380,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     auto *servicesTab = new QWidget;
     auto *servicesLayout = new QVBoxLayout(servicesTab);
     auto *servicesToolbar = new QHBoxLayout;
-    serviceNameEdit = new QLineEdit("rpc");
+    serviceNameEdit = new QLineEdit("worker");
     refreshServicesBtn = new QPushButton("刷新服务");
     setButtonRole(refreshServicesBtn, "quiet");
     servicesToolbar->addWidget(new QLabel("Service"));
@@ -427,6 +428,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     stopServerBtn = new QPushButton("停止服务端");
     startSecondServerBtn = new QPushButton("启动二节点");
     stopSecondServerBtn = new QPushButton("停止二节点");
+    startWorkerBtn = new QPushButton("启动 Worker");
+    stopWorkerBtn = new QPushButton("停止 Worker");
+    startSecondWorkerBtn = new QPushButton("启动二号 Worker");
+    stopSecondWorkerBtn = new QPushButton("停止二号 Worker");
     demoCheckBtn = new QPushButton("环境检查");
     cleanDataBtn = new QPushButton("清理数据");
     runCheckBtn = new QPushButton("构建测试");
@@ -439,10 +444,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     setButtonRole(startDepsBtn, "primary");
     setButtonRole(startServerBtn, "primary");
     setButtonRole(startSecondServerBtn, "primary");
+    setButtonRole(startWorkerBtn, "primary");
+    setButtonRole(startSecondWorkerBtn, "primary");
     setButtonRole(stopDepsBtn, "danger");
     setButtonRole(resetDepsBtn, "danger");
     setButtonRole(stopServerBtn, "danger");
     setButtonRole(stopSecondServerBtn, "danger");
+    setButtonRole(stopWorkerBtn, "danger");
+    setButtonRole(stopSecondWorkerBtn, "danger");
     runtimeLayout->addWidget(startDepsBtn, 0, 0);
     runtimeLayout->addWidget(stopDepsBtn, 0, 1);
     runtimeLayout->addWidget(resetDepsBtn, 0, 2);
@@ -450,15 +459,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     runtimeLayout->addWidget(stopServerBtn, 1, 1);
     runtimeLayout->addWidget(startSecondServerBtn, 1, 2);
     runtimeLayout->addWidget(stopSecondServerBtn, 1, 3);
-    runtimeLayout->addWidget(demoCheckBtn, 2, 0);
-    runtimeLayout->addWidget(cleanDataBtn, 2, 1);
-    runtimeLayout->addWidget(runCheckBtn, 2, 2);
-    runtimeLayout->addWidget(runIntegrationCheckBtn, 2, 3);
-    runtimeLayout->addWidget(dockerBuildBtn, 3, 0);
-    runtimeLayout->addWidget(showBenchmarkResultBtn, 3, 1);
-    runtimeLayout->addWidget(showDeployDocBtn, 3, 2);
-    runtimeLayout->addWidget(showRedisSnapshotBtn, 4, 0);
-    runtimeLayout->addWidget(showMySQLSnapshotBtn, 4, 1);
+    runtimeLayout->addWidget(startWorkerBtn, 2, 0);
+    runtimeLayout->addWidget(stopWorkerBtn, 2, 1);
+    runtimeLayout->addWidget(startSecondWorkerBtn, 2, 2);
+    runtimeLayout->addWidget(stopSecondWorkerBtn, 2, 3);
+    runtimeLayout->addWidget(demoCheckBtn, 3, 0);
+    runtimeLayout->addWidget(cleanDataBtn, 3, 1);
+    runtimeLayout->addWidget(runCheckBtn, 3, 2);
+    runtimeLayout->addWidget(runIntegrationCheckBtn, 3, 3);
+    runtimeLayout->addWidget(dockerBuildBtn, 4, 0);
+    runtimeLayout->addWidget(showBenchmarkResultBtn, 4, 1);
+    runtimeLayout->addWidget(showDeployDocBtn, 4, 2);
+    runtimeLayout->addWidget(showRedisSnapshotBtn, 5, 0);
+    runtimeLayout->addWidget(showMySQLSnapshotBtn, 5, 1);
     demoLayout->addWidget(runtimeBox);
 
     auto *monitoringBox = new QGroupBox("可观测性");
@@ -595,6 +608,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     connect(stopServerBtn, &QPushButton::clicked, this, &MainWindow::onStopServer);
     connect(startSecondServerBtn, &QPushButton::clicked, this, &MainWindow::onStartSecondServer);
     connect(stopSecondServerBtn, &QPushButton::clicked, this, &MainWindow::onStopSecondServer);
+    connect(startWorkerBtn, &QPushButton::clicked, this, &MainWindow::onStartWorker);
+    connect(stopWorkerBtn, &QPushButton::clicked, this, &MainWindow::onStopWorker);
+    connect(startSecondWorkerBtn, &QPushButton::clicked, this, &MainWindow::onStartSecondWorker);
+    connect(stopSecondWorkerBtn, &QPushButton::clicked, this, &MainWindow::onStopSecondWorker);
     connect(demoCheckBtn, &QPushButton::clicked, this, &MainWindow::onDemoCheck);
     connect(cleanDataBtn, &QPushButton::clicked, this, &MainWindow::onCleanDemoData);
     connect(runCheckBtn, &QPushButton::clicked, this, &MainWindow::onRunCheck);
@@ -646,57 +663,43 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         updateUiState();
     });
 
-    serverProcess = new QProcess(this);
-    serverProcess->setProcessChannelMode(QProcess::MergedChannels);
-    connect(serverProcess, &QProcess::readyReadStandardOutput, this, [this]() {
-        appendToolOutput(QString::fromLocal8Bit(serverProcess->readAllStandardOutput()));
-    });
-    connect(serverProcess, &QProcess::started, this, [this]() {
-        appendToolOutput("[服务端已启动]\n");
-        updateUiState();
-    });
-    connect(serverProcess, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        appendToolOutput(QString("\n[服务端已退出] exit=%1 status=%2\n")
-                             .arg(exitCode)
-                             .arg(status == QProcess::NormalExit ? "正常" : "异常"));
-        updateUiState();
-    });
+    auto configureManagedProcess = [this](QProcess *process, const QString& label) {
+        process->setProcessChannelMode(QProcess::MergedChannels);
+        connect(process, &QProcess::readyReadStandardOutput, this, [this, process]() {
+            appendToolOutput(QString::fromLocal8Bit(process->readAllStandardOutput()));
+        });
+        connect(process, &QProcess::started, this, [this, label]() {
+            appendToolOutput("[" + label + "已启动]\n");
+            updateUiState();
+        });
+        connect(process, &QProcess::finished, this,
+                [this, label](int exitCode, QProcess::ExitStatus status) {
+            appendToolOutput(QString("\n[%1已退出] exit=%2 status=%3\n")
+                                 .arg(label)
+                                 .arg(exitCode)
+                                 .arg(status == QProcess::NormalExit ? "正常" : "异常"));
+            updateUiState();
+        });
+    };
 
+    serverProcess = new QProcess(this);
     server2Process = new QProcess(this);
-    server2Process->setProcessChannelMode(QProcess::MergedChannels);
-    connect(server2Process, &QProcess::readyReadStandardOutput, this, [this]() {
-        appendToolOutput(QString::fromLocal8Bit(server2Process->readAllStandardOutput()));
-    });
-    connect(server2Process, &QProcess::started, this, [this]() {
-        appendToolOutput("[二节点已启动]\n");
-        updateUiState();
-    });
-    connect(server2Process, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        appendToolOutput(QString("\n[二节点已退出] exit=%1 status=%2\n")
-                             .arg(exitCode)
-                             .arg(status == QProcess::NormalExit ? "正常" : "异常"));
-        updateUiState();
-    });
+    workerProcess = new QProcess(this);
+    worker2Process = new QProcess(this);
+    configureManagedProcess(serverProcess, "服务端");
+    configureManagedProcess(server2Process, "二节点");
+    configureManagedProcess(workerProcess, "Worker");
+    configureManagedProcess(worker2Process, "二号 Worker");
     updateUiState();
 }
 
 MainWindow::~MainWindow() {
     if (socket->state() == QAbstractSocket::ConnectedState)
         socket->disconnectFromHost();
-    if (serverProcess && serverProcess->state() != QProcess::NotRunning) {
-        serverProcess->terminate();
-        if (!serverProcess->waitForFinished(3000)) {
-            serverProcess->kill();
-            serverProcess->waitForFinished(3000);
-        }
-    }
-    if (server2Process && server2Process->state() != QProcess::NotRunning) {
-        server2Process->terminate();
-        if (!server2Process->waitForFinished(3000)) {
-            server2Process->kill();
-            server2Process->waitForFinished(3000);
-        }
-    }
+    stopManagedProcess(serverProcess);
+    stopManagedProcess(server2Process);
+    stopManagedProcess(workerProcess);
+    stopManagedProcess(worker2Process);
     if (toolProcess && toolProcess->state() != QProcess::NotRunning) {
         toolProcess->kill();
         toolProcess->waitForFinished(3000);
@@ -963,7 +966,7 @@ void MainWindow::onRefreshServices() {
     corpcron::rpc::ListServicesRequest req;
     req.set_auth_token(authToken());
     req.set_service_name(serviceNameEdit->text().trimmed().isEmpty()
-                             ? "rpc"
+                             ? "worker"
                              : serviceNameEdit->text().trimmed().toStdString());
 
     std::string payload;
@@ -997,7 +1000,7 @@ void MainWindow::onResetDependencies() {
 }
 
 void MainWindow::onStartServer() {
-    startServerProcess(serverProcess, "config/server.conf", "服务端");
+    startNodeProcess(serverProcess, "corpcron_server", "config/server.conf", "服务端");
 }
 
 void MainWindow::onStopServer() {
@@ -1010,7 +1013,7 @@ void MainWindow::onStopServer() {
 }
 
 void MainWindow::onStartSecondServer() {
-    startServerProcess(server2Process, "config/server2.conf", "二节点");
+    startNodeProcess(server2Process, "corpcron_server", "config/server2.conf", "二节点");
 }
 
 void MainWindow::onStopSecondServer() {
@@ -1020,6 +1023,33 @@ void MainWindow::onStopSecondServer() {
     }
     appendToolOutput("[正在停止二节点]\n");
     server2Process->terminate();
+}
+
+void MainWindow::onStartWorker() {
+    startNodeProcess(workerProcess, "corpcron_worker", "config/worker.conf", "Worker");
+}
+
+void MainWindow::onStopWorker() {
+    if (workerProcess->state() == QProcess::NotRunning) {
+        appendToolOutput("[当前 Qt 客户端没有启动 Worker]\n");
+        return;
+    }
+    appendToolOutput("[正在停止 Worker]\n");
+    workerProcess->terminate();
+}
+
+void MainWindow::onStartSecondWorker() {
+    startNodeProcess(worker2Process, "corpcron_worker", "config/worker2.conf",
+                     "二号 Worker");
+}
+
+void MainWindow::onStopSecondWorker() {
+    if (worker2Process->state() == QProcess::NotRunning) {
+        appendToolOutput("[当前 Qt 客户端没有启动二号 Worker]\n");
+        return;
+    }
+    appendToolOutput("[正在停止二号 Worker]\n");
+    worker2Process->terminate();
 }
 
 void MainWindow::onDemoCheck() {
@@ -1094,11 +1124,14 @@ void MainWindow::onShowRedisSnapshot() {
     const QString script =
         "printf '%s\\n' '== services:rpc members ==' && "
         "docker exec corpcron-redis redis-cli --raw SMEMBERS services:rpc && "
-        "printf '%s\\n' '\\n== services:rpc keys and ttl ==' && "
-        "for k in $(docker exec corpcron-redis redis-cli --raw KEYS 'services:rpc:*'); do "
+        "printf '%s\\n' '\\n== services:worker members ==' && "
+        "docker exec corpcron-redis redis-cli --raw SMEMBERS services:worker && "
+        "printf '%s\\n' '\\n== service leases and handler capabilities ==' && "
+        "for pattern in 'services:rpc:*' 'services:worker:*'; do "
+        "for k in $(docker exec corpcron-redis redis-cli --raw KEYS \"$pattern\"); do "
         "ttl=$(docker exec corpcron-redis redis-cli --raw TTL \"$k\"); "
         "printf '%s ttl=%s\\n' \"$k\" \"$ttl\"; "
-        "done";
+        "done; done";
     runTool("bash", {"-lc", script}, "Redis 快照");
 }
 
@@ -1334,7 +1367,8 @@ void MainWindow::runTool(const QString& program, const QStringList& arguments, c
     updateUiState();
 }
 
-void MainWindow::startServerProcess(QProcess *process, const QString& configPath, const QString& label) {
+void MainWindow::startNodeProcess(QProcess *process, const QString& binary,
+                                  const QString& configPath, const QString& label) {
     if (process->state() != QProcess::NotRunning) {
         appendToolOutput("[" + label + " 已在运行]\n");
         return;
@@ -1346,12 +1380,21 @@ void MainWindow::startServerProcess(QProcess *process, const QString& configPath
         env.insert("CORPCRON_SERVER_LISTEN_PORT", QString::number(portSpin->value()));
     }
     process->setProcessEnvironment(env);
-    appendToolOutput(QString("\n$ ./build/corpcron_server --config %1\n").arg(configPath));
+    appendToolOutput(QString("\n$ ./build/%1 --config %2\n").arg(binary, configPath));
     if (!tokenEdit->text().trimmed().isEmpty()) {
         appendToolOutput("[env] CORPCRON_RPC_AUTH_TOKEN=<configured>\n");
     }
-    process->start(root + "/build/corpcron_server", {"--config", configPath});
+    process->start(root + "/build/" + binary, {"--config", configPath});
     updateUiState();
+}
+
+void MainWindow::stopManagedProcess(QProcess *process) {
+    if (!process || process->state() == QProcess::NotRunning) return;
+    process->terminate();
+    if (!process->waitForFinished(3000)) {
+        process->kill();
+        process->waitForFinished(3000);
+    }
 }
 
 void MainWindow::appendToolOutput(const QString& message) {
@@ -1395,6 +1438,8 @@ void MainWindow::updateUiState() {
     bool toolIdle = toolProcess && toolProcess->state() == QProcess::NotRunning;
     bool serverIdle = serverProcess && serverProcess->state() == QProcess::NotRunning;
     bool server2Idle = server2Process && server2Process->state() == QProcess::NotRunning;
+    bool workerIdle = workerProcess && workerProcess->state() == QProcess::NotRunning;
+    bool worker2Idle = worker2Process && worker2Process->state() == QProcess::NotRunning;
     startDepsBtn->setEnabled(toolIdle);
     stopDepsBtn->setEnabled(toolIdle);
     resetDepsBtn->setEnabled(toolIdle);
@@ -1423,6 +1468,10 @@ void MainWindow::updateUiState() {
     stopServerBtn->setEnabled(!serverIdle);
     startSecondServerBtn->setEnabled(server2Idle);
     stopSecondServerBtn->setEnabled(!server2Idle);
+    startWorkerBtn->setEnabled(workerIdle);
+    stopWorkerBtn->setEnabled(!workerIdle);
+    startSecondWorkerBtn->setEnabled(worker2Idle);
+    stopSecondWorkerBtn->setEnabled(!worker2Idle);
     statusLabel->setText(connected ? "已连接" : (connecting ? "连接中" : "未连接"));
     if (overviewConnectionValue) {
         overviewConnectionValue->setText(connected ? "已连接" : (connecting ? "连接中" : "未连接"));

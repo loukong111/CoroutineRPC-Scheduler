@@ -3,6 +3,7 @@
 CorpCron 的 RPC 协议是自定义 TCP 帧，不是 HTTP。生产部署时建议采用下面的边界：
 
 - `corpcron_server` 只监听 `127.0.0.1:8081`，不直接暴露公网。
+- `corpcron_worker` 只监听控制节点可访问的内网地址，默认端口为 `8181`。
 - Nginx `stream` 模块监听公网 TLS 端口，例如 `8443`，再转发到本机 `127.0.0.1:8081`。
 - RPC 仍然启用 `CORPCRON_RPC_AUTH_TOKEN`，TLS 只解决链路加密，不替代业务鉴权。
 - `/metrics`、`/alerts`、`/health` 默认只监听 `127.0.0.1:9091`，如果要给监控系统访问，通过 Nginx HTTPS + IP allowlist 或内网抓取。
@@ -23,13 +24,30 @@ host = 127.0.0.1
 port = 9091
 ```
 
-敏感信息不要写进配置文件，放到 `/etc/corpcron/corpcron.env`：
+Worker 使用独立配置 [worker.production.example.conf](../../config/worker.production.example.conf)：
+
+```ini
+[worker]
+bind_host = 127.0.0.1
+advertise_host = 127.0.0.1
+listen_port = 8181
+service_name = worker
+
+[metrics]
+host = 127.0.0.1
+port = 9191
+```
+
+敏感信息不要写进配置文件，分别放到 `/etc/corpcron/corpcron.env` 和
+`/etc/corpcron/worker.env`：
 
 ```bash
 sudo install -d -m 750 -o root -g corpcron /etc/corpcron
 sudo cp deploy/corpcron.env.example /etc/corpcron/corpcron.env
-sudo chmod 600 /etc/corpcron/corpcron.env
+sudo cp deploy/corpcron-worker.env.example /etc/corpcron/worker.env
+sudo chmod 600 /etc/corpcron/corpcron.env /etc/corpcron/worker.env
 sudo editor /etc/corpcron/corpcron.env
+sudo editor /etc/corpcron/worker.env
 ```
 
 至少修改：
@@ -40,7 +58,10 @@ CORPCRON_MYSQL_PASSWORD=change_me
 CORPCRON_SERVER_ADVERTISE_HOST=127.0.0.1
 ```
 
-如果 Nginx 和 CorpCron 在同一台机器上，`advertise_host` 可以继续用 `127.0.0.1`。如果多个 CorpCron 节点需要互相调用，应设置成节点间可达的内网地址，并用防火墙限制访问来源。
+Worker 的 `CORPCRON_RPC_AUTH_TOKEN` 必须与控制节点一致，并根据部署拓扑设置
+`CORPCRON_WORKER_ADVERTISE_HOST`。如果 Nginx、控制节点和 Worker 在同一台机器上，
+`advertise_host` 可以继续用 `127.0.0.1`；跨机器部署时，应设置成节点间可达的
+内网地址，并用防火墙只允许控制节点访问 Worker RPC。
 
 ## 2. systemd
 
@@ -49,16 +70,18 @@ CORPCRON_SERVER_ADVERTISE_HOST=127.0.0.1
 ```bash
 sudo useradd --system --no-create-home --shell /usr/sbin/nologin corpcron
 sudo mkdir -p /opt/corpcron/bin /etc/corpcron
-sudo cp build/corpcron_server /opt/corpcron/bin/
+sudo cp build/corpcron_server build/corpcron_worker /opt/corpcron/bin/
 sudo cp config/server.production.example.conf /etc/corpcron/server.conf
-sudo cp systemd/corpcron.service /etc/systemd/system/
+sudo cp config/worker.production.example.conf /etc/corpcron/worker.conf
+sudo cp systemd/corpcron.service systemd/corpcron-worker.service /etc/systemd/system/
 ```
 
 启动：
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now corpcron
+sudo systemctl enable --now corpcron-worker corpcron
+sudo systemctl status corpcron-worker
 sudo systemctl status corpcron
 ```
 
@@ -67,6 +90,7 @@ sudo systemctl status corpcron
 ```bash
 curl http://127.0.0.1:9091/health
 curl http://127.0.0.1:9091/alerts
+curl http://127.0.0.1:9191/health
 ```
 
 ## 3. Nginx RPC TLS 代理
@@ -130,7 +154,9 @@ deny all;
 允许入站: 8443/tcp    Nginx RPC TLS
 允许入站: 9443/tcp    可选，仅监控网络访问
 拒绝入站: 8081/tcp    CorpCron 后端 RPC 只给本机
+拒绝入站: 8181/tcp    Worker RPC 只给控制节点
 拒绝入站: 9091/tcp    Metrics 后端只给本机
+拒绝入站: 9191/tcp    Worker Metrics 只给本机或监控网络
 拒绝入站: 3306/tcp    MySQL
 拒绝入站: 6379/tcp    Redis
 ```
@@ -140,7 +166,9 @@ deny all;
 ## 6. 生产检查清单
 
 - `server.bind_host` 使用 `127.0.0.1` 或内网地址，避免 `0.0.0.0` 裸露。
+- `worker.bind_host` 只使用内网地址，安全组仅允许控制节点访问。
 - 设置强随机 `CORPCRON_RPC_AUTH_TOKEN`。
+- 控制节点与 Worker 使用同一个 RPC Token。
 - MySQL/Redis 使用独立账号和强密码，不使用默认演示密码。
 - Nginx TLS 证书有效，禁用过旧 TLS 协议。
 - `/metrics` 和 `/alerts` 只允许监控网络访问。

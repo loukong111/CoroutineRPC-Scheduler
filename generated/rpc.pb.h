@@ -187,12 +187,16 @@ enum ErrorCode : int {
   DB_ERROR = 5,
   HANDLER_NOT_FOUND = 6,
   UNAUTHORIZED = 7,
+  DEADLINE_EXCEEDED = 8,
+  CANCELED = 9,
+  RESOURCE_EXHAUSTED = 10,
+  UNAVAILABLE = 11,
   ErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::min(),
   ErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<int32_t>::max()
 };
 bool ErrorCode_IsValid(int value);
 constexpr ErrorCode ErrorCode_MIN = OK;
-constexpr ErrorCode ErrorCode_MAX = UNAUTHORIZED;
+constexpr ErrorCode ErrorCode_MAX = UNAVAILABLE;
 constexpr int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* ErrorCode_descriptor();
@@ -1203,6 +1207,8 @@ class ExecuteTaskRequest final :
     kParamsFieldNumber = 2,
     kHandlerFieldNumber = 3,
     kAuthTokenFieldNumber = 4,
+    kExecutionIdFieldNumber = 5,
+    kDeadlineUnixMsFieldNumber = 6,
   };
   // string task_id = 1;
   void clear_task_id();
@@ -1260,6 +1266,29 @@ class ExecuteTaskRequest final :
   std::string* _internal_mutable_auth_token();
   public:
 
+  // string execution_id = 5;
+  void clear_execution_id();
+  const std::string& execution_id() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_execution_id(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_execution_id();
+  PROTOBUF_NODISCARD std::string* release_execution_id();
+  void set_allocated_execution_id(std::string* execution_id);
+  private:
+  const std::string& _internal_execution_id() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_execution_id(const std::string& value);
+  std::string* _internal_mutable_execution_id();
+  public:
+
+  // uint64 deadline_unix_ms = 6;
+  void clear_deadline_unix_ms();
+  uint64_t deadline_unix_ms() const;
+  void set_deadline_unix_ms(uint64_t value);
+  private:
+  uint64_t _internal_deadline_unix_ms() const;
+  void _internal_set_deadline_unix_ms(uint64_t value);
+  public:
+
   // @@protoc_insertion_point(class_scope:corpcron.rpc.ExecuteTaskRequest)
  private:
   class _Internal;
@@ -1272,6 +1301,8 @@ class ExecuteTaskRequest final :
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr params_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr handler_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr auth_token_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr execution_id_;
+    uint64_t deadline_unix_ms_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -7009,6 +7040,76 @@ inline void ExecuteTaskRequest::set_allocated_auth_token(std::string* auth_token
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
   // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ExecuteTaskRequest.auth_token)
+}
+
+// string execution_id = 5;
+inline void ExecuteTaskRequest::clear_execution_id() {
+  _impl_.execution_id_.ClearToEmpty();
+}
+inline const std::string& ExecuteTaskRequest::execution_id() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ExecuteTaskRequest.execution_id)
+  return _internal_execution_id();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ExecuteTaskRequest::set_execution_id(ArgT0&& arg0, ArgT... args) {
+
+ _impl_.execution_id_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ExecuteTaskRequest.execution_id)
+}
+inline std::string* ExecuteTaskRequest::mutable_execution_id() {
+  std::string* _s = _internal_mutable_execution_id();
+  // @@protoc_insertion_point(field_mutable:corpcron.rpc.ExecuteTaskRequest.execution_id)
+  return _s;
+}
+inline const std::string& ExecuteTaskRequest::_internal_execution_id() const {
+  return _impl_.execution_id_.Get();
+}
+inline void ExecuteTaskRequest::_internal_set_execution_id(const std::string& value) {
+
+  _impl_.execution_id_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ExecuteTaskRequest::_internal_mutable_execution_id() {
+
+  return _impl_.execution_id_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ExecuteTaskRequest::release_execution_id() {
+  // @@protoc_insertion_point(field_release:corpcron.rpc.ExecuteTaskRequest.execution_id)
+  return _impl_.execution_id_.Release();
+}
+inline void ExecuteTaskRequest::set_allocated_execution_id(std::string* execution_id) {
+  if (execution_id != nullptr) {
+
+  } else {
+
+  }
+  _impl_.execution_id_.SetAllocated(execution_id, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.execution_id_.IsDefault()) {
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:corpcron.rpc.ExecuteTaskRequest.execution_id)
+}
+
+// uint64 deadline_unix_ms = 6;
+inline void ExecuteTaskRequest::clear_deadline_unix_ms() {
+  _impl_.deadline_unix_ms_ = uint64_t{0u};
+}
+inline uint64_t ExecuteTaskRequest::_internal_deadline_unix_ms() const {
+  return _impl_.deadline_unix_ms_;
+}
+inline uint64_t ExecuteTaskRequest::deadline_unix_ms() const {
+  // @@protoc_insertion_point(field_get:corpcron.rpc.ExecuteTaskRequest.deadline_unix_ms)
+  return _internal_deadline_unix_ms();
+}
+inline void ExecuteTaskRequest::_internal_set_deadline_unix_ms(uint64_t value) {
+
+  _impl_.deadline_unix_ms_ = value;
+}
+inline void ExecuteTaskRequest::set_deadline_unix_ms(uint64_t value) {
+  _internal_set_deadline_unix_ms(value);
+  // @@protoc_insertion_point(field_set:corpcron.rpc.ExecuteTaskRequest.deadline_unix_ms)
 }
 
 // -------------------------------------------------------------------

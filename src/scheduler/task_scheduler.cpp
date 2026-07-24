@@ -104,6 +104,7 @@ TaskScheduler::TaskScheduler(std::shared_ptr<MySQLClient> db,
     pool_options.max_idle_per_endpoint = static_cast<size_t>(max_idle);
     pool_options.failure_threshold = Config::instance().getInt("scheduler.rpc_pool_failure_threshold", 2);
     pool_options.cooldown_ms = Config::instance().getInt("scheduler.rpc_pool_cooldown_ms", 3000);
+    pool_options.health_check_service_name = service_name_;
     rpc_client_pool_ = std::make_unique<RpcClientPool>(pool_options);
 }
 
@@ -147,6 +148,7 @@ void TaskScheduler::schedulerLoop() {
 void TaskScheduler::scanAndDispatch() {
     recoverStaleExecutions();
     auto tasks = db_->getDueTasks(100);
+    std::unordered_map<std::string, bool> available_handlers;
     std::string misfire_policy = Config::instance().get("scheduler.misfire_policy", "once");
     int misfire_grace_seconds = Config::instance().getInt("scheduler.misfire_grace_seconds", 300);
     misfire_grace_seconds = std::max(0, misfire_grace_seconds);
@@ -180,6 +182,21 @@ void TaskScheduler::scanAndDispatch() {
             }
         }
 
+        auto [availability, inserted] =
+            available_handlers.emplace(task.handler, false);
+        if (inserted) {
+            availability->second = !redis_->discoverServices(
+                service_name_ + ":" + task.handler).empty();
+        }
+        if (!availability->second) {
+            LOG_WARN_EVENT("task_waiting_for_worker", {
+                {"task_id", task.id},
+                {"handler", task.handler},
+                {"capability", service_name_ + ":" + task.handler}
+            });
+            continue;
+        }
+
         std::chrono::system_clock::time_point due_at;
         if (parse_datetime(task.next_run_at, due_at)) {
             auto now = std::chrono::system_clock::now();
@@ -211,7 +228,8 @@ void TaskScheduler::scanAndDispatch() {
             TaskCancellationRegistry::instance().registerTask(task.id, execution_id,
                                                                task_cancellation);
 
-            if (!db_->claimTaskExecution(task.id, execution_id, node_id_)) {
+            if (!db_->claimTaskExecution(task.id, execution_id, node_id_,
+                                         TASK_SCHEDULED, task.next_run_at)) {
                 LOG_INFO_EVENT("task_claim_skipped", {
                     {"task_id", task.id},
                     {"node_id", node_id_},
@@ -254,7 +272,7 @@ void TaskScheduler::scanAndDispatch() {
                 auto steady_start = std::chrono::steady_clock::now();
                 ExecutionOutcome outcome;
                 try {
-                    outcome = executeTask(task, cancellation);
+                    outcome = executeTask(task, execution_id, cancellation);
                 } catch (const std::exception& e) {
                     outcome.success = false;
                     outcome.error = e.what();
@@ -278,6 +296,7 @@ void TaskScheduler::scanAndDispatch() {
                     {"task_id", task.id},
                     {"node_id", node_id_},
                     {"execution_id", execution_id},
+                    {"worker_endpoint", outcome.endpoint},
                     {"success", outcome.success ? "true" : "false"},
                     {"duration_ms", std::to_string(duration_ms)},
                     {"error", outcome.error}
@@ -286,7 +305,8 @@ void TaskScheduler::scanAndDispatch() {
                 TaskHistory history;
                 history.execution_id = execution_id;
                 history.task_id = task.id;
-                history.exec_node = node_id_;
+                history.exec_node =
+                    outcome.endpoint.empty() ? node_id_ : outcome.endpoint;
                 history.success = outcome.success;
                 history.result = outcome.result;
                 history.error = outcome.error;
@@ -390,41 +410,49 @@ void TaskScheduler::recoverStaleExecutions() {
     }
 }
 
-TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task,
-                                                           const CancellationToken& cancellation) {
+TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(
+    const TaskMeta& task, const std::string& execution_id,
+    const CancellationToken& cancellation) {
     ExecutionOutcome outcome;
     if (cancellation.isCancellationRequested()) {
         outcome.error = "Task execution canceled before RPC dispatch";
         return outcome;
     }
-    auto endpoints = redis_->discoverServices(service_name_);
+    auto endpoints = redis_->discoverServices(service_name_ + ":" + task.handler);
     if (endpoints.empty()) {
-        outcome.error = "No RPC service available";
+        outcome.error = "No worker available for handler: " + task.handler;
         LOG_ERROR_EVENT("task_execute_no_endpoint", {
             {"task_id", task.id},
-            {"service_name", service_name_}
+            {"capability", service_name_ + ":" + task.handler}
         });
         return outcome;
     }
-    // 构造 ExecuteTaskRequest
     corpcron::rpc::ExecuteTaskRequest req;
     req.set_task_id(task.id);
+    req.set_execution_id(execution_id);
     req.set_params(task.params);
     req.set_handler(task.handler);
     req.set_auth_token(Config::instance().get("rpc.auth_token", ""));
     std::string req_data;
-    req.SerializeToString(&req_data);
 
     uint32_t response_serial_id = 0;
     std::string resp_data;
     int task_timeout_ms = Config::instance().getInt("scheduler.task_timeout_ms", 5000);
     if (task_timeout_ms <= 0) task_timeout_ms = 5000;
+    const auto deadline_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count() + task_timeout_ms;
+    req.set_deadline_unix_ms(static_cast<uint64_t>(deadline_ms));
+    if (!req.SerializeToString(&req_data)) {
+        outcome.error = "Failed to serialize ExecuteTaskRequest";
+        return outcome;
+    }
     RpcCallOptions call_options = RpcCallOptions::fromTimeout(task_timeout_ms);
     call_options.cancellation = cancellation;
     std::string endpoint;
     std::string pool_error;
     if (rpc_client_pool_->call(endpoints, corpcron::rpc::kExecuteTaskRequestSerialId, req_data,
                                response_serial_id, resp_data, call_options, &endpoint, &pool_error)) {
+        outcome.endpoint = endpoint;
         if (response_serial_id == corpcron::rpc::kRpcErrorSerialId) {
             corpcron::rpc::RpcError error;
             if (error.ParseFromString(resp_data)) {
@@ -469,6 +497,7 @@ TaskScheduler::ExecutionOutcome TaskScheduler::executeTask(const TaskMeta& task,
             });
         }
     } else {
+        outcome.endpoint = endpoint;
         if (cancellation.isCancellationRequested()) {
             outcome.error = "Task execution canceled";
         } else {

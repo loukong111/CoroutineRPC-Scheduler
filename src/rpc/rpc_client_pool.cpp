@@ -98,7 +98,7 @@ bool RpcClientPool::healthCheckEndpoint(const std::string& endpoint,
                                         const RpcCallOptions& parent_options) {
     if (!options_.health_check_probe) return true;
     corpcron::rpc::HealthCheckRequest request;
-    request.set_service_name("rpc");
+    request.set_service_name(options_.health_check_service_name);
     std::string payload;
     request.SerializeToString(&payload);
 

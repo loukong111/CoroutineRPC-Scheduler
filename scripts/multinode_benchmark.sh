@@ -23,8 +23,12 @@ USE_EXISTING_SERVERS="${CORPCRON_MULTINODE_USE_EXISTING:-0}"
 
 SERVER1_PORT="${CORPCRON_SERVER1_PORT:-8081}"
 SERVER2_PORT="${CORPCRON_SERVER2_PORT:-8082}"
+WORKER1_PORT="${CORPCRON_WORKER1_PORT:-8181}"
+WORKER2_PORT="${CORPCRON_WORKER2_PORT:-8182}"
 METRICS1_URL="http://${HOST}:9091"
 METRICS2_URL="http://${HOST}:9092"
+WORKER_METRICS1_URL="http://${HOST}:9191"
+WORKER_METRICS2_URL="http://${HOST}:9192"
 
 mkdir -p "${RESULT_DIR}" "${LOG_DIR}"
 
@@ -33,8 +37,12 @@ RESULT_FILE="${RESULT_DIR}/multinode-${TIMESTAMP}.md"
 LATEST_FILE="${RESULT_DIR}/multinode-latest.md"
 SERVER1_LOG="${LOG_DIR}/server1-${TIMESTAMP}.log"
 SERVER2_LOG="${LOG_DIR}/server2-${TIMESTAMP}.log"
+WORKER1_LOG="${LOG_DIR}/worker1-${TIMESTAMP}.log"
+WORKER2_LOG="${LOG_DIR}/worker2-${TIMESTAMP}.log"
 SERVER1_PID=""
 SERVER2_PID=""
+WORKER1_PID=""
+WORKER2_PID=""
 
 need_executable() {
     local path="$1"
@@ -56,6 +64,14 @@ cleanup() {
     if [[ -n "${SERVER2_PID}" ]] && kill -0 "${SERVER2_PID}" 2>/dev/null; then
         kill "${SERVER2_PID}" 2>/dev/null || true
         wait "${SERVER2_PID}" 2>/dev/null || true
+    fi
+    if [[ -n "${WORKER1_PID}" ]] && kill -0 "${WORKER1_PID}" 2>/dev/null; then
+        kill "${WORKER1_PID}" 2>/dev/null || true
+        wait "${WORKER1_PID}" 2>/dev/null || true
+    fi
+    if [[ -n "${WORKER2_PID}" ]] && kill -0 "${WORKER2_PID}" 2>/dev/null; then
+        kill "${WORKER2_PID}" 2>/dev/null || true
+        wait "${WORKER2_PID}" 2>/dev/null || true
     fi
 }
 trap cleanup EXIT
@@ -150,9 +166,16 @@ print_redis_snapshot() {
     echo 'KEYS services:rpc:*'
     redis_exec KEYS 'services:rpc:*' || true
     echo
+    echo 'SMEMBERS services:worker'
+    redis_exec SMEMBERS services:worker || true
+    echo
+    echo 'SMEMBERS services:worker:Echo'
+    redis_exec SMEMBERS services:worker:Echo || true
+    echo
 }
 
 need_executable "${ROOT_DIR}/build/corpcron_server"
+need_executable "${ROOT_DIR}/build/corpcron_worker"
 need_executable "${ROOT_DIR}/build/bench_client"
 
 cd "${ROOT_DIR}"
@@ -167,6 +190,15 @@ fi
 
 if [[ "${USE_EXISTING_SERVERS}" != "1" ]]; then
     CORPCRON_RPC_AUTH_TOKEN="${AUTH_TOKEN}" \
+    CORPCRON_WORKER_LISTEN_PORT="${WORKER1_PORT}" \
+        ./build/corpcron_worker --config config/worker.conf >"${WORKER1_LOG}" 2>&1 &
+    WORKER1_PID="$!"
+
+    CORPCRON_RPC_AUTH_TOKEN="${AUTH_TOKEN}" \
+        ./build/corpcron_worker --config config/worker2.conf >"${WORKER2_LOG}" 2>&1 &
+    WORKER2_PID="$!"
+
+    CORPCRON_RPC_AUTH_TOKEN="${AUTH_TOKEN}" \
     CORPCRON_MYSQL_PASSWORD="${MYSQL_PASSWORD}" \
     CORPCRON_SERVER_LISTEN_PORT="${SERVER1_PORT}" \
         ./build/corpcron_server --config config/server.conf >"${SERVER1_LOG}" 2>&1 &
@@ -179,10 +211,14 @@ if [[ "${USE_EXISTING_SERVERS}" != "1" ]]; then
 else
     SERVER1_PID="$(pgrep -f "corpcron_server.*server.conf" | head -n 1 || true)"
     SERVER2_PID="$(pgrep -f "corpcron_server.*server2.conf" | head -n 1 || true)"
+    WORKER1_PID="$(pgrep -f "corpcron_worker.*worker.conf" | head -n 1 || true)"
+    WORKER2_PID="$(pgrep -f "corpcron_worker.*worker2.conf" | head -n 1 || true)"
 fi
 
 wait_http "${METRICS1_URL}" "server1 metrics"
 wait_http "${METRICS2_URL}" "server2 metrics"
+wait_http "${WORKER_METRICS1_URL}" "worker1 metrics"
+wait_http "${WORKER_METRICS2_URL}" "worker2 metrics"
 sleep 3
 
 TASK_ONCE="multinode-once-${TIMESTAMP}"
@@ -194,6 +230,8 @@ TASK_FAILOVER="multinode-failover-${TIMESTAMP}"
     echo "- time: $(date '+%Y-%m-%d %H:%M:%S %z')"
     echo "- node1: ${HOST}:${SERVER1_PORT}, metrics: ${METRICS1_URL}"
     echo "- node2: ${HOST}:${SERVER2_PORT}, metrics: ${METRICS2_URL}"
+    echo "- worker1: ${HOST}:${WORKER1_PORT}, metrics: ${WORKER_METRICS1_URL}"
+    echo "- worker2: ${HOST}:${WORKER2_PORT}, metrics: ${WORKER_METRICS2_URL}"
     echo "- benchmark: concurrency=${CONCURRENCY}, requests=${REQUESTS}, mode=${MODE}"
     echo "- clean_data: ${CLEAN_DATA}"
     echo
@@ -201,6 +239,8 @@ TASK_FAILOVER="multinode-failover-${TIMESTAMP}"
     echo "## 1. 启动状态"
     print_process "server1" "${SERVER1_PID}"
     print_process "server2" "${SERVER2_PID}"
+    print_process "worker1" "${WORKER1_PID}"
+    print_process "worker2" "${WORKER2_PID}"
     print_redis_snapshot
     print_http_snapshot "server1 before" "${METRICS1_URL}"
     print_http_snapshot "server2 before" "${METRICS2_URL}"
@@ -233,13 +273,20 @@ TASK_FAILOVER="multinode-failover-${TIMESTAMP}"
     fi
     echo
 
-    echo "## 4. 故障接管：停掉 node1 后 node2 执行新任务"
+    echo "## 4. 故障接管：停掉 node1 和 worker1 后备用节点执行新任务"
     if [[ "${USE_EXISTING_SERVERS}" != "1" ]] && [[ -n "${SERVER1_PID}" ]] && kill -0 "${SERVER1_PID}" 2>/dev/null; then
         kill "${SERVER1_PID}" 2>/dev/null || true
         wait "${SERVER1_PID}" 2>/dev/null || true
         echo "- node1 stopped: pid=${SERVER1_PID}"
     else
         echo "- node1 stop skipped: use_existing_servers=${USE_EXISTING_SERVERS}"
+    fi
+    if [[ "${USE_EXISTING_SERVERS}" != "1" ]] && [[ -n "${WORKER1_PID}" ]] && kill -0 "${WORKER1_PID}" 2>/dev/null; then
+        kill "${WORKER1_PID}" 2>/dev/null || true
+        wait "${WORKER1_PID}" 2>/dev/null || true
+        echo "- worker1 stopped: pid=${WORKER1_PID}"
+    else
+        echo "- worker1 stop skipped: use_existing_servers=${USE_EXISTING_SERVERS}"
     fi
     sleep 3
     print_redis_snapshot
@@ -264,12 +311,16 @@ TASK_FAILOVER="multinode-failover-${TIMESTAMP}"
     echo "## 5. 结束状态"
     print_process "server1 after failover" "${SERVER1_PID}"
     print_process "server2 after failover" "${SERVER2_PID}"
+    print_process "worker1 after failover" "${WORKER1_PID}"
+    print_process "worker2 after failover" "${WORKER2_PID}"
     print_http_snapshot "server1 after" "${METRICS1_URL}"
     print_http_snapshot "server2 after" "${METRICS2_URL}"
 
     echo "## 6. 原始日志"
     echo "- server1_log: ${SERVER1_LOG}"
     echo "- server2_log: ${SERVER2_LOG}"
+    echo "- worker1_log: ${WORKER1_LOG}"
+    echo "- worker2_log: ${WORKER2_LOG}"
 } | tee "${RESULT_FILE}"
 
 cp "${RESULT_FILE}" "${LATEST_FILE}"

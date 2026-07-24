@@ -54,6 +54,7 @@ set(CORPCRON_CORE_SOURCES
     src/scheduler/cron_parser.cpp
     src/scheduler/task_cancellation_registry.cpp
     src/scheduler/task_scheduler.cpp
+    src/worker/builtin_handlers.cpp
     generated/rpc.pb.cc
     src/rpc/rpc_client.cpp
 )
@@ -85,6 +86,15 @@ target_link_libraries(corpcron_server
 add_test(NAME server_cli_invalid_test COMMAND corpcron_server --bad-option)
 set_tests_properties(server_cli_invalid_test PROPERTIES WILL_FAIL TRUE)
 
+# 独立任务执行节点
+add_executable(corpcron_worker
+    src/worker_main.cpp
+    src/app/worker_app.cpp
+)
+target_link_libraries(corpcron_worker corpcron_core)
+add_test(NAME worker_cli_invalid_test COMMAND corpcron_worker --bad-option)
+set_tests_properties(worker_cli_invalid_test PROPERTIES WILL_FAIL TRUE)
+
 # Qt 客户端（可选，如果 Qt6 未安装则跳过）
 find_package(Qt6 QUIET COMPONENTS Core Widgets Network)
 if(Qt6_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/client/CMakeLists.txt)
@@ -92,7 +102,7 @@ if(Qt6_FOUND AND EXISTS ${CMAKE_SOURCE_DIR}/client/CMakeLists.txt)
 endif()
 
 # 可选：安装
-install(TARGETS corpcron_server DESTINATION bin)
+install(TARGETS corpcron_server corpcron_worker DESTINATION bin)
 
 add_executable(test_submit_client
     tools/test_submit_client.cpp

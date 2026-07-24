@@ -4,24 +4,29 @@
 
 ## 一句话介绍
 
-CorpCron 是一个基于 C++20 协程和 epoll 的轻量级 RPC 框架，并在其上实现了一个支持多节点部署的分布式定时任务调度系统。项目覆盖网络通信、协议设计、任务持久化、服务发现、分布式锁、失败重试、工程部署、自动化测试和 Qt 可视化管理端。
+CorpCron 是一个基于 C++20 协程和 epoll 的轻量级 RPC 框架，并在其上实现了一个控制节点与 Worker 分离的分布式定时任务调度系统。项目覆盖网络通信、协议设计、任务持久化、服务发现、分布式锁、失败重试、工程部署、自动化测试和 Qt 可视化管理端。
 
 ## 核心链路
 
 1. 客户端通过自定义二进制 RPC 协议发送请求。
-2. TCP 服务端基于 epoll 监听连接，并用协程封装异步读写。
+2. TCP 服务端基于 epoll 监听连接，并用协程封装异步读写；完整请求被投递到有界 RPC 执行池，避免 MySQL、Redis 或慢 Handler 阻塞事件循环。
 3. 协议层完成包长校验、半包处理、Protobuf 反序列化和错误码封装。
 4. `proto/rpc.proto` 声明 `CorpCronRpc` service，构建期生成 typed stub / skeleton，客户端可以直接调用 `stub.Echo()`、`stub.SubmitTask()` 等方法。
-5. `RpcDispatcher` 根据 `serial_id` 路由到 Echo、SubmitTask、CancelTask、ListTasks 等业务处理。
+5. 控制节点的 `RpcDispatcher` 根据 `serial_id` 路由到任务管理接口，并拒绝执行面专用的 `ExecuteTask`。
 6. 定时任务写入 MySQL，调度器按 `next_run_at` 扫描到期任务，并用 `execution_id` 将任务从 scheduled 推进到 running。
-7. 多节点通过 Redis 服务发现找到可执行节点，调度器使用 RPC 连接池和 round-robin 分发执行，并用 Redis 分布式锁保证同一任务只被一个节点执行。
-8. 执行结果按 `execution_id` 幂等写入 `task_history`，失败任务按指数退避重试，超过上限后禁用。
+7. 独立 Worker 按 `worker:<handler>` 向 Redis 注册能力，只开放 Echo、Health、Metrics、Streaming 和 `ExecuteTask` 等执行面方法。
+8. 调度器通过能力发现、RPC 连接池和 round-robin 把任务分发到匹配 Worker，并用 Redis 分布式锁保证同一任务只被一个节点执行。
+9. 执行结果按 `execution_id` 幂等写入 `task_history`，失败任务按指数退避重试，超过上限后禁用。
 
 ## 关键设计点
 
 ### 为什么用 epoll + 协程
 
 epoll 负责高并发连接的事件通知，协程把异步读写封装成接近同步的写法，避免大量回调嵌套。这样既保留 Reactor 模型的性能特征，也让业务代码更容易阅读和维护。
+
+网络线程不会直接执行 Dispatcher。请求通过 eventfd awaitable 投递到有界动态线程池，
+执行完成后再唤醒原协程发送响应。队列达到上限时立即返回
+`RESOURCE_EXHAUSTED`，使慢 Handler 和突发流量不会拖住所有连接。
 
 ### 为什么自定义 RPC 协议
 
@@ -43,6 +48,12 @@ RPC 请求进入业务 handler 前会先经过 interceptor 链。当前默认链
 
 调度器不在内存里维护所有任务的倒计时，而是把下一次执行时间持久化到 MySQL。这样服务重启后可以恢复调度状态，多节点也能基于同一份任务表协同工作。
 
+### 为什么拆分控制节点和 Worker
+
+控制节点持有 MySQL 任务状态并负责调度，Worker 只负责执行 Handler。两类进程使用同一
+RPC 协议，但 Dispatcher 会校验方法角色；Worker 还会按 Handler 注册能力，避免把任务
+发送给不支持该 Handler 的节点。这样可以独立扩容执行资源，也能降低慢任务对管理接口的影响。
+
 ### Redis 锁为什么要校验 owner
 
 释放锁和续约锁都必须校验 owner，避免节点 A 的锁过期后被节点 B 抢到，节点 A 又误删节点 B 的锁。这是分布式锁里最容易被问到的安全细节。
@@ -53,12 +64,12 @@ RPC 请求进入业务 handler 前会先经过 interceptor 链。当前默认链
 
 ## 工程化能力
 
-- CMake 抽出 `corpcron_core`，服务端、工具和测试复用同一套核心代码。
+- CMake 抽出 `corpcron_core`，控制节点、Worker、工具和测试复用同一套核心代码。
 - 构建期根据 `proto/rpc.proto` 生成 RPC typed stub / skeleton，`bench_client` 和 `test_submit_client` 已使用生成 stub。
 - 提供 `.clang-format` 和 `.clang-tidy` 配置。
 - `scripts/check.sh` 支持一键配置、构建、测试，以及可选格式检查、Docker 依赖启动和集成测试。
 - Docker Compose 提供 Redis/MySQL 开发环境。
-- Dockerfile、systemd unit、生产配置样例和 Nginx TLS 代理模板覆盖容器化、Linux 服务化和公网入口加固部署方式。
+- Dockerfile、控制节点/Worker systemd unit、生产配置样例和 Nginx TLS 代理模板覆盖容器化、Linux 服务化和公网入口加固部署方式。
 - Prometheus、Alertmanager 和 Grafana 示例覆盖长期指标采集、告警规则和可视化面板。
 - CTest 覆盖协议、RPC 客户端、RPC 路由、Redis/MySQL 集成和端到端调度链路。
 
@@ -68,8 +79,10 @@ RPC 请求进入业务 handler 前会先经过 interceptor 链。当前默认链
 - 协议安全：必须限制最大帧大小，否则恶意包长可能造成内存压力。
 - 连接生命周期：服务退出时要停止调度器、关闭 TCP 服务、注销 Redis 服务并等待心跳线程退出。
 - 多节点调度：锁续约和 owner 校验保证长任务执行期间不会被其他节点重复执行。
+- 能力路由：Worker 按 `worker:<handler>` 注册能力，调度器只选择支持目标 Handler 的节点。
+- 线程隔离：有界 RPC 执行池承接阻塞业务，epoll 线程只处理连接和帧收发。
 - RPC 客户端池：调度侧复用到各 endpoint 的长连接，并对连续失败节点做 open/half-open 熔断恢复。
-- 状态机幂等：任务执行前 CAS 标记为 running，完成时用 `execution_id` 校验，避免取消或重复执行时覆盖状态。
+- 状态机幂等：任务执行前同时 CAS 校验状态和扫描时的 `next_run_at`，完成时再用 `execution_id` 校验，避免旧扫描快照重复认领或旧执行覆盖新状态。
 - 崩溃恢复：超过安全阈值的 running 记录只有在对应 Redis 锁已经释放后才会被 CAS 恢复为 scheduled，避免进程退出后任务永久卡住。
 - 时区一致性：服务端和 MySQL 会话使用一致时区，避免 `next_run_at` 和查询 `NOW()` 出现偏差。
 - 故障恢复：Redis/MySQL 客户端支持连接池、连接/读写超时和错误分类；MySQL 操作前会确认连接状态，Redis 命令失败后会重连并重试一次，降低短暂网络抖动带来的任务中断概率。
@@ -82,7 +95,8 @@ RPC 请求进入业务 handler 前会先经过 interceptor 链。当前默认链
 - RPC 客户端池支持连接复用、round-robin、失败节点 open/half-open 熔断恢复；还没有实现加权负载均衡和自适应流量分配。
 - Redis/MySQL 客户端已经支持连接池、简单重连、超时配置和错误分类；生产环境还可以继续补熔断、慢查询统计和更细的故障注入测试。
 - 项目提供 Prometheus/Alertmanager/Grafana 本地示例；生产环境还需要补真实通知渠道、权限控制、数据保留策略和更完整的 OpenTelemetry 链路追踪。
-- 调度执行 handler 目前以演示任务为主，真实生产系统通常会接入任务沙箱、任务超时和更细的权限隔离。
+- Worker Handler 目前仍是进程内演示函数，真实生产系统通常会接入任务沙箱、资源配额和更细的权限隔离。
+- cancellation 可以终止客户端等待并传播 deadline，但已经运行的远端 Handler 仍需自行检查 deadline；当前没有独立的远端取消控制帧。
 - Qt 客户端用于项目演示和管理，不是互联网生产控制台。
 
 ## 常见问题回答模板

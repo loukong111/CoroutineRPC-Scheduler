@@ -2,6 +2,7 @@
 #include "corpcron/net/tcp_server.hpp"
 #include "corpcron/redis/redis_client.hpp"
 #include "corpcron/rpc/handler_registry.hpp"
+#include "corpcron/rpc/protocol.hpp"
 #include "corpcron/rpc/rpc_dispatcher.hpp"
 #include "corpcron/scheduler/task_scheduler.hpp"
 #include <cassert>
@@ -87,15 +88,24 @@ int main() {
     std::string endpoint = "127.0.0.1:" + std::to_string(port);
     std::string node_id = "e2e-node-" + std::to_string(port);
     std::string service_name = unique_id("e2e-rpc-");
+    std::string echo_handler = unique_id("E2EEcho");
+    std::string fail_handler = unique_id("E2EFail");
 
-    corpcron::HandlerRegistry::instance().registerHandler("Echo", [](const std::string& params) {
-        return "Echo: " + params;
-    });
-    corpcron::HandlerRegistry::instance().registerHandler("Fail", [](const std::string& params) -> std::string {
-        throw std::runtime_error("boom: " + params);
-    });
+    corpcron::HandlerRegistry::instance().registerHandler(
+        echo_handler, [](const std::string& params) {
+            return "Echo: " + params;
+        });
+    corpcron::HandlerRegistry::instance().registerHandler(
+        fail_handler, [](const std::string& params) -> std::string {
+            throw std::runtime_error("boom: " + params);
+        });
 
-    auto dispatcher = std::make_shared<corpcron::RpcDispatcher>(db, "");
+    corpcron::RpcDispatcherOptions worker_options;
+    worker_options.role = corpcron::RpcNodeRole::Worker;
+    worker_options.service_name = service_name;
+    worker_options.worker_service_name = service_name;
+    auto dispatcher = std::make_shared<corpcron::RpcDispatcher>(
+        nullptr, redis, "", node_id, worker_options);
     corpcron::TcpServer server("127.0.0.1", port, dispatcher, 128);
     std::thread server_thread([&]() {
         server.start();
@@ -103,13 +113,54 @@ int main() {
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
 
     assert(redis->registerService(service_name, endpoint, 30));
+    assert(redis->registerService(service_name + ":" + echo_handler, endpoint, 30));
+    assert(redis->registerService(service_name + ":" + fail_handler, endpoint, 30));
 
-    auto success_task = make_task(unique_id("e2e-success-"), "Echo", "from e2e");
-    auto failure_task = make_task(unique_id("e2e-failure-"), "Fail", "retry-disabled", 1);
-    auto multi_node_task = make_task(unique_id("e2e-multinode-"), "Echo", "run-once");
+    auto manual_task =
+        make_task(unique_id("e2e-manual-"), echo_handler, "run-now");
+    manual_task.next_run_at = "2099-01-01 00:00:00";
+    assert(db->addTask(manual_task));
+
+    corpcron::RpcDispatcherOptions control_options;
+    control_options.role = corpcron::RpcNodeRole::ControlPlane;
+    control_options.service_name = "e2e-control";
+    control_options.worker_service_name = service_name;
+    auto control_dispatcher = std::make_shared<corpcron::RpcDispatcher>(
+        db, redis, "", node_id + "-control", control_options);
+
+    corpcron::rpc::RunTaskNowRequest run_now;
+    run_now.set_task_id(manual_task.id);
+    std::string run_now_payload;
+    assert(run_now.SerializeToString(&run_now_payload));
+    auto run_now_response = control_dispatcher->dispatch(
+        corpcron::rpc::kRunTaskNowRequestSerialId, run_now_payload);
+    assert(run_now_response.serial_id ==
+           corpcron::rpc::kRunTaskNowResponseSerialId);
+    corpcron::rpc::RunTaskNowResponse run_now_result;
+    assert(run_now_result.ParseFromString(run_now_response.payload));
+    assert(run_now_result.success());
+    assert(run_now_result.result() == "Echo: run-now");
+
+    corpcron::TaskHistory manual_history;
+    assert(db->getLatestHistory(manual_task.id, manual_history));
+    assert(manual_history.success);
+    assert(manual_history.exec_node == endpoint);
+    corpcron::TaskMeta loaded_manual;
+    assert(db->getTask(manual_task.id, loaded_manual));
+    assert(loaded_manual.status == corpcron::TASK_SCHEDULED);
+
+    auto success_task =
+        make_task(unique_id("e2e-success-"), echo_handler, "from e2e");
+    auto failure_task =
+        make_task(unique_id("e2e-failure-"), fail_handler, "retry-disabled", 1);
+    auto multi_node_task =
+        make_task(unique_id("e2e-multinode-"), echo_handler, "run-once");
+    auto unavailable_task = make_task(
+        unique_id("e2e-unavailable-"), unique_id("MissingHandler"), "wait", 1);
     assert(db->addTask(success_task));
     assert(db->addTask(failure_task));
     assert(db->addTask(multi_node_task));
+    assert(db->addTask(unavailable_task));
 
     corpcron::TaskScheduler scheduler_a(db, redis, node_id + "-a", service_name);
     corpcron::TaskScheduler scheduler_b(db, redis, node_id + "-b", service_name);
@@ -128,6 +179,7 @@ int main() {
     assert(db->getLatestHistory(success_task.id, success_history));
     assert(success_history.success);
     assert(success_history.result == "Echo: from e2e");
+    assert(success_history.exec_node == endpoint);
 
     corpcron::TaskHistory failure_history;
     assert(db->getLatestHistory(failure_task.id, failure_history));
@@ -139,10 +191,16 @@ int main() {
     assert(loaded_failure.retry_count == 1);
 
     assert(db->historyCount(multi_node_task.id) == 1);
+    corpcron::TaskMeta loaded_unavailable;
+    assert(db->getTask(unavailable_task.id, loaded_unavailable));
+    assert(loaded_unavailable.status == corpcron::TASK_SCHEDULED);
+    assert(loaded_unavailable.retry_count == 0);
+    assert(db->historyCount(unavailable_task.id) == 0);
 
     setenv("CORPCRON_SCHEDULER_MISFIRE_POLICY", "skip", 1);
     setenv("CORPCRON_SCHEDULER_MISFIRE_GRACE_SECONDS", "0", 1);
-    auto misfire_task = make_task(unique_id("e2e-misfire-"), "Echo", "should-skip");
+    auto misfire_task =
+        make_task(unique_id("e2e-misfire-"), echo_handler, "should-skip");
     assert(db->addTask(misfire_task));
     corpcron::TaskScheduler scheduler_c(db, redis, node_id + "-misfire", service_name);
     scheduler_c.start();
@@ -160,7 +218,11 @@ int main() {
     db->deleteTask(success_task.id);
     db->deleteTask(failure_task.id);
     db->deleteTask(multi_node_task.id);
+    db->deleteTask(unavailable_task.id);
     db->deleteTask(misfire_task.id);
+    db->deleteTask(manual_task.id);
+    redis->unregisterService(service_name + ":" + fail_handler, endpoint);
+    redis->unregisterService(service_name + ":" + echo_handler, endpoint);
     redis->unregisterService(service_name, endpoint);
     server.stop();
     if (server_thread.joinable()) server_thread.join();

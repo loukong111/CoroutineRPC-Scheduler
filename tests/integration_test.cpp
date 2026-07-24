@@ -201,6 +201,29 @@ int main() {
     assert(!db.deleteTask(task.id));
     assert(!db.getTask(task.id, loaded));
 
+    corpcron::TaskMeta schedule_cas_task;
+    schedule_cas_task.id = unique_id("itest-schedule-cas-");
+    schedule_cas_task.cron_expr = "* * * * * ?";
+    schedule_cas_task.params = "schedule-cas";
+    schedule_cas_task.handler = "Echo";
+    schedule_cas_task.status = corpcron::TASK_SCHEDULED;
+    schedule_cas_task.next_run_at = "2000-01-01 00:00:00";
+    assert(db.addTask(schedule_cas_task));
+    const std::string schedule_cas_execution =
+        schedule_cas_task.id + "-execution";
+    assert(db.claimTaskExecution(
+        schedule_cas_task.id, schedule_cas_execution, "integration-node",
+        corpcron::TASK_SCHEDULED, schedule_cas_task.next_run_at));
+    assert(db.completeTaskExecution(
+        schedule_cas_task.id, schedule_cas_execution,
+        corpcron::TASK_SCHEDULED, "2099-01-01 00:00:00",
+        "2026-01-01 00:00:00", 0));
+    assert(!db.claimTaskExecution(
+        schedule_cas_task.id, schedule_cas_task.id + "-stale-execution",
+        "integration-node", corpcron::TASK_SCHEDULED,
+        schedule_cas_task.next_run_at));
+    assert(db.deleteTask(schedule_cas_task.id));
+
     corpcron::TaskMeta stale_task;
     stale_task.id = unique_id("itest-stale-task-");
     stale_task.cron_expr = "* * * * * ?";

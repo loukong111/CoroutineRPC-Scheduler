@@ -161,7 +161,7 @@ def overview():
         ("连接状态", "已连接", "RPC 通道"),
         ("任务数量", "12", "当前列表"),
         ("历史记录", "50", "最近查询"),
-        ("服务节点", "2", "Redis 服务发现"),
+        ("服务节点", "4", "2 控制 / 2 Worker"),
         ("RPC 请求", "8,432", "累计"),
         ("RPC 错误", "3", "累计"),
         ("活跃连接", "4", "当前"),
@@ -177,7 +177,7 @@ def overview():
     ], [420, 180, 180])
     console(d, [
         ("[20:31:24] 运行指标已刷新", GREEN),
-        ("[20:31:26] 服务发现已刷新，共 2 个节点", "#93c5fd"),
+        ("[20:31:26] worker:Echo 已发现 2 个执行节点", "#93c5fd"),
     ])
     img.save(OUT / "qt-overview.png")
 
@@ -240,10 +240,11 @@ def metrics():
 
 def demo_console():
     img, d = chrome("运维")
-    x, y, _, _ = content_area(d, "运维", "依赖、服务端、监控栈、测试、压测和协议异常演示")
+    x, y, _, _ = content_area(d, "运维", "依赖、控制节点、Worker、监控、测试和压测")
     sections = [
         ("运行环境", [("启动依赖", "primary"), ("停止依赖", "danger"), ("重置依赖", "danger"), ("环境检查", "normal")]),
-        ("服务端", [("启动服务端", "primary"), ("停止服务端", "danger"), ("启动二节点", "primary"), ("停止二节点", "danger")]),
+        ("控制节点", [("启动服务端", "primary"), ("停止服务端", "danger"), ("启动二节点", "primary"), ("停止二节点", "danger")]),
+        ("Worker", [("启动 Worker", "primary"), ("停止 Worker", "danger"), ("启动二号 Worker", "primary"), ("停止二号 Worker", "danger")]),
         ("可观测性", [("启动监控栈", "primary"), ("停止监控栈", "danger"), ("打开 Grafana", "normal"), ("查看 Alerts", "normal")]),
         ("质量与交付", [("构建测试", "normal"), ("集成/E2E", "normal"), ("构建镜像", "normal"), ("查看部署文档", "normal")]),
         ("压测", [("短连接压测", "primary"), ("长连接压测", "primary"), ("查看压测结果", "normal")]),
@@ -251,8 +252,8 @@ def demo_console():
     ]
     for si, (title, buttons) in enumerate(sections):
         sx = x + 24 + (si % 3) * 380
-        sy = y + 28 + (si // 3) * 190
-        rounded(d, (sx, sy, sx + 340, sy + 150), PANEL_ALT, outline=BORDER, radius=6)
+        sy = y + 22 + (si // 3) * 158
+        rounded(d, (sx, sy, sx + 340, sy + 142), PANEL_ALT, outline=BORDER, radius=6)
         text(d, (sx + 18, sy + 16), title, "#f9fafb", F_BODY_BOLD)
         for i, (label, kind) in enumerate(buttons):
             button(d, sx + 18 + (i % 2) * 158, sy + 52 + (i // 2) * 42, label, kind, 138)
@@ -273,15 +274,22 @@ def redis_discovery():
         "127.0.0.1:8081",
         "127.0.0.1:8082",
         "",
-        "== services:rpc keys and ttl ==",
-        "services:rpc:127.0.0.1:8081 ttl=27",
-        "services:rpc:127.0.0.1:8082 ttl=24",
+        "== services:worker members ==",
+        "127.0.0.1:8181",
+        "127.0.0.1:8182",
+        "",
+        "== services:worker:Echo capabilities ==",
+        "127.0.0.1:8181",
+        "127.0.0.1:8182",
+        "",
+        "services:worker:127.0.0.1:8181 ttl=27",
+        "services:worker:Echo:127.0.0.1:8181 ttl=27",
     ]
     y = 120
     for line in lines:
         color = "#93c5fd" if line.startswith("==") else "#86efac" if line.startswith("127") or "ttl=" in line else "#cbd5e1"
-        text(d, (68, y), line, color, F_MONO_BIG)
-        y += 44
+        text(d, (68, y), line, color, F_MONO)
+        y += 29
     img.save(OUT / "redis-service-discovery.png")
 
 

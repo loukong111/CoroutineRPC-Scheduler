@@ -1,0 +1,31 @@
+[Unit]
+Description=Corpcron task execution worker
+After=network-online.target redis-server.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=corpcron
+Group=corpcron
+WorkingDirectory=/opt/corpcron
+EnvironmentFile=-/etc/corpcron/worker.env
+ExecStart=/opt/corpcron/bin/corpcron_worker --config /etc/corpcron/worker.conf
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=65535
+
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=full
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+RestrictSUIDSGID=true
+LockPersonality=true
+CapabilityBoundingSet=
+
+[Install]
+WantedBy=multi-user.target

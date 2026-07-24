@@ -107,7 +107,8 @@ public:
     std::vector<TaskMeta> getStaleRunningTasks(int stale_after_sec, size_t limit);
     bool claimTaskExecution(const std::string& id, const std::string& execution_id,
                             const std::string& node_id,
-                            int expected_status = TASK_SCHEDULED);
+                            int expected_status = TASK_SCHEDULED,
+                            const std::string& expected_next_run_at = {});
     bool recoverTaskExecution(const std::string& id, const std::string& execution_id);
     bool completeTaskExecution(const std::string& id, const std::string& execution_id,
                                int status, const std::string& next_run_at,

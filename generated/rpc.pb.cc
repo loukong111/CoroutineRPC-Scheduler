@@ -100,6 +100,8 @@ PROTOBUF_CONSTEXPR ExecuteTaskRequest::ExecuteTaskRequest(
   , /*decltype(_impl_.params_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.handler_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
   , /*decltype(_impl_.auth_token_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.execution_id_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.deadline_unix_ms_)*/uint64_t{0u}
   , /*decltype(_impl_._cached_size_)*/{}} {}
 struct ExecuteTaskRequestDefaultTypeInternal {
   PROTOBUF_CONSTEXPR ExecuteTaskRequestDefaultTypeInternal()
@@ -581,6 +583,8 @@ const uint32_t TableStruct_rpc_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(prot
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.params_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.handler_),
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.auth_token_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.execution_id_),
+  PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskRequest, _impl_.deadline_unix_ms_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::corpcron::rpc::ExecuteTaskResponse, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -851,31 +855,31 @@ static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protode
   { 23, -1, -1, sizeof(::corpcron::rpc::SubmitTaskRequest)},
   { 33, -1, -1, sizeof(::corpcron::rpc::SubmitTaskResponse)},
   { 42, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskRequest)},
-  { 52, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskResponse)},
-  { 61, -1, -1, sizeof(::corpcron::rpc::CancelTaskRequest)},
-  { 69, -1, -1, sizeof(::corpcron::rpc::CancelTaskResponse)},
-  { 77, -1, -1, sizeof(::corpcron::rpc::TaskInfo)},
-  { 95, -1, -1, sizeof(::corpcron::rpc::ListTasksRequest)},
-  { 108, -1, -1, sizeof(::corpcron::rpc::ListTasksResponse)},
-  { 120, -1, -1, sizeof(::corpcron::rpc::TaskHistoryInfo)},
-  { 134, -1, -1, sizeof(::corpcron::rpc::ListHistoryRequest)},
-  { 147, -1, -1, sizeof(::corpcron::rpc::ListHistoryResponse)},
-  { 159, -1, -1, sizeof(::corpcron::rpc::ListServicesRequest)},
-  { 167, -1, -1, sizeof(::corpcron::rpc::ListServicesResponse)},
-  { 176, -1, -1, sizeof(::corpcron::rpc::UpdateTaskRequest)},
-  { 184, -1, -1, sizeof(::corpcron::rpc::UpdateTaskResponse)},
-  { 192, -1, -1, sizeof(::corpcron::rpc::EnableTaskRequest)},
-  { 201, -1, -1, sizeof(::corpcron::rpc::EnableTaskResponse)},
-  { 209, -1, -1, sizeof(::corpcron::rpc::DeleteTaskRequest)},
-  { 217, -1, -1, sizeof(::corpcron::rpc::DeleteTaskResponse)},
-  { 225, -1, -1, sizeof(::corpcron::rpc::RunTaskNowRequest)},
-  { 233, -1, -1, sizeof(::corpcron::rpc::RunTaskNowResponse)},
-  { 242, -1, -1, sizeof(::corpcron::rpc::GetMetricsRequest)},
-  { 249, -1, -1, sizeof(::corpcron::rpc::GetMetricsResponse)},
-  { 277, -1, -1, sizeof(::corpcron::rpc::HealthCheckRequest)},
-  { 285, -1, -1, sizeof(::corpcron::rpc::HealthCheckResponse)},
-  { 295, -1, -1, sizeof(::corpcron::rpc::StreamMetricsRequest)},
-  { 303, -1, -1, sizeof(::corpcron::rpc::StreamMetricsResponse)},
+  { 54, -1, -1, sizeof(::corpcron::rpc::ExecuteTaskResponse)},
+  { 63, -1, -1, sizeof(::corpcron::rpc::CancelTaskRequest)},
+  { 71, -1, -1, sizeof(::corpcron::rpc::CancelTaskResponse)},
+  { 79, -1, -1, sizeof(::corpcron::rpc::TaskInfo)},
+  { 97, -1, -1, sizeof(::corpcron::rpc::ListTasksRequest)},
+  { 110, -1, -1, sizeof(::corpcron::rpc::ListTasksResponse)},
+  { 122, -1, -1, sizeof(::corpcron::rpc::TaskHistoryInfo)},
+  { 136, -1, -1, sizeof(::corpcron::rpc::ListHistoryRequest)},
+  { 149, -1, -1, sizeof(::corpcron::rpc::ListHistoryResponse)},
+  { 161, -1, -1, sizeof(::corpcron::rpc::ListServicesRequest)},
+  { 169, -1, -1, sizeof(::corpcron::rpc::ListServicesResponse)},
+  { 178, -1, -1, sizeof(::corpcron::rpc::UpdateTaskRequest)},
+  { 186, -1, -1, sizeof(::corpcron::rpc::UpdateTaskResponse)},
+  { 194, -1, -1, sizeof(::corpcron::rpc::EnableTaskRequest)},
+  { 203, -1, -1, sizeof(::corpcron::rpc::EnableTaskResponse)},
+  { 211, -1, -1, sizeof(::corpcron::rpc::DeleteTaskRequest)},
+  { 219, -1, -1, sizeof(::corpcron::rpc::DeleteTaskResponse)},
+  { 227, -1, -1, sizeof(::corpcron::rpc::RunTaskNowRequest)},
+  { 235, -1, -1, sizeof(::corpcron::rpc::RunTaskNowResponse)},
+  { 244, -1, -1, sizeof(::corpcron::rpc::GetMetricsRequest)},
+  { 251, -1, -1, sizeof(::corpcron::rpc::GetMetricsResponse)},
+  { 279, -1, -1, sizeof(::corpcron::rpc::HealthCheckRequest)},
+  { 287, -1, -1, sizeof(::corpcron::rpc::HealthCheckResponse)},
+  { 297, -1, -1, sizeof(::corpcron::rpc::StreamMetricsRequest)},
+  { 305, -1, -1, sizeof(::corpcron::rpc::StreamMetricsResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
@@ -921,119 +925,122 @@ const char descriptor_table_protodef_rpc_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\021\n\tcron_expr\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017\n\007ha"
   "ndler\030\003 \001(\t\022\022\n\nauth_token\030\004 \001(\t\"E\n\022Submi"
   "tTaskResponse\022\017\n\007task_id\030\001 \001(\t\022\017\n\007succes"
-  "s\030\002 \001(\010\022\r\n\005error\030\003 \001(\t\"Z\n\022ExecuteTaskReq"
-  "uest\022\017\n\007task_id\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017\n"
-  "\007handler\030\003 \001(\t\022\022\n\nauth_token\030\004 \001(\t\"E\n\023Ex"
-  "ecuteTaskResponse\022\017\n\007success\030\001 \001(\010\022\016\n\006re"
-  "sult\030\002 \001(\t\022\r\n\005error\030\003 \001(\t\"8\n\021CancelTaskR"
-  "equest\022\017\n\007task_id\030\001 \001(\t\022\022\n\nauth_token\030\002 "
-  "\001(\t\"4\n\022CancelTaskResponse\022\017\n\007success\030\001 \001"
-  "(\010\022\r\n\005error\030\002 \001(\t\"\366\001\n\010TaskInfo\022\n\n\002id\030\001 \001"
-  "(\t\022\021\n\tcron_expr\030\002 \001(\t\022\016\n\006params\030\003 \001(\t\022\017\n"
-  "\007handler\030\004 \001(\t\022\016\n\006status\030\005 \001(\005\022\023\n\013next_r"
-  "un_at\030\006 \001(\t\022\023\n\013last_run_at\030\007 \001(\t\022\023\n\013retr"
-  "y_count\030\010 \001(\005\022\023\n\013max_retries\030\t \001(\005\022\034\n\024cu"
-  "rrent_execution_id\030\n \001(\t\022\024\n\014running_node"
-  "\030\013 \001(\t\022\022\n\nstarted_at\030\014 \001(\t\"\236\001\n\020ListTasks"
-  "Request\022\022\n\nauth_token\030\001 \001(\t\022\r\n\005limit\030\002 \001"
-  "(\005\022\024\n\014enabled_only\030\003 \001(\010\022\016\n\006offset\030\004 \001(\005"
-  "\022\025\n\rstatus_filter\030\005 \001(\005\022\017\n\007keyword\030\006 \001(\t"
-  "\022\031\n\021has_status_filter\030\007 \001(\010\"\210\001\n\021ListTask"
-  "sResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001("
-  "\t\022%\n\005tasks\030\003 \003(\0132\026.corpcron.rpc.TaskInfo"
-  "\022\r\n\005total\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005\022\r\n\005limit"
-  "\030\006 \001(\005\"\241\001\n\017TaskHistoryInfo\022\024\n\014execution_"
-  "id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\021\n\texec_node\030\003"
-  " \001(\t\022\017\n\007success\030\004 \001(\010\022\016\n\006result\030\005 \001(\t\022\r\n"
-  "\005error\030\006 \001(\t\022\022\n\nstart_time\030\007 \001(\t\022\020\n\010end_"
-  "time\030\010 \001(\t\"\235\001\n\022ListHistoryRequest\022\022\n\naut"
-  "h_token\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\r\n\005limit\030"
-  "\003 \001(\005\022\016\n\006offset\030\004 \001(\005\022\026\n\016success_filter\030"
-  "\005 \001(\005\022\017\n\007keyword\030\006 \001(\t\022\032\n\022has_success_fi"
-  "lter\030\007 \001(\010\"\223\001\n\023ListHistoryResponse\022\017\n\007su"
-  "ccess\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022.\n\007history\030\003 "
-  "\003(\0132\035.corpcron.rpc.TaskHistoryInfo\022\r\n\005to"
-  "tal\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005\022\r\n\005limit\030\006 \001(\005"
-  "\"\?\n\023ListServicesRequest\022\022\n\nauth_token\030\001 "
-  "\001(\t\022\024\n\014service_name\030\002 \001(\t\"I\n\024ListService"
-  "sResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001("
-  "\t\022\021\n\tendpoints\030\003 \003(\t\"M\n\021UpdateTaskReques"
-  "t\022\022\n\nauth_token\030\001 \001(\t\022$\n\004task\030\002 \001(\0132\026.co"
-  "rpcron.rpc.TaskInfo\"4\n\022UpdateTaskRespons"
-  "e\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"I\n\021Ena"
-  "bleTaskRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007ta"
-  "sk_id\030\002 \001(\t\022\017\n\007enabled\030\003 \001(\010\"4\n\022EnableTa"
+  "s\030\002 \001(\010\022\r\n\005error\030\003 \001(\t\"\212\001\n\022ExecuteTaskRe"
+  "quest\022\017\n\007task_id\030\001 \001(\t\022\016\n\006params\030\002 \001(\t\022\017"
+  "\n\007handler\030\003 \001(\t\022\022\n\nauth_token\030\004 \001(\t\022\024\n\014e"
+  "xecution_id\030\005 \001(\t\022\030\n\020deadline_unix_ms\030\006 "
+  "\001(\004\"E\n\023ExecuteTaskResponse\022\017\n\007success\030\001 "
+  "\001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005error\030\003 \001(\t\"8\n\021Ca"
+  "ncelTaskRequest\022\017\n\007task_id\030\001 \001(\t\022\022\n\nauth"
+  "_token\030\002 \001(\t\"4\n\022CancelTaskResponse\022\017\n\007su"
+  "ccess\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"\366\001\n\010TaskInfo\022"
+  "\n\n\002id\030\001 \001(\t\022\021\n\tcron_expr\030\002 \001(\t\022\016\n\006params"
+  "\030\003 \001(\t\022\017\n\007handler\030\004 \001(\t\022\016\n\006status\030\005 \001(\005\022"
+  "\023\n\013next_run_at\030\006 \001(\t\022\023\n\013last_run_at\030\007 \001("
+  "\t\022\023\n\013retry_count\030\010 \001(\005\022\023\n\013max_retries\030\t "
+  "\001(\005\022\034\n\024current_execution_id\030\n \001(\t\022\024\n\014run"
+  "ning_node\030\013 \001(\t\022\022\n\nstarted_at\030\014 \001(\t\"\236\001\n\020"
+  "ListTasksRequest\022\022\n\nauth_token\030\001 \001(\t\022\r\n\005"
+  "limit\030\002 \001(\005\022\024\n\014enabled_only\030\003 \001(\010\022\016\n\006off"
+  "set\030\004 \001(\005\022\025\n\rstatus_filter\030\005 \001(\005\022\017\n\007keyw"
+  "ord\030\006 \001(\t\022\031\n\021has_status_filter\030\007 \001(\010\"\210\001\n"
+  "\021ListTasksResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005e"
+  "rror\030\002 \001(\t\022%\n\005tasks\030\003 \003(\0132\026.corpcron.rpc"
+  ".TaskInfo\022\r\n\005total\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005"
+  "\022\r\n\005limit\030\006 \001(\005\"\241\001\n\017TaskHistoryInfo\022\024\n\014e"
+  "xecution_id\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022\021\n\tex"
+  "ec_node\030\003 \001(\t\022\017\n\007success\030\004 \001(\010\022\016\n\006result"
+  "\030\005 \001(\t\022\r\n\005error\030\006 \001(\t\022\022\n\nstart_time\030\007 \001("
+  "\t\022\020\n\010end_time\030\010 \001(\t\"\235\001\n\022ListHistoryReque"
+  "st\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\022"
+  "\r\n\005limit\030\003 \001(\005\022\016\n\006offset\030\004 \001(\005\022\026\n\016succes"
+  "s_filter\030\005 \001(\005\022\017\n\007keyword\030\006 \001(\t\022\032\n\022has_s"
+  "uccess_filter\030\007 \001(\010\"\223\001\n\023ListHistoryRespo"
+  "nse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022.\n\007h"
+  "istory\030\003 \003(\0132\035.corpcron.rpc.TaskHistoryI"
+  "nfo\022\r\n\005total\030\004 \001(\005\022\016\n\006offset\030\005 \001(\005\022\r\n\005li"
+  "mit\030\006 \001(\005\"\?\n\023ListServicesRequest\022\022\n\nauth"
+  "_token\030\001 \001(\t\022\024\n\014service_name\030\002 \001(\t\"I\n\024Li"
+  "stServicesResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005e"
+  "rror\030\002 \001(\t\022\021\n\tendpoints\030\003 \003(\t\"M\n\021UpdateT"
+  "askRequest\022\022\n\nauth_token\030\001 \001(\t\022$\n\004task\030\002"
+  " \001(\0132\026.corpcron.rpc.TaskInfo\"4\n\022UpdateTa"
   "skResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001"
-  "(\t\"8\n\021DeleteTaskRequest\022\022\n\nauth_token\030\001 "
-  "\001(\t\022\017\n\007task_id\030\002 \001(\t\"4\n\022DeleteTaskRespon"
-  "se\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\"8\n\021Ru"
-  "nTaskNowRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007t"
-  "ask_id\030\002 \001(\t\"D\n\022RunTaskNowResponse\022\017\n\007su"
-  "ccess\030\001 \001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005error\030\003 \001"
-  "(\t\"\'\n\021GetMetricsRequest\022\022\n\nauth_token\030\001 "
-  "\001(\t\"\213\005\n\022GetMetricsResponse\022\017\n\007success\030\001 "
-  "\001(\010\022\r\n\005error\030\002 \001(\t\022\032\n\022rpc_requests_total"
-  "\030\003 \001(\004\022\031\n\021rpc_success_total\030\004 \001(\004\022\027\n\017rpc"
-  "_error_total\030\005 \001(\004\022\032\n\022active_connections"
-  "\030\006 \001(\004\022\034\n\024rejected_connections\030\007 \001(\004\022\030\n\020"
-  "malformed_frames\030\010 \001(\004\022\026\n\016bytes_in_total"
-  "\030\t \001(\004\022\027\n\017bytes_out_total\030\n \001(\004\022\032\n\022task_"
-  "success_total\030\013 \001(\004\022\032\n\022task_failure_tota"
-  "l\030\014 \001(\004\022\"\n\032lock_acquire_success_total\030\r "
-  "\001(\004\022\"\n\032lock_acquire_failure_total\030\016 \001(\004\022"
-  "\034\n\024max_task_duration_ms\030\017 \001(\004\022\034\n\024task_du"
-  "ration_p95_ms\030\020 \001(\004\022\034\n\024task_duration_p99"
-  "_ms\030\021 \001(\004\022#\n\033task_duration_samples_total"
-  "\030\022 \001(\004\022\035\n\025schedule_delay_max_ms\030\023 \001(\004\022\035\n"
-  "\025schedule_delay_p95_ms\030\024 \001(\004\022\035\n\025schedule"
-  "_delay_p99_ms\030\025 \001(\004\022$\n\034schedule_delay_sa"
-  "mples_total\030\026 \001(\004\">\n\022HealthCheckRequest\022"
-  "\024\n\014service_name\030\001 \001(\t\022\022\n\nauth_token\030\002 \001("
-  "\t\"]\n\023HealthCheckResponse\022\017\n\007serving\030\001 \001("
-  "\010\022\016\n\006status\030\002 \001(\t\022\017\n\007node_id\030\003 \001(\t\022\024\n\014un"
-  "ix_time_ms\030\004 \001(\004\";\n\024StreamMetricsRequest"
-  "\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007samples\030\002 \001(\005\"\223\001"
-  "\n\025StreamMetricsResponse\022\017\n\007success\030\001 \001(\010"
-  "\022\r\n\005error\030\002 \001(\t\022\020\n\010sequence\030\003 \001(\r\022\025\n\rend"
-  "_of_stream\030\004 \001(\010\0221\n\007metrics\030\005 \001(\0132 .corp"
-  "cron.rpc.GetMetricsResponse*\232\001\n\tErrorCod"
-  "e\022\006\n\002OK\020\000\022\017\n\013BAD_REQUEST\020\001\022\022\n\016UNKNOWN_ME"
-  "THOD\020\002\022\025\n\021PAYLOAD_TOO_LARGE\020\003\022\022\n\016INTERNA"
-  "L_ERROR\020\004\022\014\n\010DB_ERROR\020\005\022\025\n\021HANDLER_NOT_F"
-  "OUND\020\006\022\020\n\014UNAUTHORIZED\020\0072\200\t\n\013CorpCronRpc"
-  "\022=\n\004Echo\022\031.corpcron.rpc.EchoRequest\032\032.co"
-  "rpcron.rpc.EchoResponse\022O\n\nSubmitTask\022\037."
-  "corpcron.rpc.SubmitTaskRequest\032 .corpcro"
-  "n.rpc.SubmitTaskResponse\022R\n\013ExecuteTask\022"
-  " .corpcron.rpc.ExecuteTaskRequest\032!.corp"
-  "cron.rpc.ExecuteTaskResponse\022O\n\nCancelTa"
-  "sk\022\037.corpcron.rpc.CancelTaskRequest\032 .co"
-  "rpcron.rpc.CancelTaskResponse\022L\n\tListTas"
-  "ks\022\036.corpcron.rpc.ListTasksRequest\032\037.cor"
-  "pcron.rpc.ListTasksResponse\022R\n\013ListHisto"
-  "ry\022 .corpcron.rpc.ListHistoryRequest\032!.c"
-  "orpcron.rpc.ListHistoryResponse\022U\n\014ListS"
-  "ervices\022!.corpcron.rpc.ListServicesReque"
-  "st\032\".corpcron.rpc.ListServicesResponse\022O"
-  "\n\nUpdateTask\022\037.corpcron.rpc.UpdateTaskRe"
-  "quest\032 .corpcron.rpc.UpdateTaskResponse\022"
-  "O\n\nEnableTask\022\037.corpcron.rpc.EnableTaskR"
-  "equest\032 .corpcron.rpc.EnableTaskResponse"
-  "\022O\n\nDeleteTask\022\037.corpcron.rpc.DeleteTask"
-  "Request\032 .corpcron.rpc.DeleteTaskRespons"
-  "e\022O\n\nRunTaskNow\022\037.corpcron.rpc.RunTaskNo"
-  "wRequest\032 .corpcron.rpc.RunTaskNowRespon"
-  "se\022O\n\nGetMetrics\022\037.corpcron.rpc.GetMetri"
-  "csRequest\032 .corpcron.rpc.GetMetricsRespo"
-  "nse\022R\n\013HealthCheck\022 .corpcron.rpc.Health"
-  "CheckRequest\032!.corpcron.rpc.HealthCheckR"
-  "esponse\022Z\n\rStreamMetrics\022\".corpcron.rpc."
-  "StreamMetricsRequest\032#.corpcron.rpc.Stre"
-  "amMetricsResponse0\001b\006proto3"
+  "(\t\"I\n\021EnableTaskRequest\022\022\n\nauth_token\030\001 "
+  "\001(\t\022\017\n\007task_id\030\002 \001(\t\022\017\n\007enabled\030\003 \001(\010\"4\n"
+  "\022EnableTaskResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005"
+  "error\030\002 \001(\t\"8\n\021DeleteTaskRequest\022\022\n\nauth"
+  "_token\030\001 \001(\t\022\017\n\007task_id\030\002 \001(\t\"4\n\022DeleteT"
+  "askResponse\022\017\n\007success\030\001 \001(\010\022\r\n\005error\030\002 "
+  "\001(\t\"8\n\021RunTaskNowRequest\022\022\n\nauth_token\030\001"
+  " \001(\t\022\017\n\007task_id\030\002 \001(\t\"D\n\022RunTaskNowRespo"
+  "nse\022\017\n\007success\030\001 \001(\010\022\016\n\006result\030\002 \001(\t\022\r\n\005"
+  "error\030\003 \001(\t\"\'\n\021GetMetricsRequest\022\022\n\nauth"
+  "_token\030\001 \001(\t\"\213\005\n\022GetMetricsResponse\022\017\n\007s"
+  "uccess\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022\032\n\022rpc_reque"
+  "sts_total\030\003 \001(\004\022\031\n\021rpc_success_total\030\004 \001"
+  "(\004\022\027\n\017rpc_error_total\030\005 \001(\004\022\032\n\022active_co"
+  "nnections\030\006 \001(\004\022\034\n\024rejected_connections\030"
+  "\007 \001(\004\022\030\n\020malformed_frames\030\010 \001(\004\022\026\n\016bytes"
+  "_in_total\030\t \001(\004\022\027\n\017bytes_out_total\030\n \001(\004"
+  "\022\032\n\022task_success_total\030\013 \001(\004\022\032\n\022task_fai"
+  "lure_total\030\014 \001(\004\022\"\n\032lock_acquire_success"
+  "_total\030\r \001(\004\022\"\n\032lock_acquire_failure_tot"
+  "al\030\016 \001(\004\022\034\n\024max_task_duration_ms\030\017 \001(\004\022\034"
+  "\n\024task_duration_p95_ms\030\020 \001(\004\022\034\n\024task_dur"
+  "ation_p99_ms\030\021 \001(\004\022#\n\033task_duration_samp"
+  "les_total\030\022 \001(\004\022\035\n\025schedule_delay_max_ms"
+  "\030\023 \001(\004\022\035\n\025schedule_delay_p95_ms\030\024 \001(\004\022\035\n"
+  "\025schedule_delay_p99_ms\030\025 \001(\004\022$\n\034schedule"
+  "_delay_samples_total\030\026 \001(\004\">\n\022HealthChec"
+  "kRequest\022\024\n\014service_name\030\001 \001(\t\022\022\n\nauth_t"
+  "oken\030\002 \001(\t\"]\n\023HealthCheckResponse\022\017\n\007ser"
+  "ving\030\001 \001(\010\022\016\n\006status\030\002 \001(\t\022\017\n\007node_id\030\003 "
+  "\001(\t\022\024\n\014unix_time_ms\030\004 \001(\004\";\n\024StreamMetri"
+  "csRequest\022\022\n\nauth_token\030\001 \001(\t\022\017\n\007samples"
+  "\030\002 \001(\005\"\223\001\n\025StreamMetricsResponse\022\017\n\007succ"
+  "ess\030\001 \001(\010\022\r\n\005error\030\002 \001(\t\022\020\n\010sequence\030\003 \001"
+  "(\r\022\025\n\rend_of_stream\030\004 \001(\010\0221\n\007metrics\030\005 \001"
+  "(\0132 .corpcron.rpc.GetMetricsResponse*\350\001\n"
+  "\tErrorCode\022\006\n\002OK\020\000\022\017\n\013BAD_REQUEST\020\001\022\022\n\016U"
+  "NKNOWN_METHOD\020\002\022\025\n\021PAYLOAD_TOO_LARGE\020\003\022\022"
+  "\n\016INTERNAL_ERROR\020\004\022\014\n\010DB_ERROR\020\005\022\025\n\021HAND"
+  "LER_NOT_FOUND\020\006\022\020\n\014UNAUTHORIZED\020\007\022\025\n\021DEA"
+  "DLINE_EXCEEDED\020\010\022\014\n\010CANCELED\020\t\022\026\n\022RESOUR"
+  "CE_EXHAUSTED\020\n\022\017\n\013UNAVAILABLE\020\0132\200\t\n\013Corp"
+  "CronRpc\022=\n\004Echo\022\031.corpcron.rpc.EchoReque"
+  "st\032\032.corpcron.rpc.EchoResponse\022O\n\nSubmit"
+  "Task\022\037.corpcron.rpc.SubmitTaskRequest\032 ."
+  "corpcron.rpc.SubmitTaskResponse\022R\n\013Execu"
+  "teTask\022 .corpcron.rpc.ExecuteTaskRequest"
+  "\032!.corpcron.rpc.ExecuteTaskResponse\022O\n\nC"
+  "ancelTask\022\037.corpcron.rpc.CancelTaskReque"
+  "st\032 .corpcron.rpc.CancelTaskResponse\022L\n\t"
+  "ListTasks\022\036.corpcron.rpc.ListTasksReques"
+  "t\032\037.corpcron.rpc.ListTasksResponse\022R\n\013Li"
+  "stHistory\022 .corpcron.rpc.ListHistoryRequ"
+  "est\032!.corpcron.rpc.ListHistoryResponse\022U"
+  "\n\014ListServices\022!.corpcron.rpc.ListServic"
+  "esRequest\032\".corpcron.rpc.ListServicesRes"
+  "ponse\022O\n\nUpdateTask\022\037.corpcron.rpc.Updat"
+  "eTaskRequest\032 .corpcron.rpc.UpdateTaskRe"
+  "sponse\022O\n\nEnableTask\022\037.corpcron.rpc.Enab"
+  "leTaskRequest\032 .corpcron.rpc.EnableTaskR"
+  "esponse\022O\n\nDeleteTask\022\037.corpcron.rpc.Del"
+  "eteTaskRequest\032 .corpcron.rpc.DeleteTask"
+  "Response\022O\n\nRunTaskNow\022\037.corpcron.rpc.Ru"
+  "nTaskNowRequest\032 .corpcron.rpc.RunTaskNo"
+  "wResponse\022O\n\nGetMetrics\022\037.corpcron.rpc.G"
+  "etMetricsRequest\032 .corpcron.rpc.GetMetri"
+  "csResponse\022R\n\013HealthCheck\022 .corpcron.rpc"
+  ".HealthCheckRequest\032!.corpcron.rpc.Healt"
+  "hCheckResponse\022Z\n\rStreamMetrics\022\".corpcr"
+  "on.rpc.StreamMetricsRequest\032#.corpcron.r"
+  "pc.StreamMetricsResponse0\001b\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_rpc_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_rpc_2eproto = {
-    false, false, 4667, descriptor_table_protodef_rpc_2eproto,
+    false, false, 4794, descriptor_table_protodef_rpc_2eproto,
     "rpc.proto",
     &descriptor_table_rpc_2eproto_once, nullptr, 0, 31,
     schemas, file_default_instances, TableStruct_rpc_2eproto::offsets,
@@ -1062,6 +1069,10 @@ bool ErrorCode_IsValid(int value) {
     case 5:
     case 6:
     case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
       return true;
     default:
       return false;
@@ -2411,6 +2422,8 @@ ExecuteTaskRequest::ExecuteTaskRequest(const ExecuteTaskRequest& from)
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
     , decltype(_impl_.auth_token_){}
+    , decltype(_impl_.execution_id_){}
+    , decltype(_impl_.deadline_unix_ms_){}
     , /*decltype(_impl_._cached_size_)*/{}};
 
   _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
@@ -2446,6 +2459,15 @@ ExecuteTaskRequest::ExecuteTaskRequest(const ExecuteTaskRequest& from)
     _this->_impl_.auth_token_.Set(from._internal_auth_token(),
       _this->GetArenaForAllocation());
   }
+  _impl_.execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_execution_id().empty()) {
+    _this->_impl_.execution_id_.Set(from._internal_execution_id(),
+      _this->GetArenaForAllocation());
+  }
+  _this->_impl_.deadline_unix_ms_ = from._impl_.deadline_unix_ms_;
   // @@protoc_insertion_point(copy_constructor:corpcron.rpc.ExecuteTaskRequest)
 }
 
@@ -2458,6 +2480,8 @@ inline void ExecuteTaskRequest::SharedCtor(
     , decltype(_impl_.params_){}
     , decltype(_impl_.handler_){}
     , decltype(_impl_.auth_token_){}
+    , decltype(_impl_.execution_id_){}
+    , decltype(_impl_.deadline_unix_ms_){uint64_t{0u}}
     , /*decltype(_impl_._cached_size_)*/{}
   };
   _impl_.task_id_.InitDefault();
@@ -2476,6 +2500,10 @@ inline void ExecuteTaskRequest::SharedCtor(
   #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
     _impl_.auth_token_.Set("", GetArenaForAllocation());
   #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.execution_id_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.execution_id_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
 }
 
 ExecuteTaskRequest::~ExecuteTaskRequest() {
@@ -2493,6 +2521,7 @@ inline void ExecuteTaskRequest::SharedDtor() {
   _impl_.params_.Destroy();
   _impl_.handler_.Destroy();
   _impl_.auth_token_.Destroy();
+  _impl_.execution_id_.Destroy();
 }
 
 void ExecuteTaskRequest::SetCachedSize(int size) const {
@@ -2509,6 +2538,8 @@ void ExecuteTaskRequest::Clear() {
   _impl_.params_.ClearToEmpty();
   _impl_.handler_.ClearToEmpty();
   _impl_.auth_token_.ClearToEmpty();
+  _impl_.execution_id_.ClearToEmpty();
+  _impl_.deadline_unix_ms_ = uint64_t{0u};
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -2555,6 +2586,24 @@ const char* ExecuteTaskRequest::_InternalParse(const char* ptr, ::_pbi::ParseCon
           ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(ptr);
           CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ExecuteTaskRequest.auth_token"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string execution_id = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 42)) {
+          auto str = _internal_mutable_execution_id();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "corpcron.rpc.ExecuteTaskRequest.execution_id"));
+        } else
+          goto handle_unusual;
+        continue;
+      // uint64 deadline_unix_ms = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 48)) {
+          _impl_.deadline_unix_ms_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
         } else
           goto handle_unusual;
         continue;
@@ -2627,6 +2676,22 @@ uint8_t* ExecuteTaskRequest::_InternalSerialize(
         4, this->_internal_auth_token(), target);
   }
 
+  // string execution_id = 5;
+  if (!this->_internal_execution_id().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_execution_id().data(), static_cast<int>(this->_internal_execution_id().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "corpcron.rpc.ExecuteTaskRequest.execution_id");
+    target = stream->WriteStringMaybeAliased(
+        5, this->_internal_execution_id(), target);
+  }
+
+  // uint64 deadline_unix_ms = 6;
+  if (this->_internal_deadline_unix_ms() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::_pbi::WireFormatLite::WriteUInt64ToArray(6, this->_internal_deadline_unix_ms(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
@@ -2671,6 +2736,18 @@ size_t ExecuteTaskRequest::ByteSizeLong() const {
         this->_internal_auth_token());
   }
 
+  // string execution_id = 5;
+  if (!this->_internal_execution_id().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_execution_id());
+  }
+
+  // uint64 deadline_unix_ms = 6;
+  if (this->_internal_deadline_unix_ms() != 0) {
+    total_size += ::_pbi::WireFormatLite::UInt64SizePlusOne(this->_internal_deadline_unix_ms());
+  }
+
   return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
 }
 
@@ -2700,6 +2777,12 @@ void ExecuteTaskRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, con
   }
   if (!from._internal_auth_token().empty()) {
     _this->_internal_set_auth_token(from._internal_auth_token());
+  }
+  if (!from._internal_execution_id().empty()) {
+    _this->_internal_set_execution_id(from._internal_execution_id());
+  }
+  if (from._internal_deadline_unix_ms() != 0) {
+    _this->_internal_set_deadline_unix_ms(from._internal_deadline_unix_ms());
   }
   _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
 }
@@ -2736,6 +2819,11 @@ void ExecuteTaskRequest::InternalSwap(ExecuteTaskRequest* other) {
       &_impl_.auth_token_, lhs_arena,
       &other->_impl_.auth_token_, rhs_arena
   );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.execution_id_, lhs_arena,
+      &other->_impl_.execution_id_, rhs_arena
+  );
+  swap(_impl_.deadline_unix_ms_, other->_impl_.deadline_unix_ms_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata ExecuteTaskRequest::GetMetadata() const {

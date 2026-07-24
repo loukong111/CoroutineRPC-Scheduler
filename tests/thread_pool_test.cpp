@@ -32,5 +32,27 @@ int main() {
     assert(pool.taskCount() == 0);
     assert(!pool.enqueue([]() {}));
     pool.stop();
+
+    std::atomic<bool> blocker_started{false};
+    std::atomic<bool> release_blocker{false};
+    std::atomic<int> bounded_completed{0};
+    corpcron::DynamicThreadPool bounded_pool(1, 1, 1, 5, 1);
+    assert(bounded_pool.enqueue([&]() {
+        blocker_started.store(true, std::memory_order_release);
+        while (!release_blocker.load(std::memory_order_acquire)) {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+        bounded_completed.fetch_add(1, std::memory_order_relaxed);
+    }));
+    while (!blocker_started.load(std::memory_order_acquire)) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    assert(bounded_pool.enqueue([&]() {
+        bounded_completed.fetch_add(1, std::memory_order_relaxed);
+    }));
+    assert(!bounded_pool.enqueue([]() {}));
+    release_blocker.store(true, std::memory_order_release);
+    bounded_pool.stop();
+    assert(bounded_completed.load(std::memory_order_relaxed) == 2);
     return 0;
 }

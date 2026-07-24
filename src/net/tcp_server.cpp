@@ -1,4 +1,5 @@
 #include "corpcron/net/tcp_server.hpp"
+#include "corpcron/common/thread_pool.hpp"
 #include "corpcron/coroutine/task.hpp"
 #include "corpcron/common/logger.hpp"
 #include "corpcron/metrics/metrics.hpp"
@@ -6,6 +7,7 @@
 #include "corpcron/rpc/rpc_interceptor.hpp"
 #include "corpcron/rpc/protocol.hpp"
 #include <sys/socket.h>
+#include <sys/eventfd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
@@ -13,6 +15,8 @@
 #include <cstring>
 #include <atomic>
 #include <chrono>
+#include <cerrno>
+#include <mutex>
 #include <utility>
 
 namespace corpcron {
@@ -48,10 +52,126 @@ private:
     std::atomic<size_t>* active_connections_;
 };
 
+struct DispatchState {
+    ~DispatchState() {
+        if (completion_fd >= 0) close(completion_fd);
+    }
+
+    std::mutex mutex;
+    RpcStreamResult result;
+    int completion_fd = -1;
+    bool ready = false;
+};
+
+class RpcDispatchAwaitable {
+public:
+    RpcDispatchAwaitable(DynamicThreadPool* executor, EpollLoop* loop,
+                         std::shared_ptr<RpcDispatcher> dispatcher,
+                         RpcContext context, std::string payload)
+        : executor_(executor), loop_(loop), dispatcher_(std::move(dispatcher)),
+          context_(std::move(context)), payload_(std::move(payload)),
+          state_(std::make_shared<DispatchState>()) {
+        state_->completion_fd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+        if (state_->completion_fd < 0) {
+            setResult(RpcStreamResult{{RpcDispatcher::error(
+                corpcron::rpc::INTERNAL_ERROR, errnoMessage("eventfd"))}});
+        }
+    }
+
+    bool await_ready() const {
+        std::lock_guard<std::mutex> lock(state_->mutex);
+        return state_->ready;
+    }
+
+    bool await_suspend(std::coroutine_handle<> handle) {
+        if (!executor_ || !loop_ || !dispatcher_) {
+            setResult(RpcStreamResult{{RpcDispatcher::error(
+                corpcron::rpc::UNAVAILABLE, "RPC executor is not available")}});
+            return false;
+        }
+
+        const int completion_fd = state_->completion_fd;
+        if (!loop_->addCoroutine(completion_fd, EPOLLIN, [handle]() mutable {
+                if (handle && !handle.done()) handle.resume();
+            })) {
+            setResult(RpcStreamResult{{RpcDispatcher::error(
+                corpcron::rpc::UNAVAILABLE, "Event loop is stopping")}});
+            return false;
+        }
+
+        auto state = state_;
+        auto dispatcher = dispatcher_;
+        const bool accepted = executor_->enqueue(
+            [state, dispatcher, context = std::move(context_),
+             payload = std::move(payload_)]() mutable {
+                RpcStreamResult result;
+                try {
+                    result = dispatcher->dispatchStreamWithContext(std::move(context), payload);
+                } catch (const std::exception& e) {
+                    result.responses.push_back(RpcDispatcher::error(
+                        corpcron::rpc::INTERNAL_ERROR, e.what()));
+                } catch (...) {
+                    result.responses.push_back(RpcDispatcher::error(
+                        corpcron::rpc::INTERNAL_ERROR, "Unknown RPC execution exception"));
+                }
+                {
+                    std::lock_guard<std::mutex> lock(state->mutex);
+                    state->result = std::move(result);
+                    state->ready = true;
+                }
+                uint64_t value = 1;
+                while (write(state->completion_fd, &value, sizeof(value)) < 0 &&
+                       errno == EINTR) {
+                }
+            });
+        if (!accepted) {
+            loop_->delFd(completion_fd);
+            setResult(RpcStreamResult{{RpcDispatcher::error(
+                corpcron::rpc::RESOURCE_EXHAUSTED, "RPC execution queue is full")}});
+            return false;
+        }
+        return true;
+    }
+
+    RpcStreamResult await_resume() {
+        if (state_->completion_fd >= 0) {
+            uint64_t value = 0;
+            while (read(state_->completion_fd, &value, sizeof(value)) < 0 &&
+                   errno == EINTR) {
+            }
+        }
+        std::lock_guard<std::mutex> lock(state_->mutex);
+        if (!state_->ready) {
+            return RpcStreamResult{{RpcDispatcher::error(
+                corpcron::rpc::UNAVAILABLE, "RPC execution interrupted by shutdown")}};
+        }
+        if (state_->result.responses.empty()) {
+            state_->result.responses.push_back(RpcDispatcher::error(
+                corpcron::rpc::INTERNAL_ERROR, "Empty RPC response"));
+        }
+        return std::move(state_->result);
+    }
+
+private:
+    void setResult(RpcStreamResult result) {
+        std::lock_guard<std::mutex> lock(state_->mutex);
+        state_->result = std::move(result);
+        state_->ready = true;
+    }
+
+    DynamicThreadPool* executor_;
+    EpollLoop* loop_;
+    std::shared_ptr<RpcDispatcher> dispatcher_;
+    RpcContext context_;
+    std::string payload_;
+    std::shared_ptr<DispatchState> state_;
+};
+
 } // namespace
 
 Task clientHandler(int fd, EpollLoop* loop,
                    std::shared_ptr<RpcDispatcher> dispatcher,
+                   DynamicThreadPool* request_executor,
                    std::atomic<size_t>* active_connections,
                    std::string remote) {
     ClientConnectionGuard connection_guard(fd, loop, active_connections);
@@ -98,7 +218,8 @@ Task clientHandler(int fd, EpollLoop* loop,
             context.request_serial_id = serial_id;
             context.request_bytes = payload.size();
             context.started_at = std::chrono::steady_clock::now();
-            RpcStreamResult rpc_result = dispatcher->dispatchStreamWithContext(std::move(context), payload);
+            RpcStreamResult rpc_result = co_await RpcDispatchAwaitable(
+                request_executor, loop, dispatcher, std::move(context), std::move(payload));
             if (rpc_result.responses.empty()) {
                 rpc_result.responses.push_back(
                     RpcDispatcher::error(corpcron::rpc::INTERNAL_ERROR, "Empty RPC response"));
@@ -143,9 +264,15 @@ Task clientHandler(int fd, EpollLoop* loop,
 
 TcpServer::TcpServer(const std::string& addr, int port,
                      std::shared_ptr<RpcDispatcher> dispatcher,
-                     size_t max_connections)
+                     size_t max_connections,
+                     RpcExecutorOptions executor_options)
     : addr_(addr), port_(port), loop_(std::make_unique<EpollLoop>()),
-      dispatcher_(std::move(dispatcher)), max_connections_(max_connections) {}
+      dispatcher_(std::move(dispatcher)),
+      request_executor_(std::make_unique<DynamicThreadPool>(
+          executor_options.min_threads, executor_options.max_threads,
+          executor_options.backlog_threshold, executor_options.idle_timeout_sec,
+          executor_options.max_pending_requests)),
+      max_connections_(max_connections) {}
 
 TcpServer::~TcpServer() {
     stop();
@@ -212,6 +339,7 @@ bool TcpServer::start(const std::function<bool()>& on_listening) {
 
 void TcpServer::stop() {
     if (loop_) loop_->stop();
+    if (request_executor_) request_executor_->stop();
 }
 
 void TcpServer::handleAccept() {
@@ -244,7 +372,8 @@ void TcpServer::handleAccept() {
         std::string remote = std::string(ip) + ":" + std::to_string(ntohs(client_addr.sin_port));
         LOG_INFO_EVENT("connection_accepted", {{"remote", remote}});
         try {
-            Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_, &active_connections_, remote));
+            Task::spawn(clientHandler(client_fd, loop_.get(), dispatcher_,
+                                      request_executor_.get(), &active_connections_, remote));
         } catch (const std::exception& e) {
             close(client_fd);
             active_connections_.fetch_sub(1, std::memory_order_relaxed);

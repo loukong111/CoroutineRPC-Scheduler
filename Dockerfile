@@ -33,9 +33,11 @@ RUN useradd --system --uid 10001 --no-create-home --shell /usr/sbin/nologin corp
 
 WORKDIR /app
 COPY --from=build /src/build/corpcron_server /app/corpcron_server
+COPY --from=build /src/build/corpcron_worker /app/corpcron_worker
 COPY --from=build /src/config/server.example.conf /app/config/server.conf
+COPY --from=build /src/config/worker.conf /app/config/worker.conf
 
-EXPOSE 8081
+EXPOSE 8081 8181
 
 USER corpcron
 
